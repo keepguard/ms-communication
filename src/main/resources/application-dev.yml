@@ -1,0 +1,133 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://postgres:5432/keepguard_api_db
+    username: keepguard_api_user
+    password: keepguard_api_pass
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      connection-timeout: 30000
+      maximum-pool-size: 10
+      minimum-idle: 5
+      idle-timeout: 600000
+      max-lifetime: 1800000
+      connection-test-query: SELECT 1
+  data:
+    redis:
+      cluster:
+        nodes: redis-node-1:7000,redis-node-2:7001,redis-node-3:7002,redis-node-4:7003,redis-node-5:7004,redis-node-6:7005
+        max-redirects: 3
+      password: ""
+      timeout: 3000ms
+      lettuce:
+        pool:
+          max-active: 8
+          max-idle: 8
+          min-idle: 2
+          max-wait: -1ms
+        cluster:
+          refresh:
+            adaptive: true
+            period: 30s
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: false
+        default_schema: ms_communication
+  rabbitmq:
+    host: rabbit-1
+    port: 5672
+    username: guest
+    password: guest
+    virtual-host: /
+    listener:
+      simple:
+        acknowledge-mode: manual
+        prefetch: 1
+        concurrency: 2
+        max-concurrency: 10
+        default-requeue-rejected: false
+    publisher-confirm-type: correlated
+    publisher-returns: true
+    template:
+      mandatory: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+  endpoint:
+    health:
+      show-details: always
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+
+cache:
+  redis:
+    ttl:
+      template: 604800           # 7 dias
+      provider: 604800           # 7 dias
+      providers-by-type: 604800  # 7 dias
+    prefix:
+      template: "template_cache"
+      provider: "provider_cache"
+      providers-by-type: "providers_by_type"
+
+springdoc:
+  swagger-ui:
+    enabled: true
+  api-docs:
+    enabled: true
+
+# Configurações customizadas do RabbitMQ (nomes de filas/exchanges)
+rabbitmq:
+  queues:
+    # Filas de mensageria (padrão enterprise)
+    message-send: ms.communication.message.send.dev
+    message-send-requests-dlt: ms.communication.message.send.dlt.dev
+    
+    # Exchanges
+    message-exchange: ms-communication-exchange-dev
+    dead-letter-exchange: ms-communication-exchange-dlt-dev
+    
+    # Exchange para publicar no srv-email-google-sender (NOVO)
+    email-sender-exchange: srv-email-google-sender-exchange-dev
+    email-sender-routing-key: email.google.send
+    
+    # Routing Keys
+    routing-key-message-send: communication.message.send
+    routing-key-message-failed: message.failed
+    
+    # Configurações gerais
+    durable: true
+    auto-delete: false
+    exclusive: false
+
+# Configurações do Resilience4j para ambiente de desenvolvimento
+resilience4j:
+  retry:
+    instances:
+      rabbitMQMessageProcessor:
+        maxAttempts: 3
+        waitDuration: 1s
+        exponentialBackoffMultiplier: 2
+        retryExceptions:
+          - org.springframework.amqp.AmqpException
+          - org.springframework.amqp.support.converter.MessageConversionException
+
+# Configuração específica para ambiente de desenvolvimento
+logging:
+  level:
+    root: INFO
+    org.springframework: INFO
+    org.hibernate: WARN
+    com.keepguard.ms_communication: INFO
+    org.springframework.amqp: WARN
+  logstash:
+    port: 5000
+    enabled: true 

@@ -1,0 +1,141 @@
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] -------------------< com.keepguard:ms-communication >-------------------
+[INFO] Building ms-communication 1.1.2-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] >>> spring-boot:3.3.2:run (default-cli) > test-compile @ ms-communication >>>
+[INFO] 
+[INFO] --- jacoco:0.8.11:prepare-agent (default) @ ms-communication ---
+[INFO] argLine set to -javaagent:/Users/rafaelnogueirasoares/.m2/repository/org/jacoco/org.jacoco.agent/0.8.11/org.jacoco.agent-0.8.11-runtime.jar=destfile=/Users/rafaelnogueirasoares/Projetos/keepguard-template/backend/ms/ms-communication/target/jacoco.exec
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ ms-communication ---
+[INFO] Copying 4 resources from src/main/resources to target/classes
+[INFO] Copying 1 resource from src/main/resources to target/classes
+[INFO] 
+[INFO] --- compiler:3.13.0:compile (default-compile) @ ms-communication ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ ms-communication ---
+[INFO] Copying 2 resources from src/test/resources to target/test-classes
+[INFO] 
+[INFO] --- compiler:3.13.0:testCompile (default-testCompile) @ ms-communication ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] <<< spring-boot:3.3.2:run (default-cli) < test-compile @ ms-communication <<<
+[INFO] 
+[INFO] 
+[INFO] --- spring-boot:3.3.2:run (default-cli) @ ms-communication ---
+[INFO] Attaching agents: []
+23:29:07,593 |-INFO in ch.qos.logback.classic.LoggerContext[default] - This is logback-classic version 1.5.6
+23:29:07,595 |-INFO in ch.qos.logback.classic.util.ContextInitializer@35c2b001 - Here is a list of configurators discovered as a service, by rank: 
+23:29:07,595 |-INFO in ch.qos.logback.classic.util.ContextInitializer@35c2b001 -   org.springframework.boot.logging.logback.RootLogLevelConfigurator
+23:29:07,595 |-INFO in ch.qos.logback.classic.util.ContextInitializer@35c2b001 - They will be invoked in order until ExecutionStatus.DO_NOT_INVOKE_NEXT_IF_ANY is returned.
+23:29:07,595 |-INFO in ch.qos.logback.classic.util.ContextInitializer@35c2b001 - Constructed configurator of type class org.springframework.boot.logging.logback.RootLogLevelConfigurator
+23:29:07,602 |-INFO in ch.qos.logback.classic.util.ContextInitializer@35c2b001 - org.springframework.boot.logging.logback.RootLogLevelConfigurator.configure() call lasted 1 milliseconds. ExecutionStatus=INVOKE_NEXT_IF_ANY
+23:29:07,602 |-INFO in ch.qos.logback.classic.util.ContextInitializer@35c2b001 - Trying to configure with ch.qos.logback.classic.joran.SerializedModelConfigurator
+23:29:07,603 |-INFO in ch.qos.logback.classic.util.ContextInitializer@35c2b001 - Constructed configurator of type class ch.qos.logback.classic.joran.SerializedModelConfigurator
+23:29:07,606 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback-test.scmo]
+23:29:07,606 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback.scmo]
+23:29:07,606 |-INFO in ch.qos.logback.classic.util.ContextInitializer@35c2b001 - ch.qos.logback.classic.joran.SerializedModelConfigurator.configure() call lasted 3 milliseconds. ExecutionStatus=INVOKE_NEXT_IF_ANY
+23:29:07,606 |-INFO in ch.qos.logback.classic.util.ContextInitializer@35c2b001 - Trying to configure with ch.qos.logback.classic.util.DefaultJoranConfigurator
+23:29:07,606 |-INFO in ch.qos.logback.classic.util.ContextInitializer@35c2b001 - Constructed configurator of type class ch.qos.logback.classic.util.DefaultJoranConfigurator
+23:29:07,607 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback-test.xml]
+23:29:07,607 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback.xml]
+23:29:07,607 |-INFO in ch.qos.logback.classic.util.ContextInitializer@35c2b001 - ch.qos.logback.classic.util.DefaultJoranConfigurator.configure() call lasted 1 milliseconds. ExecutionStatus=INVOKE_NEXT_IF_ANY
+23:29:07,607 |-INFO in ch.qos.logback.classic.util.ContextInitializer@35c2b001 - Trying to configure with ch.qos.logback.classic.BasicConfigurator
+23:29:07,607 |-INFO in ch.qos.logback.classic.util.ContextInitializer@35c2b001 - Constructed configurator of type class ch.qos.logback.classic.BasicConfigurator
+23:29:07,607 |-INFO in ch.qos.logback.classic.BasicConfigurator@4a4d70d1 - Setting up default configuration.
+23:29:07,623 |-INFO in ch.qos.logback.classic.util.ContextInitializer@35c2b001 - ch.qos.logback.classic.BasicConfigurator.configure() call lasted 16 milliseconds. ExecutionStatus=NEUTRAL
+23:29:07,984 |-WARN in ch.qos.logback.core.model.processor.AppenderModelHandler - Appender named [STDOUT_JSON] not referenced. Skipping further processing.
+23:29:07,984 |-INFO in ch.qos.logback.core.model.processor.AppenderModelHandler - Processing appender named [STDOUT]
+23:29:07,985 |-INFO in ch.qos.logback.core.model.processor.AppenderModelHandler - About to instantiate appender of type [ch.qos.logback.core.ConsoleAppender]
+23:29:07,994 |-WARN in ch.qos.logback.core.model.processor.AppenderModelHandler - Appender named [LOGSTASH] not referenced. Skipping further processing.
+23:29:07,994 |-INFO in ch.qos.logback.classic.model.processor.LoggerModelHandler - Setting level of logger [AUDIT] to INFO
+23:29:07,994 |-INFO in ch.qos.logback.classic.jul.LevelChangePropagator@7cb60d86 - Propagating INFO level on Logger[AUDIT] onto the JUL framework
+23:29:07,995 |-INFO in ch.qos.logback.classic.model.processor.LoggerModelHandler - Setting additivity of logger [AUDIT] to false
+23:29:07,995 |-INFO in ch.qos.logback.core.model.processor.AppenderRefModelHandler - Attaching appender named [STDOUT] to Logger[AUDIT]
+23:29:07,995 |-INFO in ch.qos.logback.classic.model.processor.RootLoggerModelHandler - Setting level of ROOT logger to INFO
+23:29:07,995 |-INFO in ch.qos.logback.classic.jul.LevelChangePropagator@7cb60d86 - Propagating INFO level on Logger[ROOT] onto the JUL framework
+23:29:07,995 |-INFO in ch.qos.logback.core.model.processor.AppenderRefModelHandler - Attaching appender named [STDOUT] to Logger[ROOT]
+23:29:07,995 |-INFO in ch.qos.logback.classic.model.processor.LoggerModelHandler - Setting level of logger [com.keepguard.ms_communication] to INFO
+23:29:07,995 |-INFO in ch.qos.logback.classic.jul.LevelChangePropagator@7cb60d86 - Propagating INFO level on Logger[com.keepguard.ms_communication] onto the JUL framework
+23:29:07,995 |-INFO in ch.qos.logback.classic.model.processor.LoggerModelHandler - Setting level of logger [org.springframework.web] to WARN
+23:29:07,995 |-INFO in ch.qos.logback.classic.jul.LevelChangePropagator@7cb60d86 - Propagating WARN level on Logger[org.springframework.web] onto the JUL framework
+23:29:07,995 |-INFO in ch.qos.logback.classic.model.processor.LoggerModelHandler - Setting level of logger [org.hibernate] to WARN
+23:29:07,995 |-INFO in ch.qos.logback.classic.jul.LevelChangePropagator@7cb60d86 - Propagating WARN level on Logger[org.hibernate] onto the JUL framework
+23:29:07,995 |-INFO in ch.qos.logback.classic.model.processor.LoggerModelHandler - Setting level of logger [org.springframework.data.jpa] to WARN
+23:29:07,995 |-INFO in ch.qos.logback.classic.jul.LevelChangePropagator@7cb60d86 - Propagating WARN level on Logger[org.springframework.data.jpa] onto the JUL framework
+23:29:07,995 |-INFO in ch.qos.logback.classic.model.processor.LoggerModelHandler - Setting level of logger [org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver] to WARN
+23:29:07,995 |-INFO in ch.qos.logback.classic.jul.LevelChangePropagator@7cb60d86 - Propagating WARN level on Logger[org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver] onto the JUL framework
+23:29:07,995 |-INFO in ch.qos.logback.classic.model.processor.LoggerModelHandler - Setting level of logger [com.keepguard.lib_common.logging.service.LoggingService] to OFF
+23:29:07,995 |-INFO in ch.qos.logback.classic.jul.LevelChangePropagator@7cb60d86 - Propagating OFF level on Logger[com.keepguard.lib_common.logging.service.LoggingService] onto the JUL framework
+23:29:07,995 |-INFO in ch.qos.logback.classic.model.processor.LoggerModelHandler - Setting level of logger [com.keepguard.lib_common.metrics.aspect.MetricsAspect] to OFF
+23:29:07,995 |-INFO in ch.qos.logback.classic.jul.LevelChangePropagator@7cb60d86 - Propagating OFF level on Logger[com.keepguard.lib_common.metrics.aspect.MetricsAspect] onto the JUL framework
+23:29:07,995 |-INFO in ch.qos.logback.classic.model.processor.LoggerModelHandler - Setting level of logger [com.keepguard.lib_common.logging.StructuredLogger] to OFF
+23:29:07,995 |-INFO in ch.qos.logback.classic.jul.LevelChangePropagator@7cb60d86 - Propagating OFF level on Logger[com.keepguard.lib_common.logging.StructuredLogger] onto the JUL framework
+23:29:07,995 |-INFO in ch.qos.logback.classic.model.processor.LoggerModelHandler - Setting level of logger [com.keepguard.ms_communication.infrastructure.filter.CorrelationIdFilter] to OFF
+23:29:07,995 |-INFO in ch.qos.logback.classic.jul.LevelChangePropagator@7cb60d86 - Propagating OFF level on Logger[com.keepguard.ms_communication.infrastructure.filter.CorrelationIdFilter] onto the JUL framework
+23:29:07,995 |-INFO in ch.qos.logback.classic.model.processor.RootLoggerModelHandler - Setting level of ROOT logger to INFO
+23:29:07,995 |-INFO in ch.qos.logback.core.model.processor.AppenderRefModelHandler - Attaching appender named [STDOUT] to Logger[ROOT]
+23:29:07,995 |-INFO in ch.qos.logback.core.model.processor.DefaultProcessor@24b1b5f6 - End of configuration.
+23:29:07,995 |-INFO in org.springframework.boot.logging.logback.SpringBootJoranConfigurator@4d35bd9 - Registering current configuration as safe fallback point
+
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.3.2)
+
+23:29:08.043 [34mINFO [0;39m [restartedMain] [36mc.k.m.MsCommunicationApplication[0;39m  CorrelationId: %X{correlationId} - Starting MsCommunicationApplication using Java 21.0.7 with PID 51391 (/Users/rafaelnogueirasoares/Projetos/keepguard-template/backend/ms/ms-communication/target/classes started by rafaelnogueirasoares in /Users/rafaelnogueirasoares/Projetos/keepguard-template/backend/ms/ms-communication)
+23:29:08.043 [34mINFO [0;39m [restartedMain] [36mc.k.m.MsCommunicationApplication[0;39m  CorrelationId: %X{correlationId} - The following 1 profile is active: "local"
+23:29:08.071 [34mINFO [0;39m [restartedMain] [36mo.s.b.d.e.DevToolsPropertyDefaultsPostProcessor[0;39m  CorrelationId: %X{correlationId} - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+23:29:08.071 [34mINFO [0;39m [restartedMain] [36mo.s.b.d.e.DevToolsPropertyDefaultsPostProcessor[0;39m  CorrelationId: %X{correlationId} - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+23:29:08.986 [34mINFO [0;39m [restartedMain] [36mo.s.d.r.c.RepositoryConfigurationDelegate[0;39m  CorrelationId: %X{correlationId} - Multiple Spring Data modules found, entering strict repository configuration mode
+23:29:08.989 [34mINFO [0;39m [restartedMain] [36mo.s.d.r.c.RepositoryConfigurationDelegate[0;39m  CorrelationId: %X{correlationId} - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+23:29:09.208 [34mINFO [0;39m [restartedMain] [36mo.s.d.r.c.RepositoryConfigurationDelegate[0;39m  CorrelationId: %X{correlationId} - Finished Spring Data repository scanning in 211 ms. Found 2 JPA repository interfaces.
+23:29:09.224 [34mINFO [0;39m [restartedMain] [36mo.s.d.r.c.RepositoryConfigurationDelegate[0;39m  CorrelationId: %X{correlationId} - Multiple Spring Data modules found, entering strict repository configuration mode
+23:29:09.225 [34mINFO [0;39m [restartedMain] [36mo.s.d.r.c.RepositoryConfigurationDelegate[0;39m  CorrelationId: %X{correlationId} - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+23:29:09.239 [34mINFO [0;39m [restartedMain] [36mo.s.d.r.c.RepositoryConfigurationExtensionSupport[0;39m  CorrelationId: %X{correlationId} - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.keepguard.ms_communication.infrastructure.persistence.spring.ProviderSpringRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+23:29:09.240 [34mINFO [0;39m [restartedMain] [36mo.s.d.r.c.RepositoryConfigurationExtensionSupport[0;39m  CorrelationId: %X{correlationId} - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.keepguard.ms_communication.infrastructure.persistence.spring.TemplateSpringRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+23:29:09.240 [34mINFO [0;39m [restartedMain] [36mo.s.d.r.c.RepositoryConfigurationDelegate[0;39m  CorrelationId: %X{correlationId} - Finished Spring Data repository scanning in 9 ms. Found 0 Redis repository interfaces.
+23:29:10.283 [34mINFO [0;39m [restartedMain] [36mo.s.b.w.e.tomcat.TomcatWebServer[0;39m  CorrelationId: %X{correlationId} - Tomcat initialized with port 8582 (http)
+23:29:10.290 [34mINFO [0;39m [restartedMain] [36mo.a.coyote.http11.Http11NioProtocol[0;39m  CorrelationId: %X{correlationId} - Initializing ProtocolHandler ["http-nio-8582"]
+23:29:10.291 [34mINFO [0;39m [restartedMain] [36mo.a.catalina.core.StandardService[0;39m  CorrelationId: %X{correlationId} - Starting service [Tomcat]
+23:29:10.292 [34mINFO [0;39m [restartedMain] [36mo.a.catalina.core.StandardEngine[0;39m  CorrelationId: %X{correlationId} - Starting Servlet engine: [Apache Tomcat/10.1.26]
+23:29:10.314 [34mINFO [0;39m [restartedMain] [36mo.a.c.c.C.[Tomcat].[localhost].[/][0;39m  CorrelationId: %X{correlationId} - Initializing Spring embedded WebApplicationContext
+23:29:10.315 [34mINFO [0;39m [restartedMain] [36mo.s.b.w.s.c.ServletWebServerApplicationContext[0;39m  CorrelationId: %X{correlationId} - Root WebApplicationContext: initialization completed in 2242 ms
+23:29:10.828 [34mINFO [0;39m [restartedMain] [36mo.s.o.j.p.SpringPersistenceUnitInfo[0;39m  CorrelationId: %X{correlationId} - No LoadTimeWeaver setup: ignoring JPA class transformer
+23:29:10.844 [34mINFO [0;39m [restartedMain] [36mcom.zaxxer.hikari.HikariDataSource[0;39m  CorrelationId: %X{correlationId} - HikariPool-1 - Starting...
+23:29:11.139 [34mINFO [0;39m [restartedMain] [36mcom.zaxxer.hikari.pool.HikariPool[0;39m  CorrelationId: %X{correlationId} - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@15bf8b58
+23:29:11.140 [34mINFO [0;39m [restartedMain] [36mcom.zaxxer.hikari.HikariDataSource[0;39m  CorrelationId: %X{correlationId} - HikariPool-1 - Start completed.
+23:29:12.525 [34mINFO [0;39m [restartedMain] [36mo.s.o.j.LocalContainerEntityManagerFactoryBean[0;39m  CorrelationId: %X{correlationId} - Initialized JPA EntityManagerFactory for persistence unit 'default'
+23:29:14.018 [31mWARN [0;39m [restartedMain] [36mo.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration[0;39m  CorrelationId: %X{correlationId} - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+23:29:15.083 [34mINFO [0;39m [restartedMain] [36mo.s.b.d.a.OptionalLiveReloadServer[0;39m  CorrelationId: %X{correlationId} - LiveReload server is running on port 35729
+23:29:15.094 [34mINFO [0;39m [restartedMain] [36mo.s.b.a.e.web.EndpointLinksResolver[0;39m  CorrelationId: %X{correlationId} - Exposing 3 endpoints beneath base path '/actuator'
+23:29:15.163 [34mINFO [0;39m [restartedMain] [36mo.a.coyote.http11.Http11NioProtocol[0;39m  CorrelationId: %X{correlationId} - Starting ProtocolHandler ["http-nio-8582"]
+23:29:15.170 [34mINFO [0;39m [restartedMain] [36mo.s.b.w.e.tomcat.TomcatWebServer[0;39m  CorrelationId: %X{correlationId} - Tomcat started on port 8582 (http) with context path '/'
+23:29:15.173 [34mINFO [0;39m [restartedMain] [36mo.s.a.r.c.CachingConnectionFactory[0;39m  CorrelationId: %X{correlationId} - Attempting to connect to: [localhost:5672]
+23:29:15.217 [34mINFO [0;39m [restartedMain] [36mo.s.a.r.c.CachingConnectionFactory[0;39m  CorrelationId: %X{correlationId} - Created new connection: rabbitConnectionFactory#2e2418aa:0/SimpleConnection@6d7dc6b7 [delegate=amqp://guest@127.0.0.1:5672/, localPort=58042]
+23:29:15.375 [34mINFO [0;39m [restartedMain] [36mc.k.m.MsCommunicationApplication[0;39m  CorrelationId: %X{correlationId} - Started MsCommunicationApplication in 7.634 seconds (process running for 7.904)
+23:29:30.346 [34mINFO [0;39m [http-nio-8582-exec-1] [36mo.a.c.c.C.[Tomcat].[localhost].[/][0;39m  CorrelationId: %X{correlationId} - Initializing Spring DispatcherServlet 'dispatcherServlet'
+23:29:43.294 [34mINFO [0;39m [http-nio-8582-exec-9] [36mo.s.api.AbstractOpenApiResource[0;39m 90670fec-a335-49d6-b9f7-28998bded18f} - Init duration for springdoc-openapi is: 612 ms
+23:30:11.114 [31mWARN [0;39m [HikariPool-1 housekeeper] [36mcom.zaxxer.hikari.pool.HikariPool[0;39m  CorrelationId: %X{correlationId} - HikariPool-1 - Retrograde clock change detected (housekeeper delta=29s862ms), soft-evicting connections from pool.
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  01:08 min
+[INFO] Finished at: 2025-10-22T23:30:14-03:00
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.springframework.boot:spring-boot-maven-plugin:3.3.2:run (default-cli) on project ms-communication: Process terminated with exit code: 137 -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoExecutionException
