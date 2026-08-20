@@ -67,7 +67,7 @@ public class MessageController {
     )
     @LogOperation(
         operation = "SEND_MESSAGE",
-        description = "Enviando mensagem - tipo: {dto.messageType}, destinatário: {dto.recipient}, codeUser: {dto.codeUser}, application: {xApplication}",
+        description = "Enviando mensagem - tipo: {dto.messageType}, destinatário: {dto.recipient}, codeUser: {dto.codeUser}, application: {tenantId}",
         audit = true,
         auditAction = "SEND_MESSAGE",
         auditEntityType = "MESSAGE"
@@ -75,14 +75,14 @@ public class MessageController {
     public ResponseEntity<MessageSendResponseDTO> send(
             @Valid @RequestBody MessageSendRequestDTO dto,
             @Parameter(description = "UUID da aplicação", required = true)
-            @RequestHeader("X-Application") String xApplication) {
+            @RequestHeader("X-Tenant-Id") String tenantIdHeader) {
 
-        log.info("Realizando envio de mensagem - tipo: {}, destinatário: {}, codeUser: {}, application: {}", 
-            dto.getMessageType(), dto.getRecipient(), dto.getCodeUser(), xApplication);
+        log.info("Realizando envio de mensagem - tipo: {}, destinatário: {}, codeUser: {}, tenantIdHeader: {}", 
+            dto.getMessageType(), dto.getRecipient(), dto.getCodeUser(), tenantIdHeader);
 
-        var xApplicationUuid = ValidationUtils.validateXApplication(xApplication);
+        var tenantId = ValidationUtils.validateTenantId(tenantIdHeader);
 
-        var command = adapterMapper.toSendCommand(dto, xApplicationUuid);
+        var command = adapterMapper.toSendCommand(dto, tenantId);
         boolean sent = messagePort.sendWithFallback(command);
         
         var response = MessageSendResponseDTO.builder()
@@ -92,7 +92,7 @@ public class MessageController {
         
         log.info("Mensagem {} - tipo: {}, destinatário: {}, codeUser: {}, application: {}", 
             sent ? "enviada com sucesso" : "falhou ao enviar", 
-            dto.getMessageType(), dto.getRecipient(), dto.getCodeUser(), xApplication);
+            dto.getMessageType(), dto.getRecipient(), dto.getCodeUser(), tenantId);
         
         return ResponseEntity.ok(response);
     }

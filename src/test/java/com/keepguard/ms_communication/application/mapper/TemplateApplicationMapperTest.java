@@ -35,7 +35,7 @@ class TemplateApplicationMapperTest {
     private TemplateView templateView;
     private Template domainTemplate;
     private UUID templateId;
-    private UUID xApplicationUuid;
+    private UUID tenantId;
     private TemplateCreateCommandDTO templateCreateCommandDTO;
     private TemplateUpdateCommandDTO templateUpdateCommandDTO;
     private Template template;
@@ -44,7 +44,7 @@ class TemplateApplicationMapperTest {
     @BeforeEach
     void setUp() {
         templateId = UUID.randomUUID();
-        xApplicationUuid = UUID.randomUUID();
+        tenantId = UUID.randomUUID();
         LocalDateTime now = LocalDateTime.now();
 
         // Setup TemplateCreateDTO
@@ -57,7 +57,7 @@ class TemplateApplicationMapperTest {
         templateCreateRequestDTO.setSubject("Test Subject");
         templateCreateRequestDTO.setIsActive(true);
         templateCreateRequestDTO.setVariables("{\"name\":\"John\"}");
-        templateCreateRequestDTO.setXApplication("test-app");
+        templateCreateRequestDTO.setTenantId("test-app");
 
         // Setup TemplateUpdateDTO
         templateUpdateRequestDTO = new TemplateUpdateRequestDTO();
@@ -104,7 +104,7 @@ class TemplateApplicationMapperTest {
         
         // Setup TemplateCreateCommandDTO
         templateCreateCommandDTO = TemplateCreateCommandDTO.builder()
-                .xApplicationUuid(xApplicationUuid)
+                .tenantId(tenantId)
                 .name("Test Template")
                 .description("Test Description")
                 .application("test-app")
@@ -119,7 +119,7 @@ class TemplateApplicationMapperTest {
         // Setup TemplateUpdateCommandDTO
         templateUpdateCommandDTO = TemplateUpdateCommandDTO.builder()
                 .id(templateId)
-                .xApplicationUuid(xApplicationUuid)
+                .tenantId(tenantId)
                 .name("Updated Template")
                 .description("Updated Description")
                 .messageType(MessageTypeEnum.SMS)
@@ -171,7 +171,7 @@ class TemplateApplicationMapperTest {
 
         // Then
         assertNotNull(result);
-        assertEquals(templateCreateCommandDTO.getXApplicationUuid(), result.getXApplicationUuid());
+        assertEquals(templateCreateCommandDTO.getTenantId(), result.getTenantId());
         assertEquals(templateCreateCommandDTO.getName(), result.getName());
         assertEquals(templateCreateCommandDTO.getDescription(), result.getDescription());
         assertEquals(templateCreateCommandDTO.getMessageType(), result.getMessageType());
@@ -202,7 +202,7 @@ class TemplateApplicationMapperTest {
         // Then
         assertNotNull(result);
         assertEquals(templateId, result.getId());
-        assertEquals(xApplicationUuid, result.getXApplicationUuid());
+        assertEquals(tenantId, result.getTenantId());
         assertEquals(templateUpdateCommandDTO.getName(), result.getName());
         assertEquals(templateUpdateCommandDTO.getDescription(), result.getDescription());
         assertEquals(templateUpdateCommandDTO.getMessageType(), result.getMessageType());
@@ -259,7 +259,7 @@ class TemplateApplicationMapperTest {
     void shouldConvertTemplateCreateCommandToDomainSuccessfully() {
         // Given
         TemplateCreateCommandDTO command = TemplateCreateCommandDTO.builder()
-                .xApplicationUuid(xApplicationUuid)
+                .tenantId(tenantId)
                 .name("Test Template")
                 .description("Test Description")
                 .application("test-app")
@@ -333,7 +333,7 @@ class TemplateApplicationMapperTest {
         // Given
         TemplateUpdateCommandDTO command = TemplateUpdateCommandDTO.builder()
                 .id(templateId)
-                .xApplicationUuid(xApplicationUuid)
+                .tenantId(tenantId)
                 .name("Updated Template")
                 .description("Updated Description")
                 .messageType(MessageTypeEnum.SMS)
@@ -377,7 +377,7 @@ class TemplateApplicationMapperTest {
         // Given
         TemplateUpdateCommandDTO command = TemplateUpdateCommandDTO.builder()
                 .id(templateId)
-                .xApplicationUuid(xApplicationUuid)
+                .tenantId(tenantId)
                 .name("Updated Template")
                 .description("Updated Description")
                 .messageType(MessageTypeEnum.SMS)
@@ -401,7 +401,7 @@ class TemplateApplicationMapperTest {
         // Given
         TemplateUpdateCommandDTO command = TemplateUpdateCommandDTO.builder()
                 .id(templateId)
-                .xApplicationUuid(xApplicationUuid)
+                .tenantId(tenantId)
                 .name(null)
                 .description(null)
                 .messageType(null)
@@ -467,7 +467,7 @@ class TemplateApplicationMapperTest {
         // Given
         TemplateUpdateCommandDTO command = TemplateUpdateCommandDTO.builder()
                 .id(templateId)
-                .xApplicationUuid(xApplicationUuid)
+                .tenantId(tenantId)
                 .name("Updated Name Only")
                 .description(null)
                 .messageType(null)
@@ -500,7 +500,7 @@ class TemplateApplicationMapperTest {
     void shouldHandleTemplateCreateDTOWithNullVariablesSuccessfully() {
         // Given
         TemplateCreateCommandDTO command = TemplateCreateCommandDTO.builder()
-                .xApplicationUuid(xApplicationUuid)
+                .tenantId(tenantId)
                 .name("Test Template")
                 .description("Test Description")
                 .application("test-app")
@@ -525,7 +525,7 @@ class TemplateApplicationMapperTest {
     void shouldHandleTemplateCreateDTOWithEmptyVariablesSuccessfully() {
         // Given
         TemplateCreateCommandDTO command = TemplateCreateCommandDTO.builder()
-                .xApplicationUuid(xApplicationUuid)
+                .tenantId(tenantId)
                 .name("Test Template")
                 .description("Test Description")
                 .application("test-app")
@@ -552,7 +552,7 @@ class TemplateApplicationMapperTest {
         // Given
         TemplateUpdateCommandDTO command = TemplateUpdateCommandDTO.builder()
                 .id(templateId)
-                .xApplicationUuid(xApplicationUuid)
+                .tenantId(tenantId)
                 .name("Updated Template")
                 .description("Updated Description")
                 .messageType(MessageTypeEnum.SMS)
@@ -603,7 +603,7 @@ class TemplateApplicationMapperTest {
     void shouldHandleTemplateCreateCommandWithEmptyVariablesSuccessfully() {
         // Given
         TemplateCreateCommandDTO command = TemplateCreateCommandDTO.builder()
-                .xApplicationUuid(xApplicationUuid)
+                .tenantId(tenantId)
                 .name("Test Template")
                 .description("Test Description")
                 .application("test-app")
@@ -630,7 +630,7 @@ class TemplateApplicationMapperTest {
         // Given
         TemplateUpdateCommandDTO command = TemplateUpdateCommandDTO.builder()
                 .id(templateId)
-                .xApplicationUuid(xApplicationUuid)
+                .tenantId(tenantId)
                 .name("Updated Template")
                 .description("Updated Description")
                 .messageType(MessageTypeEnum.SMS)

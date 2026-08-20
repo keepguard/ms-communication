@@ -44,7 +44,7 @@ public class MessageRabbitMQMapper {
         }
         
         return MessageSendCommandDTO.builder()
-            .xApplicationUuid(UUID.fromString(rabbitMQMessage.xApplication()))
+            .tenantId(UUID.fromString(rabbitMQMessage.tenantId()))
             .communicationType(rabbitMQMessage.communicationType())
             .recipient(rabbitMQMessage.recipient())
             .subject(rabbitMQMessage.subject())

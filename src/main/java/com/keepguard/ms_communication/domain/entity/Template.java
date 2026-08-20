@@ -11,7 +11,7 @@ public class Template {
     private UUID id;
     private TemplateTypeEnum templateType;
     private MessageTypeEnum messageType;
-    private String xApplication;
+    private String tenantId;
     private String name;
     private String description;
     private String subject;
@@ -31,7 +31,7 @@ public class Template {
         this.id = id;
         this.templateType = templateType;
         this.messageType = messageType;
-        this.xApplication = application;
+        this.tenantId = application;
         this.name = name;
         this.description = description;
         this.subject = subject;
@@ -44,14 +44,14 @@ public class Template {
     }
 
     // Factory method para criação
-    public static Template create(TemplateTypeEnum templateType, MessageTypeEnum messageType, String xApplication,
+    public static Template create(TemplateTypeEnum templateType, MessageTypeEnum messageType, String tenantId,
                                       String name, String description, String subject, String content) {
         LocalDateTime now = LocalDateTime.now();
         return new Template(
             UUID.randomUUID(),
             templateType,
             messageType,
-            xApplication,
+            tenantId,
             name,
             description,
             subject,
@@ -109,8 +109,8 @@ public class Template {
     public MessageTypeEnum getMessageType() { return messageType; }
     public void setMessageType(MessageTypeEnum messageType) { this.messageType = messageType; }
 
-    public String getXApplication() { return xApplication; }
-    public void setXApplication(String xApplication) { this.xApplication = xApplication; }
+    public String getTenantId() { return tenantId; }
+    public void setTenantId(String tenantId) { this.tenantId = tenantId; }
 
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
@@ -144,7 +144,7 @@ public class Template {
                 "id=" + id +
                 ", templateType=" + templateType +
                 ", messageType=" + messageType +
-                ", xApplication='" + xApplication + '\'' +
+                ", tenantId='" + tenantId + '\'' +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", subject='" + subject + '\'' +

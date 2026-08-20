@@ -27,8 +27,8 @@ public class TemplateJpaEntity {
     @Column(name = "message_type", nullable = false, length = 20)
     private MessageTypeEnum messageType;
 
-    @Column(name = "x_application", nullable = false, length = 100)
-    private String xApplication;
+    @Column(name = "tenant_id", nullable = false, length = 100)
+    private String tenantId;
 
     @Column(nullable = false, length = 200)
     private String name;

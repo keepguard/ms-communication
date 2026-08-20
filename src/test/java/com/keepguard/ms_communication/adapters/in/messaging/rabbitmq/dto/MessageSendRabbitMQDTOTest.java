@@ -17,7 +17,7 @@ class MessageSendRabbitMQDTOTest {
     @DisplayName("Deve criar DTO válido com todos os campos obrigatórios")
     void shouldCreateValidDTOWithRequiredFields() {
         // Given
-        String xApplication = "test-app";
+        String tenantId = "test-app";
         String xCorrelationId = "test-correlation-123";
         String recipient = "test@example.com";
         String subject = "Test Subject";
@@ -25,14 +25,14 @@ class MessageSendRabbitMQDTOTest {
 
         // When
         MessageSendRabbitMQDTO dto = new MessageSendRabbitMQDTO(
-            xApplication, xCorrelationId, MessageTypeEnum.EMAIL, recipient,
+            tenantId, xCorrelationId, MessageTypeEnum.EMAIL, recipient,
             TemplateTypeEnum.NOTIFICACAO_GERAL, subject, content, CommunicationTypeEnum.EMAIL,
             "user123", Map.of("name", "John")
         );
 
         // Then
         assertNotNull(dto);
-        assertEquals(xApplication, dto.xApplication());
+        assertEquals(tenantId, dto.tenantId());
         assertEquals(xCorrelationId, dto.xCorrelationId());
         assertEquals(MessageTypeEnum.EMAIL, dto.messageType());
         assertEquals(recipient, dto.recipient());
@@ -48,7 +48,7 @@ class MessageSendRabbitMQDTOTest {
     @DisplayName("Deve criar DTO válido com todos os campos")
     void shouldCreateValidDTOWithAllFields() {
         // Given
-        String xApplication = "test-app";
+        String tenantId = "test-app";
         String xCorrelationId = "test-correlation-123";
         String recipient = "test@example.com";
         String subject = "Test Subject";
@@ -58,14 +58,14 @@ class MessageSendRabbitMQDTOTest {
 
         // When
         MessageSendRabbitMQDTO dto = new MessageSendRabbitMQDTO(
-            xApplication, xCorrelationId, MessageTypeEnum.EMAIL, recipient,
+            tenantId, xCorrelationId, MessageTypeEnum.EMAIL, recipient,
             TemplateTypeEnum.NOTIFICACAO_GERAL, subject, content, CommunicationTypeEnum.EMAIL,
             codeUser, variables
         );
 
         // Then
         assertNotNull(dto);
-        assertEquals(xApplication, dto.xApplication());
+        assertEquals(tenantId, dto.tenantId());
         assertEquals(xCorrelationId, dto.xCorrelationId());
         assertEquals(MessageTypeEnum.EMAIL, dto.messageType());
         assertEquals(recipient, dto.recipient());
@@ -107,14 +107,14 @@ class MessageSendRabbitMQDTOTest {
     @DisplayName("Deve gerar string de log válida")
     void shouldGenerateValidLogString() {
         // Given
-        String xApplication = "test-app";
+        String tenantId = "test-app";
         String xCorrelationId = "test-correlation-123";
         String recipient = "test@example.com";
         String subject = "Test Subject";
         String content = "Test Content";
         
         MessageSendRabbitMQDTO dto = new MessageSendRabbitMQDTO(
-            xApplication, xCorrelationId, MessageTypeEnum.EMAIL, recipient,
+            tenantId, xCorrelationId, MessageTypeEnum.EMAIL, recipient,
             TemplateTypeEnum.NOTIFICACAO_GERAL, subject, content, CommunicationTypeEnum.EMAIL,
             "user123", Map.of("name", "John")
         );
@@ -124,7 +124,7 @@ class MessageSendRabbitMQDTOTest {
 
         // Then
         assertNotNull(logString);
-        assertTrue(logString.contains(xApplication));
+        assertTrue(logString.contains(tenantId));
         assertTrue(logString.contains(xCorrelationId));
         assertTrue(logString.contains(recipient));
         assertTrue(logString.contains("user123"));

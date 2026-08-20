@@ -32,8 +32,8 @@ public class TemplateGetTemplatesResponseDTO {
 
     @Schema(description = "Identificador da aplicação proprietária do template",
             example = "sistema-gestao")
-    @JsonProperty("xApplication")
-    private String xApplication;
+    @JsonProperty("tenantId")
+    private String tenantId;
 
     @Schema(description = "Nome do template",
             example = "Template de Boas-vindas")

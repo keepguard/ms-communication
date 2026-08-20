@@ -17,8 +17,8 @@ import java.util.UUID;
 @AllArgsConstructor
 public class ProviderCreateCommandDTO {
     
-    @NotNull(message = "O header X-Application é obrigatório")
-    private UUID xApplicationUuid;
+    @NotNull(message = "O header X-Tenant-Id é obrigatório")
+    private UUID tenantId;
     
     @NotBlank(message = "Nome é obrigatório")
     private String name;

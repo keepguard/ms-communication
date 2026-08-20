@@ -15,17 +15,17 @@ import java.util.UUID;
 @Slf4j
 public class TemplateAdapterMapper {
 
-    public TemplateCreateCommandDTO toCreateCommand(TemplateCreateRequestDTO dto, UUID xApplicationUuid) {
+    public TemplateCreateCommandDTO toCreateCommand(TemplateCreateRequestDTO dto, UUID tenantId) {
         if (dto == null) {
             return null;
         }
 
         try {
             return TemplateCreateCommandDTO.builder()
-                    .xApplicationUuid(xApplicationUuid)
+                    .tenantId(tenantId)
                     .name(dto.getName())
                     .description(dto.getDescription())
-                    .application(dto.getXApplication())
+                    .application(dto.getTenantId())
                     .messageType(dto.getMessageType())
                     .templateType(dto.getTemplateType())
                     .content(dto.getContent())
@@ -39,7 +39,7 @@ public class TemplateAdapterMapper {
         }
     }
 
-    public TemplateUpdateCommandDTO toUpdateCommand(UUID id, TemplateUpdateRequestDTO dto, UUID xApplicationUuid) {
+    public TemplateUpdateCommandDTO toUpdateCommand(UUID id, TemplateUpdateRequestDTO dto, UUID tenantId) {
         if (dto == null) {
             return null;
         }
@@ -47,7 +47,7 @@ public class TemplateAdapterMapper {
         try {
             return TemplateUpdateCommandDTO.builder()
                     .id(id)
-                    .xApplicationUuid(xApplicationUuid)
+                    .tenantId(tenantId)
                     .name(dto.getName())
                     .description(dto.getDescription())
                     .messageType(dto.getMessageType())
@@ -76,7 +76,7 @@ public class TemplateAdapterMapper {
                     .messageType(view.messageType())
                     .templateType(view.templateType())
                     .type(view.templateType())
-                    .xApplication(view.xApplication())
+                    .tenantId(view.tenantId())
                     .content(view.content())
                     .subject(view.subject())
                     .isActive(view.isActive())
@@ -181,7 +181,7 @@ public class TemplateAdapterMapper {
                     .messageType(view.messageType())
                     .templateType(view.templateType())
                     .type(view.templateType())
-                    .xApplication(view.xApplication())
+                    .tenantId(view.tenantId())
                     .content(view.content())
                     .subject(view.subject())
                     .isActive(view.isActive())

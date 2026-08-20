@@ -17,7 +17,7 @@ public class TemplateGetByIdQueryDTO {
     @NotNull(message = "ID do template é obrigatório")
     private UUID id;
     
-    @NotNull(message = "O header X-Application é obrigatório")
-    private UUID xApplicationUuid;
+    @NotNull(message = "O header X-Tenant-Id é obrigatório")
+    private UUID tenantId;
 }
 

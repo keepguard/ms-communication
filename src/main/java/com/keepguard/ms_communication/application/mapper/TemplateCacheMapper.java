@@ -16,7 +16,7 @@ public class TemplateCacheMapper {
             template.getId(),
             template.getTemplateType(),
             template.getMessageType(),
-            template.getXApplication(),
+            template.getTenantId(),
             template.getName(),
             template.getDescription(),
             template.getSubject(),
@@ -37,7 +37,7 @@ public class TemplateCacheMapper {
         template.setId(dto.id());
         template.setTemplateType(dto.templateType());
         template.setMessageType(dto.messageType());
-        template.setXApplication(dto.application());
+        template.setTenantId(dto.application());
         template.setName(dto.name());
         template.setDescription(dto.description());
         template.setSubject(dto.subject());

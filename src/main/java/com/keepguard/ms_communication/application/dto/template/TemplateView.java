@@ -12,7 +12,7 @@ public record TemplateView(
     String description,
     MessageTypeEnum messageType,
     TemplateTypeEnum templateType,
-    String xApplication,
+    String tenantId,
     String content,
     String subject,
     Boolean isActive,

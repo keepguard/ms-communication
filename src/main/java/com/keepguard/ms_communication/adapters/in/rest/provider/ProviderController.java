@@ -66,12 +66,12 @@ public class ProviderController {
     public ResponseEntity<ProviderCreateResponseDTO> createProvider(
             @Valid @RequestBody ProviderCreateRequestDTO dto,
             @Parameter(description = "UUID da aplicação", required = true)
-            @RequestHeader("X-Application") String xApplication) {
+            @RequestHeader("X-Tenant-Id") String tenantIdHeader) {
         
-        log.info("Criando provider - application={}", xApplication);
+        log.info("Criando provider - tenantIdHeader={}", tenantIdHeader);
         
-        var xApplicationUuid = ValidationUtils.validateXApplication(xApplication);
-        com.keepguard.ms_communication.domain.dto.provider.ProviderCreateCommandDTO requestCommand = adapterMapper.toCreateCommand(dto, xApplicationUuid);
+        var tenantId = ValidationUtils.validateTenantId(tenantIdHeader);
+        com.keepguard.ms_communication.domain.dto.provider.ProviderCreateCommandDTO requestCommand = adapterMapper.toCreateCommand(dto, tenantId);
         ProviderCreateCommandDTO command = applicationMapper.toCreateCommand(requestCommand);
         ProviderView view = providerPort.create(command);
         ProviderCreateResponseDTO response = adapterMapper.toCreateResponseDTO(view);
@@ -100,12 +100,12 @@ public class ProviderController {
             @Parameter(description = "ID único do provedor") @PathVariable UUID id,
             @Valid @RequestBody ProviderUpdateRequestDTO dto,
             @Parameter(description = "UUID da aplicação", required = true)
-            @RequestHeader("X-Application") String xApplication) {
+            @RequestHeader("X-Tenant-Id") String tenantIdHeader) {
         
-        log.info("Atualizando provider: {} - application={}", id, xApplication);
+        log.info("Atualizando provider: {} - tenantIdHeader={}", id, tenantIdHeader);
         
-        var xApplicationUuid = ValidationUtils.validateXApplication(xApplication);
-        com.keepguard.ms_communication.domain.dto.provider.ProviderUpdateCommandDTO requestCommand = adapterMapper.toUpdateCommand(id, dto, xApplicationUuid);
+        var tenantId = ValidationUtils.validateTenantId(tenantIdHeader);
+        com.keepguard.ms_communication.domain.dto.provider.ProviderUpdateCommandDTO requestCommand = adapterMapper.toUpdateCommand(id, dto, tenantId);
         ProviderUpdateCommandDTO command = applicationMapper.toUpdateCommand(requestCommand);
         ProviderView view = providerPort.update(command);
         ProviderUpdateResponseDTO response = adapterMapper.toUpdateResponseDTO(view);
@@ -131,11 +131,11 @@ public class ProviderController {
     public ResponseEntity<ProviderGetProviderByIdResponseDTO> getProviderById(
             @Parameter(description = "ID único do provedor") @PathVariable UUID id,
             @Parameter(description = "UUID da aplicação", required = true)
-            @RequestHeader("X-Application") String xApplication) {
+            @RequestHeader("X-Tenant-Id") String tenantIdHeader) {
         
-        log.info("Buscando provider por ID: {} - application={}", id, xApplication);
+        log.info("Buscando provider por ID: {} - tenantIdHeader={}", id, tenantIdHeader);
         
-        var xApplicationUuid = ValidationUtils.validateXApplication(xApplication);
+        var tenantId = ValidationUtils.validateTenantId(tenantIdHeader);
         ProviderView view = providerPort.getById(id).orElseThrow(() -> new RuntimeException("Provider not found"));
         ProviderGetProviderByIdResponseDTO response = adapterMapper.toGetProviderByIdResponseDTO(view);
         
@@ -159,11 +159,11 @@ public class ProviderController {
     )
     public ResponseEntity<List<ProviderGetAllProvidersResponseDTO>> getAllProviders(
             @Parameter(description = "UUID da aplicação", required = true)
-            @RequestHeader("X-Application") String xApplication) {
+            @RequestHeader("X-Tenant-Id") String tenantIdHeader) {
         
-        log.info("Listando todos providers - application={}", xApplication);
+        log.info("Listando todos providers - tenantIdHeader={}", tenantIdHeader);
         
-        var xApplicationUuid = ValidationUtils.validateXApplication(xApplication);
+        var tenantId = ValidationUtils.validateTenantId(tenantIdHeader);
         List<ProviderView> views = providerPort.getAllActive();
         List<ProviderGetAllProvidersResponseDTO> response = views.stream()
                 .map(adapterMapper::toGetAllProvidersResponseDTO)
@@ -188,11 +188,11 @@ public class ProviderController {
     )
     public ResponseEntity<List<ProviderGetActiveProvidersResponseDTO>> getActiveProviders(
             @Parameter(description = "UUID da aplicação", required = true)
-            @RequestHeader("X-Application") String xApplication) {
+            @RequestHeader("X-Tenant-Id") String tenantIdHeader) {
         
-        log.info("Listando providers ativos - application={}", xApplication);
+        log.info("Listando providers ativos - tenantIdHeader={}", tenantIdHeader);
         
-        var xApplicationUuid = ValidationUtils.validateXApplication(xApplication);
+        var tenantId = ValidationUtils.validateTenantId(tenantIdHeader);
         List<ProviderView> views = providerPort.getAllActive();
         List<ProviderGetActiveProvidersResponseDTO> response = views.stream()
                 .map(adapterMapper::toGetActiveProvidersResponseDTO)
@@ -220,11 +220,11 @@ public class ProviderController {
             @Parameter(description = "Tipo de comunicação (EMAIL, SMS, WHATSAPP, PUSH_NOTIFICATION, TELEGRAM)")
             @PathVariable CommunicationTypeEnum communicationType,
             @Parameter(description = "UUID da aplicação", required = true)
-            @RequestHeader("X-Application") String xApplication) {
+            @RequestHeader("X-Tenant-Id") String tenantIdHeader) {
         
-        log.info("Listando providers por tipo de comunicação: {} - application={}", communicationType, xApplication);
+        log.info("Listando providers por tipo de comunicação: {} - tenantIdHeader={}", communicationType, tenantIdHeader);
         
-        var xApplicationUuid = ValidationUtils.validateXApplication(xApplication);
+        var tenantId = ValidationUtils.validateTenantId(tenantIdHeader);
         List<ProviderView> views = providerPort.getByCommunicationType(communicationType);
         List<ProviderGetProvidersByCommunicationTypeResponseDTO> response = views.stream()
                 .map(adapterMapper::toGetProvidersByCommunicationTypeResponseDTO)
@@ -253,11 +253,11 @@ public class ProviderController {
             @Parameter(description = "Tipo de comunicação para buscar o provedor padrão")
             @PathVariable CommunicationTypeEnum communicationType,
             @Parameter(description = "UUID da aplicação", required = true)
-            @RequestHeader("X-Application") String xApplication) {
+            @RequestHeader("X-Tenant-Id") String tenantIdHeader) {
         
-        log.info("Buscando provider padrão por tipo: {} - application={}", communicationType, xApplication);
+        log.info("Buscando provider padrão por tipo: {} - tenantIdHeader={}", communicationType, tenantIdHeader);
         
-        var xApplicationUuid = ValidationUtils.validateXApplication(xApplication);
+        var tenantId = ValidationUtils.validateTenantId(tenantIdHeader);
         ProviderView view = providerPort.getDefaultByCommunicationType(communicationType).orElseThrow(() -> new RuntimeException("Default provider not found"));
         ProviderGetDefaultProviderResponseDTO response = adapterMapper.toGetDefaultProviderResponseDTO(view);
         
@@ -282,11 +282,11 @@ public class ProviderController {
     public ResponseEntity<Void> deleteProvider(
             @Parameter(description = "ID único do provedor") @PathVariable UUID id,
             @Parameter(description = "UUID da aplicação", required = true)
-            @RequestHeader("X-Application") String xApplication) {
+            @RequestHeader("X-Tenant-Id") String tenantIdHeader) {
         
-        log.info("Deletando provider: {} - application={}", id, xApplication);
+        log.info("Deletando provider: {} - tenantIdHeader={}", id, tenantIdHeader);
         
-        var xApplicationUuid = ValidationUtils.validateXApplication(xApplication);
+        var tenantId = ValidationUtils.validateTenantId(tenantIdHeader);
         providerPort.delete(id);
         
         return ResponseEntity.noContent().build();
@@ -310,11 +310,11 @@ public class ProviderController {
     public ResponseEntity<ProviderActivateProviderResponseDTO> activateProvider(
             @Parameter(description = "ID único do provedor") @PathVariable UUID id,
             @Parameter(description = "UUID da aplicação", required = true)
-            @RequestHeader("X-Application") String xApplication) {
+            @RequestHeader("X-Tenant-Id") String tenantIdHeader) {
         
-        log.info("Ativando provider: {} - application={}", id, xApplication);
+        log.info("Ativando provider: {} - tenantIdHeader={}", id, tenantIdHeader);
         
-        var xApplicationUuid = ValidationUtils.validateXApplication(xApplication);
+        var tenantId = ValidationUtils.validateTenantId(tenantIdHeader);
         ProviderView view = providerPort.activate(id);
         ProviderActivateProviderResponseDTO response = adapterMapper.toActivateProviderResponseDTO(view);
         
@@ -339,11 +339,11 @@ public class ProviderController {
     public ResponseEntity<ProviderDeactivateProviderResponseDTO> deactivateProvider(
             @Parameter(description = "ID único do provedor") @PathVariable UUID id,
             @Parameter(description = "UUID da aplicação", required = true)
-            @RequestHeader("X-Application") String xApplication) {
+            @RequestHeader("X-Tenant-Id") String tenantIdHeader) {
         
-        log.info("Desativando provider: {} - application={}", id, xApplication);
+        log.info("Desativando provider: {} - tenantIdHeader={}", id, tenantIdHeader);
         
-        var xApplicationUuid = ValidationUtils.validateXApplication(xApplication);
+        var tenantId = ValidationUtils.validateTenantId(tenantIdHeader);
         ProviderView view = providerPort.deactivate(id);
         ProviderDeactivateProviderResponseDTO response = adapterMapper.toDeactivateProviderResponseDTO(view);
         
@@ -369,11 +369,11 @@ public class ProviderController {
     public ResponseEntity<ProviderSetAsDefaultResponseDTO> setAsDefault(
             @Parameter(description = "ID único do provedor") @PathVariable UUID id,
             @Parameter(description = "UUID da aplicação", required = true)
-            @RequestHeader("X-Application") String xApplication) {
+            @RequestHeader("X-Tenant-Id") String tenantIdHeader) {
         
-        log.info("Definindo provider como padrão: {} - application={}", id, xApplication);
+        log.info("Definindo provider como padrão: {} - tenantIdHeader={}", id, tenantIdHeader);
         
-        var xApplicationUuid = ValidationUtils.validateXApplication(xApplication);
+        var tenantId = ValidationUtils.validateTenantId(tenantIdHeader);
         ProviderView view = providerPort.setAsDefault(id);
         ProviderSetAsDefaultResponseDTO response = adapterMapper.toSetAsDefaultResponseDTO(view);
         
@@ -395,11 +395,11 @@ public class ProviderController {
     )
     public ResponseEntity<ProviderTypeEnum[]> getProviderTypes(
             @Parameter(description = "UUID da aplicação", required = true)
-            @RequestHeader("X-Application") String xApplication) {
+            @RequestHeader("X-Tenant-Id") String tenantIdHeader) {
         
-        log.info("Listando tipos de provider - application={}", xApplication);
+        log.info("Listando tipos de provider - tenantIdHeader={}", tenantIdHeader);
         
-        var xApplicationUuid = ValidationUtils.validateXApplication(xApplication);
+        var tenantId = ValidationUtils.validateTenantId(tenantIdHeader);
         return ResponseEntity.ok(ProviderTypeEnum.values());
     }
 
@@ -418,11 +418,11 @@ public class ProviderController {
     )
     public ResponseEntity<CommunicationTypeEnum[]> getCommunicationTypes(
             @Parameter(description = "UUID da aplicação", required = true)
-            @RequestHeader("X-Application") String xApplication) {
+            @RequestHeader("X-Tenant-Id") String tenantIdHeader) {
         
-        log.info("Listando tipos de comunicação - application={}", xApplication);
+        log.info("Listando tipos de comunicação - tenantIdHeader={}", tenantIdHeader);
         
-        var xApplicationUuid = ValidationUtils.validateXApplication(xApplication);
+        var tenantId = ValidationUtils.validateTenantId(tenantIdHeader);
         return ResponseEntity.ok(CommunicationTypeEnum.values());
     }
 

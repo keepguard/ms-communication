@@ -23,7 +23,7 @@ import java.util.UUID;
 public class ProviderTestBuilder {
     
     private UUID id = UUID.randomUUID();
-    private UUID xApplicationUuid = UUID.randomUUID();
+    private UUID tenantId = UUID.randomUUID();
     private String name = "N8N Provider";
     private ProviderTypeEnum providerType = ProviderTypeEnum.SENDGRID;
     private CommunicationTypeEnum communicationType = CommunicationTypeEnum.EMAIL;
@@ -48,8 +48,8 @@ public class ProviderTestBuilder {
         return new ProviderTestBuilder();
     }
     
-    public ProviderTestBuilder withXApplication(UUID xApplicationUuid) {
-        this.xApplicationUuid = xApplicationUuid;
+    public ProviderTestBuilder withTenantId(UUID tenantId) {
+        this.tenantId = tenantId;
         return this;
     }
     
@@ -241,7 +241,7 @@ public class ProviderTestBuilder {
     
     public ProviderCreateCommandDTO buildCreateCommand() {
         return ProviderCreateCommandDTO.builder()
-                .xApplicationUuid(xApplicationUuid)
+                .tenantId(tenantId)
                 .name(name)
                 .providerType(providerType)
                 .communicationType(communicationType)
@@ -261,7 +261,7 @@ public class ProviderTestBuilder {
     public ProviderUpdateCommandDTO buildUpdateCommand() {
         return ProviderUpdateCommandDTO.builder()
                 .id(id)
-                .xApplicationUuid(xApplicationUuid)
+                .tenantId(tenantId)
                 .name(name)
                 .providerType(providerType)
                 .communicationType(communicationType)

@@ -11,14 +11,14 @@ import java.util.UUID;
 @Slf4j
 public class MessageAdapterMapper {
 
-    public MessageSendCommandDTO toSendCommand(MessageSendRequestDTO dto, UUID xApplicationUuid) {
+    public MessageSendCommandDTO toSendCommand(MessageSendRequestDTO dto, UUID tenantId) {
         if (dto == null) {
             return null;
         }
 
         try {
             return MessageSendCommandDTO.builder()
-                    .xApplicationUuid(xApplicationUuid)
+                    .tenantId(tenantId)
                     .communicationType(dto.getCommunicationType())
                     .recipient(dto.getRecipient())
                     .codeUser(dto.getCodeUser())

@@ -45,13 +45,14 @@ class MessageControllerTest {
 
     private MessageSendRequestDTO messageSendRequestDTO;
     private MessageSendCommandDTO messageSendCommandDTO;
-    private String xApplication;
-    private UUID xApplicationUuid;
+    private String tenantIdStr;
+    private UUID tenantId;
 
     @BeforeEach
     void setUp() {
-        xApplication = UUID.randomUUID().toString();
-        xApplicationUuid = UUID.fromString(xApplication);
+        tenantId = UUID.randomUUID();
+        tenantIdStr = tenantId.toString();
+        
 
         // Setup request DTO
         messageSendRequestDTO = new MessageSendRequestDTO();
@@ -68,7 +69,7 @@ class MessageControllerTest {
 
         // Setup command DTO
         messageSendCommandDTO = MessageSendCommandDTO.builder()
-                .xApplicationUuid(xApplicationUuid)
+                .tenantId(tenantId)
                 .communicationType(CommunicationTypeEnum.EMAIL)
                 .recipient("test@example.com")
                 .subject("Test Subject")
@@ -84,16 +85,16 @@ class MessageControllerTest {
     void shouldSendMessageSuccessfully() {
         // Given
         try (MockedStatic<ValidationUtils> validationUtilsMock = mockStatic(ValidationUtils.class)) {
-            validationUtilsMock.when(() -> ValidationUtils.validateXApplication(xApplication))
-                    .thenReturn(xApplicationUuid);
+            validationUtilsMock.when(() -> ValidationUtils.validateTenantId(tenantIdStr))
+                    .thenReturn(tenantId);
 
-            when(adapterMapper.toSendCommand(messageSendRequestDTO, xApplicationUuid))
+            when(adapterMapper.toSendCommand(messageSendRequestDTO, tenantId))
                     .thenReturn(messageSendCommandDTO);
             when(messagePort.sendWithFallback(messageSendCommandDTO))
                     .thenReturn(true);
 
             // When
-            ResponseEntity<MessageSendResponseDTO> response = messageController.send(messageSendRequestDTO, xApplication);
+            ResponseEntity<MessageSendResponseDTO> response = messageController.send(messageSendRequestDTO, tenantIdStr);
 
             // Then
             assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -103,7 +104,7 @@ class MessageControllerTest {
             assertTrue(responseBody.isSuccess());
             assertEquals("Mensagem enviada com sucesso", responseBody.getMessage());
 
-            verify(adapterMapper, times(1)).toSendCommand(messageSendRequestDTO, xApplicationUuid);
+            verify(adapterMapper, times(1)).toSendCommand(messageSendRequestDTO, tenantId);
             verify(messagePort, times(1)).sendWithFallback(messageSendCommandDTO);
         }
     }
@@ -113,16 +114,16 @@ class MessageControllerTest {
     void shouldReturnFailureWhenSendingMessageFails() {
         // Given
         try (MockedStatic<ValidationUtils> validationUtilsMock = mockStatic(ValidationUtils.class)) {
-            validationUtilsMock.when(() -> ValidationUtils.validateXApplication(xApplication))
-                    .thenReturn(xApplicationUuid);
+            validationUtilsMock.when(() -> ValidationUtils.validateTenantId(tenantIdStr))
+                    .thenReturn(tenantId);
 
-            when(adapterMapper.toSendCommand(messageSendRequestDTO, xApplicationUuid))
+            when(adapterMapper.toSendCommand(messageSendRequestDTO, tenantId))
                     .thenReturn(messageSendCommandDTO);
             when(messagePort.sendWithFallback(messageSendCommandDTO))
                     .thenReturn(false);
 
             // When
-            ResponseEntity<MessageSendResponseDTO> response = messageController.send(messageSendRequestDTO, xApplication);
+            ResponseEntity<MessageSendResponseDTO> response = messageController.send(messageSendRequestDTO, tenantIdStr);
 
             // Then
             assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -132,24 +133,24 @@ class MessageControllerTest {
             assertFalse(responseBody.isSuccess());
             assertEquals("Falha ao enviar mensagem", responseBody.getMessage());
 
-            verify(adapterMapper, times(1)).toSendCommand(messageSendRequestDTO, xApplicationUuid);
+            verify(adapterMapper, times(1)).toSendCommand(messageSendRequestDTO, tenantId);
             verify(messagePort, times(1)).sendWithFallback(messageSendCommandDTO);
         }
     }
 
     @Test
-    @DisplayName("Deve lançar exceção quando X-Application for inválido")
-    void shouldThrowExceptionWhenXApplicationIsInvalid() {
+    @DisplayName("Deve lançar exceção quando X-Tenant-Id for inválido")
+    void shouldThrowExceptionWhenTenantIdIsInvalid() {
         // Given
-        String invalidXApplication = "invalid-uuid";
+        String invalidTenantId = "invalid-uuid";
 
         try (MockedStatic<ValidationUtils> validationUtilsMock = mockStatic(ValidationUtils.class)) {
-            validationUtilsMock.when(() -> ValidationUtils.validateXApplication(invalidXApplication))
-                    .thenThrow(new IllegalArgumentException("X-Application inválido"));
+            validationUtilsMock.when(() -> ValidationUtils.validateTenantId(tenantIdStr))
+                    .thenThrow(new IllegalArgumentException("X-Tenant-Id inválido"));
 
             // When & Then
             assertThrows(IllegalArgumentException.class, () -> {
-                messageController.send(messageSendRequestDTO, invalidXApplication);
+                messageController.send(messageSendRequestDTO, invalidTenantId);
             });
 
             verify(adapterMapper, never()).toSendCommand(any(), any());

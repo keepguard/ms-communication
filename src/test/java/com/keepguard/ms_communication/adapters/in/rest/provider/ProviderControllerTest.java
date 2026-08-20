@@ -68,14 +68,15 @@ class ProviderControllerTest {
     private ProviderCreateCommandDTO providerCreateCommand;
     private ProviderUpdateCommandDTO providerUpdateCommand;
     private UUID providerId;
-    private String xApplication;
-    private UUID xApplicationUuid;
+    private String tenantIdStr;
+    private UUID tenantId;
     
     @BeforeEach
     void setUp() {
         providerId = UUID.randomUUID();
-        xApplication = UUID.randomUUID().toString();
-        xApplicationUuid = UUID.fromString(xApplication);
+        tenantId = UUID.randomUUID();
+        tenantIdStr = tenantId.toString();
+        
         
         providerCreateRequestDTO = new ProviderCreateRequestDTO();
         providerCreateRequestDTO.setName("Test Provider");
@@ -305,7 +306,7 @@ class ProviderControllerTest {
         );
         
         providerCreateCommand = ProviderCreateCommandDTO.builder()
-                .xApplicationUuid(xApplicationUuid)
+                .tenantId(tenantId)
                 .name("Test Provider")
                 .providerType(ProviderTypeEnum.N8N)
                 .communicationType(CommunicationTypeEnum.EMAIL)
@@ -323,7 +324,7 @@ class ProviderControllerTest {
         
         providerUpdateCommand = ProviderUpdateCommandDTO.builder()
                 .id(providerId)
-                .xApplicationUuid(xApplicationUuid)
+                .tenantId(tenantId)
                 .name("Updated Provider")
                 .providerType(ProviderTypeEnum.SENDGRID)
                 .communicationType(CommunicationTypeEnum.EMAIL)
@@ -344,7 +345,7 @@ class ProviderControllerTest {
     @DisplayName("Deve criar provedor com sucesso")
     void shouldCreateProviderSuccessfully() {
         // Given
-        when(adapterMapper.toCreateCommand(providerCreateRequestDTO, xApplicationUuid)).thenReturn(com.keepguard.ms_communication.domain.dto.provider.ProviderCreateCommandDTO.builder()
+        when(adapterMapper.toCreateCommand(providerCreateRequestDTO, tenantId)).thenReturn(com.keepguard.ms_communication.domain.dto.provider.ProviderCreateCommandDTO.builder()
                 .name("Test Provider")
                 .providerType(ProviderTypeEnum.N8N)
                 .communicationType(CommunicationTypeEnum.EMAIL)
@@ -364,7 +365,7 @@ class ProviderControllerTest {
         when(adapterMapper.toCreateResponseDTO(providerView)).thenReturn(providerCreateResponseDTO);
         
         // When
-        ResponseEntity<ProviderCreateResponseDTO> response = providerController.createProvider(providerCreateRequestDTO, xApplication);
+        ResponseEntity<ProviderCreateResponseDTO> response = providerController.createProvider(providerCreateRequestDTO, tenantIdStr);
         
         // Then
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
@@ -376,7 +377,7 @@ class ProviderControllerTest {
         assertEquals(ProviderTypeEnum.N8N, responseBody.getProviderType());
         assertEquals(CommunicationTypeEnum.EMAIL, responseBody.getCommunicationType());
         
-        verify(adapterMapper, times(1)).toCreateCommand(providerCreateRequestDTO, xApplicationUuid);
+        verify(adapterMapper, times(1)).toCreateCommand(providerCreateRequestDTO, tenantId);
         verify(providerPort, times(1)).create(providerCreateCommand);
         verify(adapterMapper, times(1)).toCreateResponseDTO(providerView);
     }
@@ -401,17 +402,17 @@ class ProviderControllerTest {
                 .monthlyLimit(30000)
                 .build();
         
-        when(adapterMapper.toCreateCommand(providerCreateRequestDTO, xApplicationUuid)).thenReturn(requestCommand);
+        when(adapterMapper.toCreateCommand(providerCreateRequestDTO, tenantId)).thenReturn(requestCommand);
         when(applicationMapper.toCreateCommand(requestCommand)).thenReturn(providerCreateCommand);
         when(providerPort.create(providerCreateCommand))
             .thenThrow(new RuntimeException("Service error"));
         
         // When & Then
         assertThrows(RuntimeException.class, () -> {
-            providerController.createProvider(providerCreateRequestDTO, xApplication);
+            providerController.createProvider(providerCreateRequestDTO, tenantIdStr);
         });
         
-        verify(adapterMapper, times(1)).toCreateCommand(providerCreateRequestDTO, xApplicationUuid);
+        verify(adapterMapper, times(1)).toCreateCommand(providerCreateRequestDTO, tenantId);
         verify(providerPort, times(1)).create(providerCreateCommand);
     }
     
@@ -419,7 +420,7 @@ class ProviderControllerTest {
     @DisplayName("Deve atualizar provedor com sucesso")
     void shouldUpdateProviderSuccessfully() {
         // Given
-        when(adapterMapper.toUpdateCommand(providerId, providerUpdateRequestDTO, xApplicationUuid)).thenReturn(com.keepguard.ms_communication.domain.dto.provider.ProviderUpdateCommandDTO.builder()
+        when(adapterMapper.toUpdateCommand(providerId, providerUpdateRequestDTO, tenantId)).thenReturn(com.keepguard.ms_communication.domain.dto.provider.ProviderUpdateCommandDTO.builder()
                 .name("Updated Provider")
                 .providerType(ProviderTypeEnum.SENDGRID)
                 .communicationType(CommunicationTypeEnum.EMAIL)
@@ -456,13 +457,13 @@ class ProviderControllerTest {
                 .build());
         
         // When
-        ResponseEntity<ProviderUpdateResponseDTO> response = providerController.updateProvider(providerId, providerUpdateRequestDTO, xApplication);
+        ResponseEntity<ProviderUpdateResponseDTO> response = providerController.updateProvider(providerId, providerUpdateRequestDTO, tenantIdStr);
         
         // Then
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
         
-        verify(adapterMapper, times(1)).toUpdateCommand(providerId, providerUpdateRequestDTO, xApplicationUuid);
+        verify(adapterMapper, times(1)).toUpdateCommand(providerId, providerUpdateRequestDTO, tenantId);
         verify(providerPort, times(1)).update(providerUpdateCommand);
         verify(adapterMapper, times(1)).toUpdateResponseDTO(providerView);
     }
@@ -475,7 +476,7 @@ class ProviderControllerTest {
         when(adapterMapper.toGetProviderByIdResponseDTO(providerView)).thenReturn(providerGetProviderByIdResponseDTO);
         
         // When
-        ResponseEntity<ProviderGetProviderByIdResponseDTO> response = providerController.getProviderById(providerId, xApplication);
+        ResponseEntity<ProviderGetProviderByIdResponseDTO> response = providerController.getProviderById(providerId, tenantIdStr);
         
         // Then
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -493,7 +494,7 @@ class ProviderControllerTest {
         
         // When & Then
         assertThrows(RuntimeException.class, () -> {
-            providerController.getProviderById(providerId, xApplication);
+            providerController.getProviderById(providerId, tenantIdStr);
         });
         
         verify(providerPort, times(1)).getById(providerId);
@@ -508,7 +509,7 @@ class ProviderControllerTest {
         when(adapterMapper.toGetAllProvidersResponseDTO(providerView)).thenReturn(providerGetAllProvidersResponseDTO);
         
         // When
-        ResponseEntity<List<ProviderGetAllProvidersResponseDTO>> response = providerController.getAllProviders(xApplication);
+        ResponseEntity<List<ProviderGetAllProvidersResponseDTO>> response = providerController.getAllProviders(tenantIdStr);
         
         // Then
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -530,7 +531,7 @@ class ProviderControllerTest {
         when(adapterMapper.toGetActiveProvidersResponseDTO(providerView)).thenReturn(providerGetActiveProvidersResponseDTO);
         
         // When
-        ResponseEntity<List<ProviderGetActiveProvidersResponseDTO>> response = providerController.getActiveProviders(xApplication);
+        ResponseEntity<List<ProviderGetActiveProvidersResponseDTO>> response = providerController.getActiveProviders(tenantIdStr);
         
         // Then
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -552,7 +553,7 @@ class ProviderControllerTest {
         when(adapterMapper.toGetProvidersByCommunicationTypeResponseDTO(providerView)).thenReturn(providerGetProvidersByCommunicationTypeResponseDTO);
         
         // When
-        ResponseEntity<List<ProviderGetProvidersByCommunicationTypeResponseDTO>> response = providerController.getProvidersByCommunicationType(CommunicationTypeEnum.EMAIL, xApplication);
+        ResponseEntity<List<ProviderGetProvidersByCommunicationTypeResponseDTO>> response = providerController.getProvidersByCommunicationType(CommunicationTypeEnum.EMAIL, tenantIdStr);
         
         // Then
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -573,7 +574,7 @@ class ProviderControllerTest {
         when(adapterMapper.toGetDefaultProviderResponseDTO(providerView)).thenReturn(providerGetDefaultProviderResponseDTO);
         
         // When
-        ResponseEntity<ProviderGetDefaultProviderResponseDTO> response = providerController.getDefaultProvider(CommunicationTypeEnum.EMAIL, xApplication);
+        ResponseEntity<ProviderGetDefaultProviderResponseDTO> response = providerController.getDefaultProvider(CommunicationTypeEnum.EMAIL, tenantIdStr);
         
         // Then
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -591,7 +592,7 @@ class ProviderControllerTest {
         
         // When & Then
         assertThrows(RuntimeException.class, () -> {
-            providerController.getDefaultProvider(CommunicationTypeEnum.EMAIL, xApplication);
+            providerController.getDefaultProvider(CommunicationTypeEnum.EMAIL, tenantIdStr);
         });
         
         verify(providerPort, times(1)).getDefaultByCommunicationType(CommunicationTypeEnum.EMAIL);
@@ -604,7 +605,7 @@ class ProviderControllerTest {
         doNothing().when(providerPort).delete(providerId);
         
         // When
-        ResponseEntity<Void> response = providerController.deleteProvider(providerId, xApplication);
+        ResponseEntity<Void> response = providerController.deleteProvider(providerId, tenantIdStr);
         
         // Then
         assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
@@ -620,7 +621,7 @@ class ProviderControllerTest {
         when(adapterMapper.toActivateProviderResponseDTO(providerView)).thenReturn(providerActivateProviderResponseDTO);
         
         // When
-        ResponseEntity<ProviderActivateProviderResponseDTO> response = providerController.activateProvider(providerId, xApplication);
+        ResponseEntity<ProviderActivateProviderResponseDTO> response = providerController.activateProvider(providerId, tenantIdStr);
         
         // Then
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -638,7 +639,7 @@ class ProviderControllerTest {
         when(adapterMapper.toDeactivateProviderResponseDTO(providerView)).thenReturn(providerDeactivateProviderResponseDTO);
         
         // When
-        ResponseEntity<ProviderDeactivateProviderResponseDTO> response = providerController.deactivateProvider(providerId, xApplication);
+        ResponseEntity<ProviderDeactivateProviderResponseDTO> response = providerController.deactivateProvider(providerId, tenantIdStr);
         
         // Then
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -656,7 +657,7 @@ class ProviderControllerTest {
         when(adapterMapper.toSetAsDefaultResponseDTO(providerView)).thenReturn(providerSetAsDefaultResponseDTO);
         
         // When
-        ResponseEntity<ProviderSetAsDefaultResponseDTO> response = providerController.setAsDefault(providerId, xApplication);
+        ResponseEntity<ProviderSetAsDefaultResponseDTO> response = providerController.setAsDefault(providerId, tenantIdStr);
         
         // Then
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -670,7 +671,7 @@ class ProviderControllerTest {
     @DisplayName("Deve listar tipos de provedores")
     void shouldGetProviderTypes() {
         // When
-        ResponseEntity<ProviderTypeEnum[]> response = providerController.getProviderTypes(xApplication);
+        ResponseEntity<ProviderTypeEnum[]> response = providerController.getProviderTypes(tenantIdStr);
         
         // Then
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -684,7 +685,7 @@ class ProviderControllerTest {
     @DisplayName("Deve listar tipos de comunicação")
     void shouldGetCommunicationTypes() {
         // When
-        ResponseEntity<CommunicationTypeEnum[]> response = providerController.getCommunicationTypes(xApplication);
+        ResponseEntity<CommunicationTypeEnum[]> response = providerController.getCommunicationTypes(tenantIdStr);
         
         // Then
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -832,11 +833,11 @@ class ProviderControllerTest {
         dto.setDailyLimit(1000);
         dto.setMonthlyLimit(30000);
         
-        when(adapterMapper.toCreateCommand(dto, xApplicationUuid)).thenReturn(com.keepguard.ms_communication.domain.dto.provider.ProviderCreateCommandDTO.builder().build());
+        when(adapterMapper.toCreateCommand(dto, tenantId)).thenReturn(com.keepguard.ms_communication.domain.dto.provider.ProviderCreateCommandDTO.builder().build());
         when(applicationMapper.toCreateCommand(any(com.keepguard.ms_communication.domain.dto.provider.ProviderCreateCommandDTO.class))).thenReturn(providerCreateCommand);
         
         // When
-        com.keepguard.ms_communication.domain.dto.provider.ProviderCreateCommandDTO requestCommand = adapterMapper.toCreateCommand(dto, xApplicationUuid);
+        com.keepguard.ms_communication.domain.dto.provider.ProviderCreateCommandDTO requestCommand = adapterMapper.toCreateCommand(dto, tenantId);
         ProviderCreateCommandDTO result = applicationMapper.toCreateCommand(requestCommand);
         
         // Then
@@ -855,7 +856,7 @@ class ProviderControllerTest {
         assertEquals(1000, result.getDailyLimit());
         assertEquals(30000, result.getMonthlyLimit());
         
-        verify(adapterMapper, times(1)).toCreateCommand(dto, xApplicationUuid);
+        verify(adapterMapper, times(1)).toCreateCommand(dto, tenantId);
     }
     
     @Test
@@ -877,11 +878,11 @@ class ProviderControllerTest {
         dto.setDailyLimit(2000);
         dto.setMonthlyLimit(60000);
         
-        when(adapterMapper.toUpdateCommand(providerId, dto, xApplicationUuid)).thenReturn(com.keepguard.ms_communication.domain.dto.provider.ProviderUpdateCommandDTO.builder().build());
+        when(adapterMapper.toUpdateCommand(providerId, dto, tenantId)).thenReturn(com.keepguard.ms_communication.domain.dto.provider.ProviderUpdateCommandDTO.builder().build());
         when(applicationMapper.toUpdateCommand(any(com.keepguard.ms_communication.domain.dto.provider.ProviderUpdateCommandDTO.class))).thenReturn(providerUpdateCommand);
         
         // When
-        com.keepguard.ms_communication.domain.dto.provider.ProviderUpdateCommandDTO requestCommand = adapterMapper.toUpdateCommand(providerId, dto, xApplicationUuid);
+        com.keepguard.ms_communication.domain.dto.provider.ProviderUpdateCommandDTO requestCommand = adapterMapper.toUpdateCommand(providerId, dto, tenantId);
         ProviderUpdateCommandDTO result = applicationMapper.toUpdateCommand(requestCommand);
         
         // Then
@@ -901,7 +902,7 @@ class ProviderControllerTest {
         assertEquals(2000, result.getDailyLimit());
         assertEquals(60000, result.getMonthlyLimit());
         
-        verify(adapterMapper, times(1)).toUpdateCommand(providerId, dto, xApplicationUuid);
+        verify(adapterMapper, times(1)).toUpdateCommand(providerId, dto, tenantId);
     }
     
     @Test

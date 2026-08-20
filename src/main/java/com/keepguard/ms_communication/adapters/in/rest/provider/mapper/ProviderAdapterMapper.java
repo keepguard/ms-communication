@@ -15,14 +15,14 @@ import java.util.UUID;
 @Slf4j
 public class ProviderAdapterMapper {
 
-    public ProviderCreateCommandDTO toCreateCommand(ProviderCreateRequestDTO dto, UUID xApplicationUuid) {
+    public ProviderCreateCommandDTO toCreateCommand(ProviderCreateRequestDTO dto, UUID tenantId) {
         if (dto == null) {
             return null;
         }
 
         try {
             return ProviderCreateCommandDTO.builder()
-                    .xApplicationUuid(xApplicationUuid)
+                    .tenantId(tenantId)
                     .name(dto.getName())
                     .providerType(dto.getProviderType())
                     .communicationType(dto.getCommunicationType())
@@ -43,7 +43,7 @@ public class ProviderAdapterMapper {
         }
     }
 
-    public ProviderUpdateCommandDTO toUpdateCommand(UUID id, ProviderUpdateRequestDTO dto, UUID xApplicationUuid) {
+    public ProviderUpdateCommandDTO toUpdateCommand(UUID id, ProviderUpdateRequestDTO dto, UUID tenantId) {
         if (dto == null) {
             return null;
         }
@@ -51,7 +51,7 @@ public class ProviderAdapterMapper {
         try {
             return ProviderUpdateCommandDTO.builder()
                     .id(id)
-                    .xApplicationUuid(xApplicationUuid)
+                    .tenantId(tenantId)
                     .name(dto.getName())
                     .providerType(dto.getProviderType())
                     .communicationType(dto.getCommunicationType())

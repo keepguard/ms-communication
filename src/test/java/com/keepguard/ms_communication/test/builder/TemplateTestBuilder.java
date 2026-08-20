@@ -22,7 +22,7 @@ import java.util.UUID;
 public class TemplateTestBuilder {
     
     private UUID id = UUID.randomUUID();
-    private UUID xApplicationUuid = UUID.randomUUID();
+    private UUID tenantId = UUID.randomUUID();
     private TemplateTypeEnum templateType = TemplateTypeEnum.CADASTRO_SUCESSO;
     private MessageTypeEnum messageType = MessageTypeEnum.EMAIL;
     private String application = "test-app";
@@ -43,8 +43,8 @@ public class TemplateTestBuilder {
         return new TemplateTestBuilder();
     }
     
-    public TemplateTestBuilder withXApplication(UUID xApplicationUuid) {
-        this.xApplicationUuid = xApplicationUuid;
+    public TemplateTestBuilder withTenantId(UUID tenantId) {
+        this.tenantId = tenantId;
         return this;
     }
     
@@ -213,7 +213,7 @@ public class TemplateTestBuilder {
         template.setTemplateType(templateType);
         template.setContent(content);
         template.setSubject(subject);
-        template.setXApplication(application);
+        template.setTenantId(application);
         template.setIsActive(isActive);
         template.setVariables(variables.toString());
         template.setCreatedAt(createdAt);
@@ -240,7 +240,7 @@ public class TemplateTestBuilder {
     
     public TemplateCreateCommandDTO buildCreateCommand() {
         return TemplateCreateCommandDTO.builder()
-                .xApplicationUuid(xApplicationUuid)
+                .tenantId(tenantId)
                 .name(name)
                 .description(description)
                 .application(application)
@@ -256,7 +256,7 @@ public class TemplateTestBuilder {
     public TemplateUpdateCommandDTO buildUpdateCommand() {
         return TemplateUpdateCommandDTO.builder()
                 .id(id)
-                .xApplicationUuid(xApplicationUuid)
+                .tenantId(tenantId)
                 .name(name)
                 .description(description)
                 .messageType(messageType)

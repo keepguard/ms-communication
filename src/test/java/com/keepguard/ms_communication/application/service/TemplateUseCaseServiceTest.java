@@ -53,11 +53,11 @@ class TemplateUseCaseServiceTest {
     @BeforeEach
     void setUp() {
         templateId = UUID.randomUUID();
-        UUID xApplicationUuid = UUID.randomUUID();
+        UUID tenantId = UUID.randomUUID();
         LocalDateTime now = LocalDateTime.now();
 
         templateCreateCommand = TemplateTestBuilder.builder()
-                .withXApplication(xApplicationUuid)
+                .withTenantId(tenantId)
                 .withName("Test Template")
                 .withDescription("Test Description")
                 .withMessageType(MessageTypeEnum.EMAIL)
@@ -69,7 +69,7 @@ class TemplateUseCaseServiceTest {
 
         templateUpdateCommand = TemplateTestBuilder.builder()
                 .withId(templateId)
-                .withXApplication(xApplicationUuid)
+                .withTenantId(tenantId)
                 .withName("Updated Template")
                 .withDescription("Updated Description")
                 .withMessageType(MessageTypeEnum.SMS)

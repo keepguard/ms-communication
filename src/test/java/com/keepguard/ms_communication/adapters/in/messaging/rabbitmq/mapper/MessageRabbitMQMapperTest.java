@@ -28,7 +28,7 @@ class MessageRabbitMQMapperTest {
     @DisplayName("Deve converter DTO RabbitMQ válido para Command de domínio")
     void shouldConvertValidRabbitMQDTOToCommand() {
         // Given
-        String xApplication = "550e8400-e29b-41d4-a716-446655440000";
+        String tenantId = "550e8400-e29b-41d4-a716-446655440000";
         String xCorrelationId = "test-correlation-123";
         String recipient = "test@example.com";
         String subject = "Test Subject";
@@ -37,7 +37,7 @@ class MessageRabbitMQMapperTest {
         Map<String, Object> variables = Map.of("name", "John", "company", "Test Corp");
 
         MessageSendRabbitMQDTO rabbitMQMessage = new MessageSendRabbitMQDTO(
-            xApplication, xCorrelationId, MessageTypeEnum.EMAIL, recipient,
+            tenantId, xCorrelationId, MessageTypeEnum.EMAIL, recipient,
             TemplateTypeEnum.NOTIFICACAO_GERAL, subject, content, CommunicationTypeEnum.EMAIL,
             codeUser, variables
         );
@@ -47,7 +47,7 @@ class MessageRabbitMQMapperTest {
 
         // Then
         assertNotNull(command);
-        assertEquals(UUID.fromString(xApplication), command.getXApplicationUuid());
+        assertEquals(UUID.fromString(tenantId), command.getTenantId());
         assertEquals(CommunicationTypeEnum.EMAIL, command.getCommunicationType());
         assertEquals(recipient, command.getRecipient());
         assertEquals(subject, command.getSubject());
@@ -62,12 +62,12 @@ class MessageRabbitMQMapperTest {
     @DisplayName("Deve converter DTO RabbitMQ com campos nulos para Command")
     void shouldConvertRabbitMQDTOWithNullFieldsToCommand() {
         // Given
-        String xApplication = "550e8400-e29b-41d4-a716-446655440000";
+        String tenantId = "550e8400-e29b-41d4-a716-446655440000";
         String xCorrelationId = "test-correlation-123";
         String recipient = "test@example.com";
 
         MessageSendRabbitMQDTO rabbitMQMessage = new MessageSendRabbitMQDTO(
-            xApplication, xCorrelationId, MessageTypeEnum.EMAIL, recipient,
+            tenantId, xCorrelationId, MessageTypeEnum.EMAIL, recipient,
             TemplateTypeEnum.NOTIFICACAO_GERAL, null, null, CommunicationTypeEnum.EMAIL,
             null, null
         );
@@ -77,7 +77,7 @@ class MessageRabbitMQMapperTest {
 
         // Then
         assertNotNull(command);
-        assertEquals(UUID.fromString(xApplication), command.getXApplicationUuid());
+        assertEquals(UUID.fromString(tenantId), command.getTenantId());
         assertEquals(CommunicationTypeEnum.EMAIL, command.getCommunicationType());
         assertEquals(recipient, command.getRecipient());
         assertNull(command.getSubject());
@@ -109,12 +109,12 @@ class MessageRabbitMQMapperTest {
     @DisplayName("Deve converter diferentes tipos de mensagem corretamente")
     void shouldConvertDifferentMessageTypesCorrectly() {
         // Given
-        String xApplication = "550e8400-e29b-41d4-a716-446655440000";
+        String tenantId = "550e8400-e29b-41d4-a716-446655440000";
         String xCorrelationId = "test-correlation-123";
         String recipient = "test@example.com";
 
         MessageSendRabbitMQDTO smsMessage = new MessageSendRabbitMQDTO(
-            xApplication, xCorrelationId, MessageTypeEnum.SMS, recipient,
+            tenantId, xCorrelationId, MessageTypeEnum.SMS, recipient,
             TemplateTypeEnum.AUTENTICACAO_SMS_TOKEN, "SMS Subject", "SMS Content", 
             CommunicationTypeEnum.SMS, "user123", Map.of("code", "123456")
         );
@@ -133,12 +133,12 @@ class MessageRabbitMQMapperTest {
     @DisplayName("Deve converter diferentes tipos de template corretamente")
     void shouldConvertDifferentTemplateTypesCorrectly() {
         // Given
-        String xApplication = "550e8400-e29b-41d4-a716-446655440000";
+        String tenantId = "550e8400-e29b-41d4-a716-446655440000";
         String xCorrelationId = "test-correlation-123";
         String recipient = "test@example.com";
 
         MessageSendRabbitMQDTO authMessage = new MessageSendRabbitMQDTO(
-            xApplication, xCorrelationId, MessageTypeEnum.EMAIL, recipient,
+            tenantId, xCorrelationId, MessageTypeEnum.EMAIL, recipient,
             TemplateTypeEnum.AUTENTICACAO_EMAIL_TOKEN, "Auth Subject", "Auth Content", 
             CommunicationTypeEnum.EMAIL, "user123", Map.of("token", "abc123")
         );
@@ -156,7 +156,7 @@ class MessageRabbitMQMapperTest {
     @DisplayName("Deve converter DTO com variáveis complexas")
     void shouldConvertDTOWithComplexVariables() {
         // Given
-        String xApplication = "550e8400-e29b-41d4-a716-446655440000";
+        String tenantId = "550e8400-e29b-41d4-a716-446655440000";
         String xCorrelationId = "test-correlation-123";
         String recipient = "test@example.com";
         Map<String, Object> complexVariables = Map.of(
@@ -166,7 +166,7 @@ class MessageRabbitMQMapperTest {
         );
 
         MessageSendRabbitMQDTO rabbitMQMessage = new MessageSendRabbitMQDTO(
-            xApplication, xCorrelationId, MessageTypeEnum.EMAIL, recipient,
+            tenantId, xCorrelationId, MessageTypeEnum.EMAIL, recipient,
             TemplateTypeEnum.NOTIFICACAO_GERAL, "Complex Subject", "Complex Content", 
             CommunicationTypeEnum.EMAIL, "user123", complexVariables
         );

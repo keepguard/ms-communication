@@ -53,19 +53,19 @@ class MessageCommandServiceTest {
     private MessageSendCommandDTO messageSendCommand;
     private Provider provider;
     private UUID providerId;
-    private UUID xApplicationUuid;
+    private UUID tenantId;
 
     @BeforeEach
     void setUp() {
         providerId = UUID.randomUUID();
-        xApplicationUuid = UUID.randomUUID();
+        tenantId = UUID.randomUUID();
 
         Map<String, Object> variables = new HashMap<>();
         variables.put("userName", "Test User");
         variables.put("activationLink", "https://example.com/activate");
 
         messageSendCommand = MessageSendCommandDTO.builder()
-                .xApplicationUuid(xApplicationUuid)
+                .tenantId(tenantId)
                 .communicationType(CommunicationTypeEnum.EMAIL)
                 .recipient("test@example.com")
                 .subject("Test Subject")
@@ -131,7 +131,7 @@ class MessageCommandServiceTest {
     void shouldCreateCommandDTOWithAllFieldsCorrectly() {
         // Given & When
         MessageSendCommandDTO command = MessageSendCommandDTO.builder()
-                .xApplicationUuid(xApplicationUuid)
+                .tenantId(tenantId)
                 .communicationType(CommunicationTypeEnum.EMAIL)
                 .recipient("test@example.com")
                 .subject("Test Subject")
@@ -143,7 +143,7 @@ class MessageCommandServiceTest {
 
         // Then
         assertNotNull(command);
-        assertEquals(xApplicationUuid, command.getXApplicationUuid());
+        assertEquals(tenantId, command.getTenantId());
         assertEquals(CommunicationTypeEnum.EMAIL, command.getCommunicationType());
         assertEquals("test@example.com", command.getRecipient());
         assertEquals("Test Subject", command.getSubject());

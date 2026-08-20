@@ -138,7 +138,7 @@ public class MessageCommandService implements MessagePort {
                 TemplateProcessorService.ProcessedTemplate processedTemplate = templateProcessorService.processTemplate(
                         TemplateTypeEnum.valueOf(command.getTemplateType()),
                         messageType,
-                        command.getXApplicationUuid().toString(), // UUID da aplicação do header X-Application
+                        command.getTenantId().toString(), // UUID da aplicação do header X-Tenant-Id
                         variables  // usar variáveis exatamente como fornecidas no payload
                 );
 

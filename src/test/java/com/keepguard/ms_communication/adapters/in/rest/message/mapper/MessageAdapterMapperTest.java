@@ -28,12 +28,12 @@ class MessageAdapterMapperTest {
     private MessageAdapterMapper mapper;
 
     private MessageSendRequestDTO requestDTO;
-    private UUID xApplicationUuid;
+    private UUID tenantId;
     private Map<String, Object> variables;
 
     @BeforeEach
     void setUp() {
-        xApplicationUuid = UUID.randomUUID();
+        tenantId = UUID.randomUUID();
         
         variables = new HashMap<>();
         variables.put("userName", "Test User");
@@ -53,11 +53,11 @@ class MessageAdapterMapperTest {
     @DisplayName("Deve mapear MessageSendRequestDTO para MessageSendCommandDTO com sucesso")
     void shouldMapMessageSendRequestDTOToMessageSendCommandDTO() {
         // When
-        MessageSendCommandDTO command = mapper.toSendCommand(requestDTO, xApplicationUuid);
+        MessageSendCommandDTO command = mapper.toSendCommand(requestDTO, tenantId);
 
         // Then
         assertNotNull(command);
-        assertEquals(xApplicationUuid, command.getXApplicationUuid());
+        assertEquals(tenantId, command.getTenantId());
         assertEquals(CommunicationTypeEnum.EMAIL, command.getCommunicationType());
         assertEquals("test@example.com", command.getRecipient());
         assertEquals("Welcome to our system", command.getSubject());
@@ -76,11 +76,11 @@ class MessageAdapterMapperTest {
         requestDTO.setVariables(null);
 
         // When
-        MessageSendCommandDTO command = mapper.toSendCommand(requestDTO, xApplicationUuid);
+        MessageSendCommandDTO command = mapper.toSendCommand(requestDTO, tenantId);
 
         // Then
         assertNotNull(command);
-        assertEquals(xApplicationUuid, command.getXApplicationUuid());
+        assertEquals(tenantId, command.getTenantId());
         assertEquals(CommunicationTypeEnum.EMAIL, command.getCommunicationType());
         assertEquals("test@example.com", command.getRecipient());
         assertNull(command.getVariables());
@@ -93,7 +93,7 @@ class MessageAdapterMapperTest {
         requestDTO.setMessageType(null);
 
         // When
-        MessageSendCommandDTO command = mapper.toSendCommand(requestDTO, xApplicationUuid);
+        MessageSendCommandDTO command = mapper.toSendCommand(requestDTO, tenantId);
 
         // Then
         assertNotNull(command);
@@ -107,7 +107,7 @@ class MessageAdapterMapperTest {
         requestDTO.setTemplateType(null);
 
         // When
-        MessageSendCommandDTO command = mapper.toSendCommand(requestDTO, xApplicationUuid);
+        MessageSendCommandDTO command = mapper.toSendCommand(requestDTO, tenantId);
 
         // Then
         assertNotNull(command);
@@ -118,7 +118,7 @@ class MessageAdapterMapperTest {
     @DisplayName("Deve retornar null quando requestDTO for null")
     void shouldReturnNullWhenRequestDTOIsNull() {
         // When
-        MessageSendCommandDTO command = mapper.toSendCommand(null, xApplicationUuid);
+        MessageSendCommandDTO command = mapper.toSendCommand(null, tenantId);
 
         // Then
         assertNull(command);
@@ -129,27 +129,27 @@ class MessageAdapterMapperTest {
     void shouldMapMessageSendRequestDTOWithAllCommunicationTypes() {
         // Test EMAIL
         requestDTO.setCommunicationType(CommunicationTypeEnum.EMAIL);
-        MessageSendCommandDTO emailCommand = mapper.toSendCommand(requestDTO, xApplicationUuid);
+        MessageSendCommandDTO emailCommand = mapper.toSendCommand(requestDTO, tenantId);
         assertEquals(CommunicationTypeEnum.EMAIL, emailCommand.getCommunicationType());
 
         // Test SMS
         requestDTO.setCommunicationType(CommunicationTypeEnum.SMS);
-        MessageSendCommandDTO smsCommand = mapper.toSendCommand(requestDTO, xApplicationUuid);
+        MessageSendCommandDTO smsCommand = mapper.toSendCommand(requestDTO, tenantId);
         assertEquals(CommunicationTypeEnum.SMS, smsCommand.getCommunicationType());
 
         // Test WHATSAPP
         requestDTO.setCommunicationType(CommunicationTypeEnum.WHATSAPP);
-        MessageSendCommandDTO whatsappCommand = mapper.toSendCommand(requestDTO, xApplicationUuid);
+        MessageSendCommandDTO whatsappCommand = mapper.toSendCommand(requestDTO, tenantId);
         assertEquals(CommunicationTypeEnum.WHATSAPP, whatsappCommand.getCommunicationType());
 
         // Test PUSH_NOTIFICATION
         requestDTO.setCommunicationType(CommunicationTypeEnum.PUSH_NOTIFICATION);
-        MessageSendCommandDTO pushCommand = mapper.toSendCommand(requestDTO, xApplicationUuid);
+        MessageSendCommandDTO pushCommand = mapper.toSendCommand(requestDTO, tenantId);
         assertEquals(CommunicationTypeEnum.PUSH_NOTIFICATION, pushCommand.getCommunicationType());
 
         // Test TELEGRAM
         requestDTO.setCommunicationType(CommunicationTypeEnum.TELEGRAM);
-        MessageSendCommandDTO telegramCommand = mapper.toSendCommand(requestDTO, xApplicationUuid);
+        MessageSendCommandDTO telegramCommand = mapper.toSendCommand(requestDTO, tenantId);
         assertEquals(CommunicationTypeEnum.TELEGRAM, telegramCommand.getCommunicationType());
     }
 
@@ -161,7 +161,7 @@ class MessageAdapterMapperTest {
         requestDTO.setContent("");
 
         // When
-        MessageSendCommandDTO command = mapper.toSendCommand(requestDTO, xApplicationUuid);
+        MessageSendCommandDTO command = mapper.toSendCommand(requestDTO, tenantId);
 
         // Then
         assertNotNull(command);
@@ -187,7 +187,7 @@ class MessageAdapterMapperTest {
         requestDTO.setVariables(complexVariables);
 
         // When
-        MessageSendCommandDTO command = mapper.toSendCommand(requestDTO, xApplicationUuid);
+        MessageSendCommandDTO command = mapper.toSendCommand(requestDTO, tenantId);
 
         // Then
         assertNotNull(command);
