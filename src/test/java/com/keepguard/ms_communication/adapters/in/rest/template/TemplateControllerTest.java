@@ -249,7 +249,7 @@ class TemplateControllerTest {
         assertEquals("Test Template", responseBody.getName());
         assertEquals(TemplateTypeEnum.CADASTRO_SUCESSO, responseBody.getTemplateType());
         assertEquals(MessageTypeEnum.EMAIL, responseBody.getMessageType());
-        assertEquals(tenantId, responseBody.getTenantId());
+        assertEquals(tenantId.toString(), responseBody.getTenantId());
         
         verify(adapterMapper, times(1)).toCreateCommand(templateCreateRequestDTO, tenantId);
         verify(templatePort, times(1)).create(templateCreateCommand);

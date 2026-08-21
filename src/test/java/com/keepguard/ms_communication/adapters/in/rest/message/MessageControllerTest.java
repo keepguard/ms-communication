@@ -145,7 +145,7 @@ class MessageControllerTest {
         String invalidTenantId = "invalid-uuid";
 
         try (MockedStatic<ValidationUtils> validationUtilsMock = mockStatic(ValidationUtils.class)) {
-            validationUtilsMock.when(() -> ValidationUtils.validateTenantId(tenantIdStr))
+            validationUtilsMock.when(() -> ValidationUtils.validateTenantId(invalidTenantId))
                     .thenThrow(new IllegalArgumentException("X-Tenant-Id inválido"));
 
             // When & Then
