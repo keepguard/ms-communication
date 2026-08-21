@@ -18,8 +18,9 @@ import java.util.UUID;
 @Builder
 public class ProviderJpaEntity {
     @Id
-    @GeneratedValue(generator = "UUID")
+
     @Column(columnDefinition = "uuid", updatable = false, nullable = false)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     @Column(name = "name", nullable = false, length = 100)

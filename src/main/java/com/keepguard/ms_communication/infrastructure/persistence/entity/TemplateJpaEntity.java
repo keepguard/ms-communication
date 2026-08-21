@@ -15,8 +15,9 @@ import java.util.UUID;
 @Builder
 public class TemplateJpaEntity {
     @Id
-    @GeneratedValue(generator = "UUID")
+
     @Column(columnDefinition = "uuid", updatable = false, nullable = false)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     @Enumerated(EnumType.STRING)
