@@ -127,10 +127,11 @@ class ProviderStrategyFactoryTest {
         
         // Then
         assertNotNull(availableTypes);
-        assertEquals(3, availableTypes.size());
+        assertEquals(4, availableTypes.size());
         assertTrue(availableTypes.contains(ProviderTypeEnum.N8N));
         assertTrue(availableTypes.contains(ProviderTypeEnum.SENDGRID));
         assertTrue(availableTypes.contains(ProviderTypeEnum.EMAIL_GOOGLE_SENDER));
+        assertTrue(availableTypes.contains(ProviderTypeEnum.SRV_SMS_SENDER));
     }
     
     @Test

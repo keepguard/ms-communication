@@ -41,9 +41,7 @@ public class RabbitMQConsumerConfig {
         SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();
         factory.setConnectionFactory(connectionFactory);
         factory.setMessageConverter(messageConverter);
-        
-        // As configurações de listener são agora gerenciadas pelo Spring Boot
-        // através das propriedades spring.rabbitmq.listener.simple.*
+        factory.setAcknowledgeMode(org.springframework.amqp.core.AcknowledgeMode.MANUAL);
         
         return factory;
     }

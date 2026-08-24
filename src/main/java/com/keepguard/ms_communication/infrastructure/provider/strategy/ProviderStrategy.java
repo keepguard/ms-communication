@@ -53,6 +53,21 @@ public sealed interface ProviderStrategy {
         }
     }
 
+    record SmsSenderStrategy() implements ProviderStrategy {
+        @Override
+        public ProviderTypeEnum getProviderType() {
+            return ProviderTypeEnum.SRV_SMS_SENDER;
+        }
+
+        @Override
+        public CommunicationProvider getCommunicationProvider(List<CommunicationProvider> providers) {
+            return providers.stream()
+                    .filter(cp -> cp.supports(Provider.builder().providerType(ProviderTypeEnum.SRV_SMS_SENDER).build()))
+                    .findFirst()
+                    .orElse(null);
+        }
+    }
+
     ProviderTypeEnum getProviderType();
 
     default boolean supports(Provider provider) {
@@ -66,6 +81,7 @@ public sealed interface ProviderStrategy {
             case N8N -> new N8NStrategy();
             case SENDGRID -> new SendGridStrategy();
             case EMAIL_GOOGLE_SENDER -> new EmailGoogleSenderStrategy();
+            case SRV_SMS_SENDER -> new SmsSenderStrategy();
         };
     }
 }

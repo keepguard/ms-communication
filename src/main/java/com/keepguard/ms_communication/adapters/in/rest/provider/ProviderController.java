@@ -28,6 +28,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -258,7 +259,12 @@ public class ProviderController {
         log.info("Buscando provider padrão por tipo: {} - tenantIdHeader={}", communicationType, tenantIdHeader);
         
         var tenantId = ValidationUtils.validateTenantId(tenantIdHeader);
-        ProviderView view = providerPort.getDefaultByCommunicationType(communicationType).orElseThrow(() -> new RuntimeException("Default provider not found"));
+        ProviderView view = providerPort.getDefaultByCommunicationType(communicationType)
+                .orElseThrow(() -> new com.keepguard.ms_communication.application.service.exception.NotFoundException(
+                        "Provedor padrão não encontrado para o tipo: " + communicationType,
+                        "DEFAULT_PROVIDER_NOT_FOUND",
+                        Map.of("communicationType", communicationType.name())
+                ));
         ProviderGetDefaultProviderResponseDTO response = adapterMapper.toGetDefaultProviderResponseDTO(view);
         
         return ResponseEntity.ok(response);

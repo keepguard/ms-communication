@@ -18,7 +18,8 @@ public class ProviderStrategyFactory {
         this.strategies = Map.of(
                 ProviderTypeEnum.N8N, new ProviderStrategy.N8NStrategy(),
                 ProviderTypeEnum.SENDGRID, new ProviderStrategy.SendGridStrategy(),
-                ProviderTypeEnum.EMAIL_GOOGLE_SENDER, new ProviderStrategy.EmailGoogleSenderStrategy()
+                ProviderTypeEnum.EMAIL_GOOGLE_SENDER, new ProviderStrategy.EmailGoogleSenderStrategy(),
+                ProviderTypeEnum.SRV_SMS_SENDER, new ProviderStrategy.SmsSenderStrategy()
         );
     }
 
@@ -39,6 +40,7 @@ public class ProviderStrategyFactory {
             case N8N -> Optional.of(new ProviderStrategy.N8NStrategy());
             case SENDGRID -> Optional.of(new ProviderStrategy.SendGridStrategy());
             case EMAIL_GOOGLE_SENDER -> Optional.of(new ProviderStrategy.EmailGoogleSenderStrategy());
+            case SRV_SMS_SENDER -> Optional.of(new ProviderStrategy.SmsSenderStrategy());
         };
     }
 }

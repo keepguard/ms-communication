@@ -30,7 +30,6 @@ public record MessageSendRabbitMQDTO(
     
     @JsonProperty("recipient")
     @NotBlank(message = "Destinatário é obrigatório")
-    @Email(message = "Destinatário deve ser um email válido")
     @Size(max = 200, message = "Destinatário deve ter no máximo 200 caracteres")
     String recipient,
     

@@ -25,8 +25,6 @@ spring:
       connection-test-query: SELECT 1
   data:
     redis:
-      host: localhost
-      port: 6379
       timeout: 3000ms
       lettuce:
         pool:
@@ -120,12 +118,12 @@ management:
 rabbitmq:
   queues:
     # Filas de mensageria (padrão enterprise)
-    message-send: ms.communication.message.send.local
-    message-send-requests-dlt: ms.communication.message.send.dlt.local
+    message-send: ms.communication.message.send.dev
+    message-send-requests-dlt: ms.communication.message.send.dlt.dev
     
     # Exchanges
-    message-exchange: ms-communication-exchange-local
-    dead-letter-exchange: ms-communication-exchange-dlt-local
+    message-exchange: ms-communication-exchange-dev
+    dead-letter-exchange: ms-communication-exchange-dlt-dev
     
     # Routing Keys
     routing-key-message-send: communication.message.send

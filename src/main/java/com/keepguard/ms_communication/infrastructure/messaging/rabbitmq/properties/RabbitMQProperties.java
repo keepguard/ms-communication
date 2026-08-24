@@ -102,6 +102,9 @@ public class RabbitMQProperties {
         private String emailSenderExchange = "srv-email-google-sender-exchange-dev";
         private String emailSenderRoutingKey = "email.google.send";
         
+        // Fila direta para srv-sms-sender
+        private String smsQueue = "keepguard.notifications.sms";
+        
         // Routing Keys
         private String routingKeyMessageSend = "communication.message.send";
         private String routingKeyMessageFailed = "message.failed";

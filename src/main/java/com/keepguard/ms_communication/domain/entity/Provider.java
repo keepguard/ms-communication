@@ -60,7 +60,7 @@ public class Provider {
                                       String url, String configuration) {
         LocalDateTime now = LocalDateTime.now();
         return new Provider(
-            UUID.randomUUID(),
+            null,
             name,
             providerType,
             communicationType,

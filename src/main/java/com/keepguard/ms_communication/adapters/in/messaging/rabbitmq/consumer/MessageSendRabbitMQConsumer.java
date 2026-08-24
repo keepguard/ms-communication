@@ -36,6 +36,15 @@ public class MessageSendRabbitMQConsumer {
             rabbitMQMessage.xCorrelationId(), rabbitMQMessage.recipient(), deliveryTag);
         
         try {
+            if (rabbitMQMessage.xCorrelationId() != null) {
+                org.slf4j.MDC.put("correlationId", rabbitMQMessage.xCorrelationId());
+                org.slf4j.MDC.put("traceId", rabbitMQMessage.xCorrelationId());
+            }
+            if (rabbitMQMessage.tenantId() != null) {
+                org.slf4j.MDC.put("tenantId", rabbitMQMessage.tenantId());
+                org.slf4j.MDC.put("X-Tenant-Id", rabbitMQMessage.tenantId());
+            }
+
             // Validar mensagem recebida
             validateReceivedMessage(rabbitMQMessage);
             
