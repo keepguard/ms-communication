@@ -122,6 +122,7 @@ public class RabbitMQProducerConfig {
     @Bean
     public Queue deadLetterQueue() {
         return QueueBuilder.durable(rabbitMQProperties.getQueues().getMessageSendRequestsDlt())
+                .withArgument("x-message-ttl", 604800000)
                 .build();
     }
     
