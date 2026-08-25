@@ -46,13 +46,7 @@ public class RabbitMQConsumerConfig {
                 rabbitMQProperties.getQueues().getDeadLetterExchange(),
                 rabbitMQProperties.getQueues().getRoutingKeyMessageFailed()
         );
-
-        // Enriquecimento com cabeçalhos forenses de alta rastreabilidade
-        recoverer.setHeaderNames(
-                "x-exception-message",
-                "x-exception-stacktrace",
-                "x-original-queue"
-        );
+        recoverer.setErrorHeaderName("x-exception-message");
         return recoverer;
     }
 
