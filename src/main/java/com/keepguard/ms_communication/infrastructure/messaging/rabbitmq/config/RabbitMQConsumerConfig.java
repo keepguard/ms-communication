@@ -37,12 +37,55 @@ public class RabbitMQConsumerConfig {
      * @return RabbitListenerContainerFactory configurada
      */
     @Bean
-    public RabbitListenerContainerFactory<?> rabbitListenerContainerFactory(ConnectionFactory connectionFactory, MessageConverter messageConverter) {
+    public org.springframework.amqp.rabbit.retry.MessageRecoverer communicationMessageRecoverer(
+            org.springframework.amqp.rabbit.core.RabbitTemplate rabbitTemplate,
+            com.keepguard.ms_communication.infrastructure.messaging.rabbitmq.properties.RabbitMQProperties rabbitMQProperties) {
+        
+        var recoverer = new org.springframework.amqp.rabbit.retry.RepublishMessageRecoverer(
+                rabbitTemplate,
+                rabbitMQProperties.getQueues().getDeadLetterExchange(),
+                rabbitMQProperties.getQueues().getRoutingKeyMessageFailed()
+        );
+
+        // Enriquecimento com cabeçalhos forenses de alta rastreabilidade
+        recoverer.setHeaderNames(
+                "x-exception-message",
+                "x-exception-stacktrace",
+                "x-original-queue"
+        );
+        return recoverer;
+    }
+
+    /**
+     * Factory para listeners RabbitMQ com Retry Resiliente e Dead Letter Forense.
+     */
+    @Bean
+    public RabbitListenerContainerFactory<?> rabbitListenerContainerFactory(
+            ConnectionFactory connectionFactory, 
+            MessageConverter messageConverter,
+            org.springframework.amqp.rabbit.retry.MessageRecoverer communicationMessageRecoverer) {
+        
         SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();
         factory.setConnectionFactory(connectionFactory);
         factory.setMessageConverter(messageConverter);
         factory.setAcknowledgeMode(org.springframework.amqp.core.AcknowledgeMode.MANUAL);
         
+        var retryTemplate = new org.springframework.retry.support.RetryTemplate();
+        var backOffPolicy = new org.springframework.retry.backoff.ExponentialBackOffPolicy();
+        backOffPolicy.setInitialInterval(1000);
+        backOffPolicy.setMultiplier(2.0);
+        backOffPolicy.setMaxInterval(5000);
+        retryTemplate.setBackOffPolicy(backOffPolicy);
+
+        var retryPolicy = new org.springframework.retry.policy.SimpleRetryPolicy(3);
+        retryTemplate.setRetryPolicy(retryPolicy);
+
+        var advice = org.springframework.amqp.rabbit.config.RetryInterceptorBuilder.stateless()
+                .retryOperations(retryTemplate)
+                .recoverer(communicationMessageRecoverer)
+                .build();
+
+        factory.setAdviceChain(advice);
         return factory;
     }
 }
