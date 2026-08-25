@@ -41,13 +41,11 @@ public class RabbitMQConsumerConfig {
             org.springframework.amqp.rabbit.core.RabbitTemplate rabbitTemplate,
             com.keepguard.ms_communication.infrastructure.messaging.rabbitmq.properties.RabbitMQProperties rabbitMQProperties) {
         
-        var recoverer = new org.springframework.amqp.rabbit.retry.RepublishMessageRecoverer(
+        return new org.springframework.amqp.rabbit.retry.RepublishMessageRecoverer(
                 rabbitTemplate,
                 rabbitMQProperties.getQueues().getDeadLetterExchange(),
                 rabbitMQProperties.getQueues().getRoutingKeyMessageFailed()
         );
-        recoverer.setErrorHeaderName("x-exception-message");
-        return recoverer;
     }
 
     /**
