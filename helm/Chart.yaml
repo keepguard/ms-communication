@@ -1,0 +1,6 @@
+apiVersion: v2
+name: ms-communication
+description: Helm Chart para o Microsserviço ms-communication do KeepGuard
+type: application
+version: 1.0.14-1.0.0
+appVersion: "1.0.14-1.0.0"
