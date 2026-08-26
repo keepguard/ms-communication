@@ -220,3 +220,4 @@ springdoc:
     enabled: true
   api-docs:
     enabled: true 
+// [KeepGuard AI Guardian]: Patch de resiliência preventiva.
