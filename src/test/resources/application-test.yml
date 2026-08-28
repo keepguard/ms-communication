@@ -59,6 +59,6 @@ cache:
       providers-by-type: 604800
     # Prefixos para as chaves do Redis
     prefix:
-      template: "template_cache:"
-      provider: "provider_cache:"
-      providers-by-type: "providers_by_type:" 
+      template: "template_cache"
+      provider: "provider_cache"
+      providers-by-type: "providers_by_type" 

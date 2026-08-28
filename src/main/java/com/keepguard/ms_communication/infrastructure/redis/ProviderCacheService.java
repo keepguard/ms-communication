@@ -39,7 +39,7 @@ public class ProviderCacheService implements ProviderCachePort {
     @CircuitBreaker(name = "redisCache")
     public void cacheProviderById(String providerId, ProviderCacheView provider) {
         try {
-            String key = providerCachePrefix + ":" + providerId;
+            String key = providerKey(providerId);
             String value = objectMapper.writeValueAsString(provider);
             redisTemplate.opsForValue().set(key, value, providerTtlSeconds, TimeUnit.SECONDS);
         } catch (Exception e) {
@@ -50,7 +50,7 @@ public class ProviderCacheService implements ProviderCachePort {
     @CircuitBreaker(name = "redisCache", fallbackMethod = "getProviderFallback")
     @Retry(name = "redisCache")
     public ProviderCacheView getProviderByIdFromCache(String providerId) {
-        var key = "%s:%s".formatted(providerCachePrefix, providerId);
+        var key = providerKey(providerId);
         try {
             var value = redisTemplate.opsForValue().get(key);
             if (value == null || value.isBlank()) {
@@ -70,7 +70,7 @@ public class ProviderCacheService implements ProviderCachePort {
     @CircuitBreaker(name = "redisCache")
     public void removeProviderFromCacheById(String providerId) {
         try {
-            String key = providerCachePrefix + ":" + providerId;
+            String key = providerKey(providerId);
             redisTemplate.delete(key);
         } catch (Exception e) {
             log.warn("Falha ao remover provider do cache por ID | key={}", providerId);
@@ -80,7 +80,7 @@ public class ProviderCacheService implements ProviderCachePort {
     @CircuitBreaker(name = "redisCache")
     public void cacheProvidersByType(CommunicationTypeEnum communicationType, List<ProviderCacheView> providers) {
         try {
-            String key = providersByTypeCachePrefix + ":" + communicationType.name();
+            String key = providersByTypeKey(communicationType);
             String value = objectMapper.writeValueAsString(providers);
             redisTemplate.opsForValue().set(key, value, providersByTypeTtlSeconds, TimeUnit.SECONDS);
         } catch (Exception e) {
@@ -91,7 +91,7 @@ public class ProviderCacheService implements ProviderCachePort {
     @CircuitBreaker(name = "redisCache", fallbackMethod = "getProvidersListFallback")
     @Retry(name = "redisCache")
     public List<ProviderCacheView> getProvidersByTypeFromCache(CommunicationTypeEnum communicationType) {
-        var key = "%s:%s".formatted(providersByTypeCachePrefix, communicationType.name());
+        var key = providersByTypeKey(communicationType);
         try {
             var value = redisTemplate.opsForValue().get(key);
             if (value == null || value.isBlank()) {
@@ -111,7 +111,7 @@ public class ProviderCacheService implements ProviderCachePort {
     @CircuitBreaker(name = "redisCache")
     public void removeProvidersByTypeFromCache(CommunicationTypeEnum communicationType) {
         try {
-            String key = providersByTypeCachePrefix + ":" + communicationType.name();
+            String key = providersByTypeKey(communicationType);
             redisTemplate.delete(key);
         } catch (Exception e) {
             log.warn("Falha ao remover providers do cache por tipo | key={}", communicationType);
@@ -121,8 +121,8 @@ public class ProviderCacheService implements ProviderCachePort {
     @CircuitBreaker(name = "redisCache")
     public void clearAllProviderCache() {
         try {
-            var providerPattern = providerCachePrefix + ":*";
-            var providersByTypePattern = providersByTypeCachePrefix + ":*";
+            var providerPattern = providerBasePrefix() + ":*";
+            var providersByTypePattern = providersByTypeBasePrefix() + ":*";
             
             var providerKeys = redisTemplate.keys(providerPattern);
             var providersByTypeKeys = redisTemplate.keys(providersByTypePattern);
@@ -145,6 +145,32 @@ public class ProviderCacheService implements ProviderCachePort {
         } catch (Exception e) {
             log.warn("Falha ao limpar cache de providers");
         }
+    }
+
+    private String providerBasePrefix() {
+        if (providerCachePrefix == null || providerCachePrefix.isBlank()) {
+            return "provider_cache";
+        }
+        return providerCachePrefix.replaceAll(":+$", "");
+    }
+
+    private String providersByTypeBasePrefix() {
+        if (providersByTypeCachePrefix == null || providersByTypeCachePrefix.isBlank()) {
+            return "providers_by_type";
+        }
+        return providersByTypeCachePrefix.replaceAll(":+$", "");
+    }
+
+    private String providerKey(String providerId) {
+        return providerBasePrefix() + ":" + normalize(providerId);
+    }
+
+    private String providersByTypeKey(CommunicationTypeEnum communicationType) {
+        return providersByTypeBasePrefix() + ":" + communicationType.name();
+    }
+
+    private String normalize(String value) {
+        return value == null ? "" : value.trim().toLowerCase();
     }
 
 }

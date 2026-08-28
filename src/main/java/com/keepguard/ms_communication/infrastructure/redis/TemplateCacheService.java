@@ -73,7 +73,7 @@ public class TemplateCacheService implements TemplateCachePort {
     @CircuitBreaker(name = "redisCache")
     public void clearAllTemplateCache() {
         try {
-            var pattern = templateCachePrefix + ":*";
+            var pattern = basePrefix() + ":*";
             var keys = redisTemplate.keys(pattern);
             
             if (keys != null && !keys.isEmpty()) {
@@ -88,7 +88,18 @@ public class TemplateCacheService implements TemplateCachePort {
     }
 
     private String buildTemplateKey(TemplateTypeEnum templateType, MessageTypeEnum messageType, String application) {
-        return templateCachePrefix + ":" + templateType.name() + ":" + messageType.name() + ":" + application;
+        return basePrefix() + ":" + templateType.name() + ":" + messageType.name() + ":" + normalize(application);
+    }
+
+    private String basePrefix() {
+        if (templateCachePrefix == null || templateCachePrefix.isBlank()) {
+            return "template_cache";
+        }
+        return templateCachePrefix.replaceAll(":+$", "");
+    }
+
+    private String normalize(String value) {
+        return value == null ? "" : value.trim().toLowerCase();
     }
 
 }
