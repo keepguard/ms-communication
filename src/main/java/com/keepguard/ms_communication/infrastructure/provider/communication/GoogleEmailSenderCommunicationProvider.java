@@ -13,6 +13,10 @@ import com.keepguard.ms_communication.infrastructure.provider.CommunicationProvi
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
+import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
@@ -47,7 +51,8 @@ public class GoogleEmailSenderCommunicationProvider implements CommunicationProv
                         .to(recipient)
                         .subject(subject)
                         .html(content)
-                        .xCorrelationId(null) // Correlation ID será definido pelo contexto de logging
+                        .tenantId(currentTenantId())
+                        .xCorrelationId(UUID.randomUUID().toString())
                         .build();
                     
                     emailSenderRabbitMQProducer.publishEmailMessage(emailMessage);
@@ -106,6 +111,21 @@ public class GoogleEmailSenderCommunicationProvider implements CommunicationProv
     public boolean supports(Provider provider) {
         return provider != null && 
                ProviderTypeEnum.EMAIL_GOOGLE_SENDER.equals(provider.getProviderType());
+    }
+
+    private String currentTenantId() {
+        try {
+            var attrs = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+            if (attrs != null) {
+                String header = attrs.getRequest().getHeader("X-Tenant-Id");
+                if (header != null && !header.isBlank()) {
+                    return header.trim();
+                }
+            }
+        } catch (Exception ignored) {
+            // fora de request HTTP
+        }
+        return "keepguard-guardian";
     }
 
     @Override
