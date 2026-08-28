@@ -65,13 +65,13 @@ class TemplateControllerTest {
     private TemplateUpdateCommandDTO templateUpdateCommand;
     private UUID templateId;
     private String tenantIdStr;
-    private UUID tenantId;
+    private UUID companyId;
     
     @BeforeEach
     void setUp() {
         templateId = UUID.randomUUID();
-        tenantId = UUID.randomUUID();
-        tenantIdStr = tenantId.toString();
+        companyId = UUID.randomUUID();
+        tenantIdStr = companyId.toString();
         
         
         templateCreateRequestDTO = new TemplateCreateRequestDTO();
@@ -82,7 +82,7 @@ class TemplateControllerTest {
         templateCreateRequestDTO.setSubject("Test Subject");
         templateCreateRequestDTO.setContent("Hello {{userName}}, welcome to our system!");
         templateCreateRequestDTO.setVariables("[\"userName\", \"activationLink\"]");
-        templateCreateRequestDTO.setTenantId("test-app");
+        templateCreateRequestDTO.setCompanyId("test-app");
         templateCreateRequestDTO.setIsActive(true);
         
         templateUpdateRequestDTO = new TemplateUpdateRequestDTO();
@@ -100,7 +100,7 @@ class TemplateControllerTest {
             .type(TemplateTypeEnum.CADASTRO_SUCESSO)
             .templateType(TemplateTypeEnum.CADASTRO_SUCESSO)
             .messageType(MessageTypeEnum.EMAIL)
-            .tenantId(tenantIdStr)
+            .companyId(tenantIdStr)
             .name("Test Template")
             .description("Test template description")
             .subject("Test Subject")
@@ -164,7 +164,7 @@ class TemplateControllerTest {
             .type(TemplateTypeEnum.CADASTRO_SUCESSO)
             .templateType(TemplateTypeEnum.CADASTRO_SUCESSO)
             .messageType(MessageTypeEnum.EMAIL)
-            .tenantId(tenantIdStr)
+            .companyId(tenantIdStr)
             .name("Test Template")
             .description("Test template description")
             .subject("Test Subject")
@@ -191,7 +191,7 @@ class TemplateControllerTest {
         );
         
         templateCreateCommand = TemplateCreateCommandDTO.builder()
-                .tenantId(tenantId)
+                .companyId(companyId)
                 .name("Test Template")
                 .description("Test template description")
                 .application("test-app")
@@ -205,7 +205,7 @@ class TemplateControllerTest {
         
         templateUpdateCommand = TemplateUpdateCommandDTO.builder()
                 .id(templateId)
-                .tenantId(tenantId)
+                .companyId(companyId)
                 .name("Updated Template")
                 .description("Updated template description")
                 .messageType(MessageTypeEnum.SMS)
@@ -222,7 +222,7 @@ class TemplateControllerTest {
     void shouldCreateTemplateSuccessfully() {
         // Given
         Timer.Sample sample = mock(Timer.Sample.class);
-        when(adapterMapper.toCreateCommand(templateCreateRequestDTO, tenantId)).thenReturn(com.keepguard.ms_communication.domain.dto.template.TemplateCreateCommandDTO.builder()
+        when(adapterMapper.toCreateCommand(templateCreateRequestDTO, companyId)).thenReturn(com.keepguard.ms_communication.domain.dto.template.TemplateCreateCommandDTO.builder()
                 .name("Test Template")
                 .description("Test template description")
                 .messageType(MessageTypeEnum.EMAIL)
@@ -238,7 +238,7 @@ class TemplateControllerTest {
         when(adapterMapper.toCreateResponseDTO(templateView)).thenReturn(templateCreateResponseDTO);
         
         // When
-        ResponseEntity<TemplateCreateResponseDTO> response = templateController.createTemplate(templateCreateRequestDTO, tenantIdStr);
+        ResponseEntity<TemplateCreateResponseDTO> response = templateController.createTemplate(templateCreateRequestDTO, companyId);
         
         // Then
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
@@ -249,9 +249,9 @@ class TemplateControllerTest {
         assertEquals("Test Template", responseBody.getName());
         assertEquals(TemplateTypeEnum.CADASTRO_SUCESSO, responseBody.getTemplateType());
         assertEquals(MessageTypeEnum.EMAIL, responseBody.getMessageType());
-        assertEquals(tenantId.toString(), responseBody.getTenantId());
+        assertEquals(companyId.toString(), responseBody.getCompanyId());
         
-        verify(adapterMapper, times(1)).toCreateCommand(templateCreateRequestDTO, tenantId);
+        verify(adapterMapper, times(1)).toCreateCommand(templateCreateRequestDTO, companyId);
         verify(templatePort, times(1)).create(templateCreateCommand);
         verify(adapterMapper, times(1)).toCreateResponseDTO(templateView);
     }
@@ -273,17 +273,17 @@ class TemplateControllerTest {
                 .isActive(true)
                 .build();
         
-        when(adapterMapper.toCreateCommand(templateCreateRequestDTO, tenantId)).thenReturn(requestCommand);
+        when(adapterMapper.toCreateCommand(templateCreateRequestDTO, companyId)).thenReturn(requestCommand);
         when(applicationMapper.toCreateCommand(requestCommand)).thenReturn(templateCreateCommand);
         when(templatePort.create(templateCreateCommand))
             .thenThrow(new RuntimeException("Service error"));
         
         // When & Then
         assertThrows(RuntimeException.class, () -> {
-            templateController.createTemplate(templateCreateRequestDTO, tenantIdStr);
+            templateController.createTemplate(templateCreateRequestDTO, companyId);
         });
         
-        verify(adapterMapper, times(1)).toCreateCommand(templateCreateRequestDTO, tenantId);
+        verify(adapterMapper, times(1)).toCreateCommand(templateCreateRequestDTO, companyId);
         verify(templatePort, times(1)).create(templateCreateCommand);
     }
     
@@ -291,7 +291,7 @@ class TemplateControllerTest {
     @DisplayName("Deve atualizar template com sucesso")
     void shouldUpdateTemplateSuccessfully() {
         // Given
-        when(adapterMapper.toUpdateCommand(templateId, templateUpdateRequestDTO, tenantId)).thenReturn(com.keepguard.ms_communication.domain.dto.template.TemplateUpdateCommandDTO.builder()
+        when(adapterMapper.toUpdateCommand(templateId, templateUpdateRequestDTO, companyId)).thenReturn(com.keepguard.ms_communication.domain.dto.template.TemplateUpdateCommandDTO.builder()
                 .name("Updated Template")
                 .description("Updated template description")
                 .messageType(MessageTypeEnum.EMAIL)
@@ -306,13 +306,13 @@ class TemplateControllerTest {
         when(adapterMapper.toUpdateResponseDTO(templateView)).thenReturn(templateUpdateResponseDTO);
         
         // When
-        ResponseEntity<TemplateUpdateResponseDTO> response = templateController.updateTemplate(templateId, templateUpdateRequestDTO, tenantIdStr);
+        ResponseEntity<TemplateUpdateResponseDTO> response = templateController.updateTemplate(templateId, templateUpdateRequestDTO, companyId);
         
         // Then
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
         
-        verify(adapterMapper, times(1)).toUpdateCommand(templateId, templateUpdateRequestDTO, tenantId);
+        verify(adapterMapper, times(1)).toUpdateCommand(templateId, templateUpdateRequestDTO, companyId);
         verify(templatePort, times(1)).update(templateUpdateCommand);
         verify(adapterMapper, times(1)).toUpdateResponseDTO(templateView);
     }
@@ -324,7 +324,7 @@ class TemplateControllerTest {
         doNothing().when(templatePort).delete(templateId);
         
         // When
-        ResponseEntity<Void> response = templateController.deleteTemplate(templateId, tenantIdStr);
+        ResponseEntity<Void> response = templateController.deleteTemplate(templateId, companyId);
         
         // Then
         assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
@@ -340,7 +340,7 @@ class TemplateControllerTest {
         when(adapterMapper.toGetTemplateByIdResponseDTO(templateView)).thenReturn(templateGetTemplateByIdResponseDTO);
         
         // When
-        ResponseEntity<TemplateGetTemplateByIdResponseDTO> response = templateController.getTemplateById(templateId, tenantIdStr);
+        ResponseEntity<TemplateGetTemplateByIdResponseDTO> response = templateController.getTemplateById(templateId, companyId);
         
         // Then
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -358,7 +358,7 @@ class TemplateControllerTest {
         
         // When & Then
         assertThrows(RuntimeException.class, () -> {
-            templateController.getTemplateById(templateId, tenantIdStr);
+            templateController.getTemplateById(templateId, companyId);
         });
         
         verify(templatePort, times(1)).getById(templateId);
@@ -373,7 +373,7 @@ class TemplateControllerTest {
         
         // When
         ResponseEntity<TemplateGetTemplateByTypeResponseDTO> response = templateController.getTemplateByType(
-            TemplateTypeEnum.CADASTRO_SUCESSO, MessageTypeEnum.EMAIL, tenantIdStr);
+            TemplateTypeEnum.CADASTRO_SUCESSO, MessageTypeEnum.EMAIL, companyId);
         
         // Then
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -392,7 +392,7 @@ class TemplateControllerTest {
         when(adapterMapper.toGetTemplatesResponseDTO(templateView)).thenReturn(templateGetTemplatesResponseDTO);
         
         // When
-        ResponseEntity<List<TemplateGetTemplatesResponseDTO>> response = templateController.getTemplates(tenantIdStr);
+        ResponseEntity<List<TemplateGetTemplatesResponseDTO>> response = templateController.getTemplates(companyId);
         
         // Then
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -432,7 +432,7 @@ class TemplateControllerTest {
         dto.setSubject("Test Subject");
         dto.setContent("Hello {{userName}}, welcome!");
         dto.setVariables("[\"userName\"]");
-        dto.setTenantId("test-app");
+        dto.setCompanyId("test-app");
         dto.setIsActive(true);
         
         // Then
@@ -444,7 +444,7 @@ class TemplateControllerTest {
         assertEquals("Test Subject", dto.getSubject());
         assertEquals("Hello {{userName}}, welcome!", dto.getContent());
         assertEquals("[\"userName\"]", dto.getVariables());
-        assertEquals("test-app", dto.getTenantId());
+        assertEquals("test-app", dto.getCompanyId());
         assertTrue(dto.getIsActive());
     }
     
@@ -486,14 +486,14 @@ class TemplateControllerTest {
         dto.setSubject("Test Subject");
         dto.setContent("Hello {{userName}}, welcome!");
         dto.setVariables("[\"userName\"]");
-        dto.setTenantId("test-app");
+        dto.setCompanyId("test-app");
         dto.setIsActive(true);
         
-        when(adapterMapper.toCreateCommand(dto, tenantId)).thenReturn(com.keepguard.ms_communication.domain.dto.template.TemplateCreateCommandDTO.builder().build());
+        when(adapterMapper.toCreateCommand(dto, companyId)).thenReturn(com.keepguard.ms_communication.domain.dto.template.TemplateCreateCommandDTO.builder().build());
         when(applicationMapper.toCreateCommand(any(com.keepguard.ms_communication.domain.dto.template.TemplateCreateCommandDTO.class))).thenReturn(templateCreateCommand);
         
         // When
-        com.keepguard.ms_communication.domain.dto.template.TemplateCreateCommandDTO requestCommand = adapterMapper.toCreateCommand(dto, tenantId);
+        com.keepguard.ms_communication.domain.dto.template.TemplateCreateCommandDTO requestCommand = adapterMapper.toCreateCommand(dto, companyId);
         TemplateCreateCommandDTO result = applicationMapper.toCreateCommand(requestCommand);
         
         // Then
@@ -508,7 +508,7 @@ class TemplateControllerTest {
         assertEquals("[\"userName\", \"activationLink\"]", result.getVariables());
         assertTrue(result.getIsActive());
         
-        verify(adapterMapper, times(1)).toCreateCommand(dto, tenantId);
+        verify(adapterMapper, times(1)).toCreateCommand(dto, companyId);
     }
     
     @Test
@@ -525,11 +525,11 @@ class TemplateControllerTest {
         dto.setTemplateType(TemplateTypeEnum.RECUPERACAO_SENHA);
         dto.setIsActive(false);
         
-        when(adapterMapper.toUpdateCommand(templateId, dto, tenantId)).thenReturn(com.keepguard.ms_communication.domain.dto.template.TemplateUpdateCommandDTO.builder().build());
+        when(adapterMapper.toUpdateCommand(templateId, dto, companyId)).thenReturn(com.keepguard.ms_communication.domain.dto.template.TemplateUpdateCommandDTO.builder().build());
         when(applicationMapper.toUpdateCommand(any(com.keepguard.ms_communication.domain.dto.template.TemplateUpdateCommandDTO.class))).thenReturn(templateUpdateCommand);
         
         // When
-        com.keepguard.ms_communication.domain.dto.template.TemplateUpdateCommandDTO requestCommand = adapterMapper.toUpdateCommand(templateId, dto, tenantId);
+        com.keepguard.ms_communication.domain.dto.template.TemplateUpdateCommandDTO requestCommand = adapterMapper.toUpdateCommand(templateId, dto, companyId);
         TemplateUpdateCommandDTO result = applicationMapper.toUpdateCommand(requestCommand);
         
         // Then
@@ -544,6 +544,6 @@ class TemplateControllerTest {
         assertEquals(TemplateTypeEnum.RECUPERACAO_SENHA, result.getTemplateType());
         assertFalse(result.getIsActive());
         
-        verify(adapterMapper, times(1)).toUpdateCommand(templateId, dto, tenantId);
+        verify(adapterMapper, times(1)).toUpdateCommand(templateId, dto, companyId);
     }
 }

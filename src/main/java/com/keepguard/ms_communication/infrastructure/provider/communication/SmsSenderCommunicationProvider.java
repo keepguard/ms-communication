@@ -39,12 +39,12 @@ public class SmsSenderCommunicationProvider implements CommunicationProvider {
 
             String traceId = MDC.get("traceId");
             String correlationId = MDC.get("correlationId");
-            String tenantId = MDC.get("tenantId");
-            if (tenantId == null || tenantId.isBlank()) {
-                tenantId = MDC.get("X-Tenant-Id");
+            String companyId = MDC.get("companyId");
+            if (companyId == null || companyId.isBlank()) {
+                companyId = MDC.get("X-Tenant-Id");
             }
-            if (tenantId == null || tenantId.isBlank()) {
-                tenantId = "f7fc7350-b9fc-4e54-9c58-ac9385b23ae3";
+            if (companyId == null || companyId.isBlank()) {
+                companyId = "f7fc7350-b9fc-4e54-9c58-ac9385b23ae3";
             }
             if (correlationId == null || correlationId.isBlank()) {
                 correlationId = UUID.randomUUID().toString();
@@ -52,7 +52,7 @@ public class SmsSenderCommunicationProvider implements CommunicationProvider {
 
             SmsQueueMessageDTO smsMessage = SmsQueueMessageDTO.builder()
                     .id(UUID.randomUUID().toString())
-                    .tenantId(tenantId)
+                    .companyId(companyId)
                     .recipient(recipient)
                     .body(content != null ? content : subject)
                     .senderId(provider.getName())

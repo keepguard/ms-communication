@@ -55,11 +55,11 @@ class ProviderUseCaseServiceTest {
     @BeforeEach
     void setUp() {
         providerId = UUID.randomUUID();
-        UUID tenantId = UUID.randomUUID();
+        UUID companyId = UUID.randomUUID();
         LocalDateTime now = LocalDateTime.now();
 
         providerCreateCommand = ProviderTestBuilder.builder()
-                .withTenantId(tenantId)
+                .withTenantId(companyId)
                 .withName("Test Provider")
                 .withProviderType(ProviderTypeEnum.N8N)
                 .withCommunicationType(CommunicationTypeEnum.EMAIL)
@@ -76,7 +76,7 @@ class ProviderUseCaseServiceTest {
 
         providerUpdateCommand = ProviderTestBuilder.builder()
                 .withId(providerId)
-                .withTenantId(tenantId)
+                .withTenantId(companyId)
                 .withName("Updated Provider")
                 .withProviderType(ProviderTypeEnum.SENDGRID)
                 .withCommunicationType(CommunicationTypeEnum.SMS)

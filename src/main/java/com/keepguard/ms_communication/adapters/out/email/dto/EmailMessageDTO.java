@@ -19,8 +19,8 @@ public class EmailMessageDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @JsonProperty("tenant_id")
-    private String tenantId;
+    @JsonProperty("company_id")
+    private String companyId;
 
     @JsonProperty("x_correlation_id")
     private String xCorrelationId;

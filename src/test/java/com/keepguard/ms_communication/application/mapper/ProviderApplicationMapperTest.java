@@ -35,7 +35,7 @@ class ProviderApplicationMapperTest {
     private ProviderView providerView;
     private Provider domainProvider;
     private UUID providerId;
-    private UUID tenantId;
+    private UUID companyId;
     private ProviderCreateCommandDTO providerCreateCommandDTO;
     private ProviderUpdateCommandDTO providerUpdateCommandDTO;
     private Provider provider;
@@ -43,7 +43,7 @@ class ProviderApplicationMapperTest {
     @BeforeEach
     void setUp() {
         providerId = UUID.randomUUID();
-        tenantId = UUID.randomUUID();
+        companyId = UUID.randomUUID();
         LocalDateTime now = LocalDateTime.now();
 
         // Setup ProviderCreateDTO
@@ -120,7 +120,7 @@ class ProviderApplicationMapperTest {
         
         // Setup ProviderCreateCommandDTO
         providerCreateCommandDTO = ProviderCreateCommandDTO.builder()
-                .tenantId(tenantId)
+                .companyId(companyId)
                 .name("Test Provider")
                 .providerType(ProviderTypeEnum.N8N)
                 .communicationType(CommunicationTypeEnum.EMAIL)
@@ -139,7 +139,7 @@ class ProviderApplicationMapperTest {
         // Setup ProviderUpdateCommandDTO
         providerUpdateCommandDTO = ProviderUpdateCommandDTO.builder()
                 .id(providerId)
-                .tenantId(tenantId)
+                .companyId(companyId)
                 .name("Updated Provider")
                 .providerType(ProviderTypeEnum.SENDGRID)
                 .communicationType(CommunicationTypeEnum.EMAIL)
@@ -184,7 +184,7 @@ class ProviderApplicationMapperTest {
 
         // Then
         assertNotNull(result);
-        assertEquals(providerCreateCommandDTO.getTenantId(), result.getTenantId());
+        assertEquals(providerCreateCommandDTO.getCompanyId(), result.getCompanyId());
         assertEquals(providerCreateCommandDTO.getName(), result.getName());
         assertEquals(providerCreateCommandDTO.getProviderType(), result.getProviderType());
         assertEquals(providerCreateCommandDTO.getCommunicationType(), result.getCommunicationType());
@@ -219,7 +219,7 @@ class ProviderApplicationMapperTest {
         // Then
         assertNotNull(result);
         assertEquals(providerId, result.getId());
-        assertEquals(tenantId, result.getTenantId());
+        assertEquals(companyId, result.getCompanyId());
         assertEquals(providerUpdateCommandDTO.getName(), result.getName());
         assertEquals(providerUpdateCommandDTO.getProviderType(), result.getProviderType());
         assertEquals(providerUpdateCommandDTO.getCommunicationType(), result.getCommunicationType());
@@ -286,7 +286,7 @@ class ProviderApplicationMapperTest {
     void shouldConvertProviderCreateCommandToDomainSuccessfully() {
         // Given
         ProviderCreateCommandDTO command = ProviderCreateCommandDTO.builder()
-                .tenantId(tenantId)
+                .companyId(companyId)
                 .name("Test Provider")
                 .providerType(ProviderTypeEnum.N8N)
                 .communicationType(CommunicationTypeEnum.EMAIL)
@@ -337,7 +337,7 @@ class ProviderApplicationMapperTest {
     void shouldConvertProviderCreateCommandWithNullOptionalFieldsSuccessfully() {
         // Given
         ProviderCreateCommandDTO command = ProviderCreateCommandDTO.builder()
-                .tenantId(tenantId)
+                .companyId(companyId)
                 .name("Test Provider")
                 .providerType(ProviderTypeEnum.N8N)
                 .communicationType(CommunicationTypeEnum.EMAIL)
@@ -380,7 +380,7 @@ class ProviderApplicationMapperTest {
         // Given
         ProviderUpdateCommandDTO command = ProviderUpdateCommandDTO.builder()
                 .id(providerId)
-                .tenantId(tenantId)
+                .companyId(companyId)
                 .name("Updated Provider")
                 .providerType(ProviderTypeEnum.SENDGRID)
                 .communicationType(CommunicationTypeEnum.SMS)
@@ -434,7 +434,7 @@ class ProviderApplicationMapperTest {
         // Given
         ProviderUpdateCommandDTO command = ProviderUpdateCommandDTO.builder()
                 .id(providerId)
-                .tenantId(tenantId)
+                .companyId(companyId)
                 .name("Updated Provider")
                 .providerType(ProviderTypeEnum.SENDGRID)
                 .communicationType(CommunicationTypeEnum.SMS)
@@ -463,7 +463,7 @@ class ProviderApplicationMapperTest {
         // Given
         ProviderUpdateCommandDTO command = ProviderUpdateCommandDTO.builder()
                 .id(providerId)
-                .tenantId(tenantId)
+                .companyId(companyId)
                 .name(null)
                 .providerType(null)
                 .communicationType(null)
@@ -544,7 +544,7 @@ class ProviderApplicationMapperTest {
         // Given
         ProviderUpdateCommandDTO command = ProviderUpdateCommandDTO.builder()
                 .id(providerId)
-                .tenantId(tenantId)
+                .companyId(companyId)
                 .name("Updated Name Only")
                 .providerType(null)
                 .communicationType(null)

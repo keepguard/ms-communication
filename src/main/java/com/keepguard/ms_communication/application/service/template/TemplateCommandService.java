@@ -54,7 +54,7 @@ public class TemplateCommandService  {
             command.getContent()
         );
         
-        log.info("Template criado com tenantId: {}", template.getTenantId());
+        log.info("Template criado com companyId: {}", template.getCompanyId());
         log.info("Command application: {}", command.getApplication());
 
         // Configurar campos opcionais

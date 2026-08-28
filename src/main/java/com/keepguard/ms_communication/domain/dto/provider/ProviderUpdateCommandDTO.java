@@ -19,8 +19,8 @@ public class ProviderUpdateCommandDTO {
     @NotNull(message = "ID do provedor é obrigatório")
     private UUID id;
     
-    @NotNull(message = "O header X-Tenant-Id é obrigatório")
-    private UUID tenantId;
+    @NotNull(message = "O header X-Company-Id é obrigatório")
+    private UUID companyId;
     
     private String name;
     private ProviderTypeEnum providerType;

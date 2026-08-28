@@ -42,7 +42,7 @@ class TemplateTest {
         // Then
         assertEquals(TemplateTypeEnum.AUTENTICACAO_EMAIL_TOKEN, template.getTemplateType());
         assertEquals(MessageTypeEnum.EMAIL, template.getMessageType());
-        assertEquals("ms-auth", template.getTenantId());
+        assertEquals("ms-auth", template.getCompanyId());
         assertEquals("Email Authentication Template", template.getName());
         assertEquals("Template para autenticação por email", template.getDescription());
         assertEquals("Authentication Code", template.getSubject());
@@ -92,7 +92,7 @@ class TemplateTest {
         // Then
         assertEquals(TemplateTypeEnum.CADASTRO_SUCESSO, emailTemplate.getTemplateType());
         assertEquals(MessageTypeEnum.EMAIL, emailTemplate.getMessageType());
-        assertEquals("ms-auth", emailTemplate.getTenantId());
+        assertEquals("ms-auth", emailTemplate.getCompanyId());
         assertEquals("Welcome Email Template", emailTemplate.getName());
         assertEquals("Template para email de boas-vindas", emailTemplate.getDescription());
         assertEquals("Welcome to our platform!", emailTemplate.getSubject());
@@ -116,7 +116,7 @@ class TemplateTest {
         // Then
         assertEquals(TemplateTypeEnum.AUTENTICACAO_SMS_TOKEN, smsTemplate.getTemplateType());
         assertEquals(MessageTypeEnum.SMS, smsTemplate.getMessageType());
-        assertEquals("ms-auth", smsTemplate.getTenantId());
+        assertEquals("ms-auth", smsTemplate.getCompanyId());
         assertEquals("SMS Authentication Template", smsTemplate.getName());
         assertEquals("Template para autenticação por SMS", smsTemplate.getDescription());
         assertNull(smsTemplate.getSubject());
@@ -140,7 +140,7 @@ class TemplateTest {
         // Then
         assertEquals(TemplateTypeEnum.AUTENTICACAO_WHATSAPP_TOKEN, whatsappTemplate.getTemplateType());
         assertEquals(MessageTypeEnum.WHATSAPP, whatsappTemplate.getMessageType());
-        assertEquals("ms-auth", whatsappTemplate.getTenantId());
+        assertEquals("ms-auth", whatsappTemplate.getCompanyId());
         assertEquals("WhatsApp Authentication Template", whatsappTemplate.getName());
         assertEquals("Template para autenticação por WhatsApp", whatsappTemplate.getDescription());
         assertNull(whatsappTemplate.getSubject());
@@ -164,7 +164,7 @@ class TemplateTest {
         // Then
         assertEquals(TemplateTypeEnum.NOTIFICACAO_GERAL, pushTemplate.getTemplateType());
         assertEquals(MessageTypeEnum.PUSH_NOTIFICATION, pushTemplate.getMessageType());
-        assertEquals("ms-auth", pushTemplate.getTenantId());
+        assertEquals("ms-auth", pushTemplate.getCompanyId());
         assertEquals("Push Notification Template", pushTemplate.getName());
         assertEquals("Template para notificações push", pushTemplate.getDescription());
         assertEquals("Notification", pushTemplate.getSubject());
@@ -188,7 +188,7 @@ class TemplateTest {
         // Then
         assertEquals(TemplateTypeEnum.RECUPERACAO_SENHA, passwordRecoveryTemplate.getTemplateType());
         assertEquals(MessageTypeEnum.EMAIL, passwordRecoveryTemplate.getMessageType());
-        assertEquals("ms-auth", passwordRecoveryTemplate.getTenantId());
+        assertEquals("ms-auth", passwordRecoveryTemplate.getCompanyId());
         assertEquals("Password Recovery Template", passwordRecoveryTemplate.getName());
         assertEquals("Template para recuperação de senha", passwordRecoveryTemplate.getDescription());
         assertEquals("Password Recovery", passwordRecoveryTemplate.getSubject());
@@ -212,7 +212,7 @@ class TemplateTest {
         // Then
         assertEquals(TemplateTypeEnum.ALERTA_SEGURANCA, securityAlertTemplate.getTemplateType());
         assertEquals(MessageTypeEnum.EMAIL, securityAlertTemplate.getMessageType());
-        assertEquals("ms-auth", securityAlertTemplate.getTenantId());
+        assertEquals("ms-auth", securityAlertTemplate.getCompanyId());
         assertEquals("Security Alert Template", securityAlertTemplate.getName());
         assertEquals("Template para alertas de segurança", securityAlertTemplate.getDescription());
         assertEquals("Security Alert", securityAlertTemplate.getSubject());
@@ -236,7 +236,7 @@ class TemplateTest {
         // Then
         assertEquals(TemplateTypeEnum.CONFIRMACAO_ACAO, actionConfirmationTemplate.getTemplateType());
         assertEquals(MessageTypeEnum.EMAIL, actionConfirmationTemplate.getMessageType());
-        assertEquals("ms-auth", actionConfirmationTemplate.getTenantId());
+        assertEquals("ms-auth", actionConfirmationTemplate.getCompanyId());
         assertEquals("Action Confirmation Template", actionConfirmationTemplate.getName());
         assertEquals("Template para confirmação de ações", actionConfirmationTemplate.getDescription());
         assertEquals("Action Confirmation", actionConfirmationTemplate.getSubject());

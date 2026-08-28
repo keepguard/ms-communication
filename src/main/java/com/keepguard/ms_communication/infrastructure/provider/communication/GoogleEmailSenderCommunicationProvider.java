@@ -51,7 +51,7 @@ public class GoogleEmailSenderCommunicationProvider implements CommunicationProv
                         .to(recipient)
                         .subject(subject)
                         .html(content)
-                        .tenantId(currentTenantId())
+                        .companyId(currentTenantId())
                         .xCorrelationId(UUID.randomUUID().toString())
                         .build();
                     

@@ -16,7 +16,7 @@ public class TemplateJpaMapper {
                 .id(domain.getId())
                 .templateType(domain.getTemplateType())
                 .messageType(domain.getMessageType())
-                .tenantId(domain.getTenantId())
+                .companyId(domain.getCompanyId())
                 .name(domain.getName())
                 .description(domain.getDescription())
                 .subject(domain.getSubject())
@@ -37,7 +37,7 @@ public class TemplateJpaMapper {
                 entity.getId(),
                 entity.getTemplateType(),
                 entity.getMessageType(),
-                entity.getTenantId(),
+                entity.getCompanyId(),
                 entity.getName(),
                 entity.getDescription(),
                 entity.getSubject(),

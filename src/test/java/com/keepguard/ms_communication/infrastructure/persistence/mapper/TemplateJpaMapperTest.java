@@ -60,7 +60,7 @@ class TemplateJpaMapperTest {
             .id(templateId)
             .templateType(TemplateTypeEnum.CADASTRO_SUCESSO)
             .messageType(MessageTypeEnum.EMAIL)
-            .tenantId("test-app")
+            .companyId("test-app")
             .name("Test Template")
             .description("Test template description")
             .subject("Test Subject")
@@ -83,7 +83,7 @@ class TemplateJpaMapperTest {
         assertEquals(template.getId(), result.getId());
         assertEquals(template.getTemplateType(), result.getTemplateType());
         assertEquals(template.getMessageType(), result.getMessageType());
-        assertEquals(template.getTenantId(), result.getTenantId());
+        assertEquals(template.getCompanyId(), result.getCompanyId());
         assertEquals(template.getName(), result.getName());
         assertEquals(template.getDescription(), result.getDescription());
         assertEquals(template.getSubject(), result.getSubject());
@@ -105,7 +105,7 @@ class TemplateJpaMapperTest {
         assertEquals(templateJpaEntity.getId(), result.getId());
         assertEquals(templateJpaEntity.getTemplateType(), result.getTemplateType());
         assertEquals(templateJpaEntity.getMessageType(), result.getMessageType());
-        assertEquals(templateJpaEntity.getTenantId(), result.getTenantId());
+        assertEquals(templateJpaEntity.getCompanyId(), result.getCompanyId());
         assertEquals(templateJpaEntity.getName(), result.getName());
         assertEquals(templateJpaEntity.getDescription(), result.getDescription());
         assertEquals(templateJpaEntity.getSubject(), result.getSubject());
@@ -209,7 +209,7 @@ class TemplateJpaMapperTest {
             
             // Then
             assertNotNull(result);
-            assertEquals(application, result.getTenantId());
+            assertEquals(application, result.getCompanyId());
         }
     }
     
@@ -410,7 +410,7 @@ class TemplateJpaMapperTest {
         assertNotNull(result);
         assertNull(result.getTemplateType());
         assertNull(result.getMessageType());
-        assertNull(result.getTenantId());
+        assertNull(result.getCompanyId());
         assertNull(result.getName());
         assertNull(result.getDescription());
         assertNull(result.getSubject());
@@ -429,7 +429,7 @@ class TemplateJpaMapperTest {
             .id(templateId)
             .templateType(null)
             .messageType(null)
-            .tenantId(null)
+            .companyId(null)
             .name(null)
             .description(null)
             .subject(null)
@@ -447,7 +447,7 @@ class TemplateJpaMapperTest {
         assertNotNull(result);
         assertNull(result.getTemplateType());
         assertNull(result.getMessageType());
-        assertNull(result.getTenantId());
+        assertNull(result.getCompanyId());
         assertNull(result.getName());
         assertNull(result.getDescription());
         assertNull(result.getSubject());

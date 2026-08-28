@@ -39,7 +39,7 @@ class TemplateJpaEntityTest {
         assertNull(entity.getId());
         assertNull(entity.getTemplateType());
         assertNull(entity.getMessageType());
-        assertNull(entity.getTenantId());
+        assertNull(entity.getCompanyId());
         assertNull(entity.getName());
         assertNull(entity.getDescription());
         assertNull(entity.getSubject());
@@ -77,7 +77,7 @@ class TemplateJpaEntityTest {
         assertEquals(testId, entity.getId());
         assertEquals(TemplateTypeEnum.CADASTRO_SUCESSO, entity.getTemplateType());
         assertEquals(MessageTypeEnum.EMAIL, entity.getMessageType());
-        assertEquals("test-app", entity.getTenantId());
+        assertEquals("test-app", entity.getCompanyId());
         assertEquals("Welcome Template", entity.getName());
         assertEquals("Template for welcome emails", entity.getDescription());
         assertEquals("Welcome to KeepGuard", entity.getSubject());
@@ -99,7 +99,7 @@ class TemplateJpaEntityTest {
             .id(testId)
             .templateType(TemplateTypeEnum.NOTIFICACAO_GERAL)
             .messageType(MessageTypeEnum.SMS)
-            .tenantId("notification-app")
+            .companyId("notification-app")
             .name("SMS Notification Template")
             .description("Template for SMS notifications")
             .subject(null)
@@ -115,7 +115,7 @@ class TemplateJpaEntityTest {
         assertEquals(testId, entity.getId());
         assertEquals(TemplateTypeEnum.NOTIFICACAO_GERAL, entity.getTemplateType());
         assertEquals(MessageTypeEnum.SMS, entity.getMessageType());
-        assertEquals("notification-app", entity.getTenantId());
+        assertEquals("notification-app", entity.getCompanyId());
         assertEquals("SMS Notification Template", entity.getName());
         assertEquals("Template for SMS notifications", entity.getDescription());
         assertNull(entity.getSubject());
@@ -133,7 +133,7 @@ class TemplateJpaEntityTest {
         TemplateJpaEntity entity = TemplateJpaEntity.builder()
             .templateType(TemplateTypeEnum.CADASTRO_SUCESSO)
             .messageType(MessageTypeEnum.EMAIL)
-            .tenantId("test-app")
+            .companyId("test-app")
             .name("Test Template")
             .description("Test Description")
             .content("Test Content")
@@ -150,7 +150,7 @@ class TemplateJpaEntityTest {
         TemplateJpaEntity entity = TemplateJpaEntity.builder()
             .templateType(TemplateTypeEnum.CADASTRO_SUCESSO)
             .messageType(MessageTypeEnum.EMAIL)
-            .tenantId("test-app")
+            .companyId("test-app")
             .name("Test Template")
             .description("Test Description")
             .content("Test Content")
@@ -175,7 +175,7 @@ class TemplateJpaEntityTest {
         TemplateJpaEntity entity = TemplateJpaEntity.builder()
             .templateType(TemplateTypeEnum.CADASTRO_SUCESSO)
             .messageType(MessageTypeEnum.EMAIL)
-            .tenantId("test-app")
+            .companyId("test-app")
             .name("Test Template")
             .description("Test Description")
             .content("Test Content")
@@ -205,7 +205,7 @@ class TemplateJpaEntityTest {
         templateJpaEntity.setId(testId);
         templateJpaEntity.setTemplateType(TemplateTypeEnum.RECUPERACAO_SENHA);
         templateJpaEntity.setMessageType(MessageTypeEnum.EMAIL);
-        templateJpaEntity.setTenantId("auth-app");
+        templateJpaEntity.setCompanyId("auth-app");
         templateJpaEntity.setName("Password Reset Template");
         templateJpaEntity.setDescription("Template for password reset emails");
         templateJpaEntity.setSubject("Reset your password");
@@ -219,7 +219,7 @@ class TemplateJpaEntityTest {
         assertEquals(testId, templateJpaEntity.getId());
         assertEquals(TemplateTypeEnum.RECUPERACAO_SENHA, templateJpaEntity.getTemplateType());
         assertEquals(MessageTypeEnum.EMAIL, templateJpaEntity.getMessageType());
-        assertEquals("auth-app", templateJpaEntity.getTenantId());
+        assertEquals("auth-app", templateJpaEntity.getCompanyId());
         assertEquals("Password Reset Template", templateJpaEntity.getName());
         assertEquals("Template for password reset emails", templateJpaEntity.getDescription());
         assertEquals("Reset your password", templateJpaEntity.getSubject());
@@ -237,7 +237,7 @@ class TemplateJpaEntityTest {
         templateJpaEntity.setId(null);
         templateJpaEntity.setTemplateType(null);
         templateJpaEntity.setMessageType(null);
-        templateJpaEntity.setTenantId(null);
+        templateJpaEntity.setCompanyId(null);
         templateJpaEntity.setName(null);
         templateJpaEntity.setDescription(null);
         templateJpaEntity.setSubject(null);
@@ -250,7 +250,7 @@ class TemplateJpaEntityTest {
         assertNull(templateJpaEntity.getId());
         assertNull(templateJpaEntity.getTemplateType());
         assertNull(templateJpaEntity.getMessageType());
-        assertNull(templateJpaEntity.getTenantId());
+        assertNull(templateJpaEntity.getCompanyId());
         assertNull(templateJpaEntity.getName());
         assertNull(templateJpaEntity.getDescription());
         assertNull(templateJpaEntity.getSubject());
@@ -333,7 +333,7 @@ class TemplateJpaEntityTest {
         templateJpaEntity.setId(testId);
         templateJpaEntity.setTemplateType(TemplateTypeEnum.CADASTRO_SUCESSO);
         templateJpaEntity.setMessageType(MessageTypeEnum.EMAIL);
-        templateJpaEntity.setTenantId("test-app");
+        templateJpaEntity.setCompanyId("test-app");
         templateJpaEntity.setName("Welcome Template");
         templateJpaEntity.setIsActive(true);
 
@@ -361,7 +361,7 @@ class TemplateJpaEntityTest {
             .id(id1)
             .templateType(TemplateTypeEnum.CADASTRO_SUCESSO)
             .messageType(MessageTypeEnum.EMAIL)
-            .tenantId("test-app")
+            .companyId("test-app")
             .name("Template 1")
             .content("Content 1")
             .build();
@@ -370,7 +370,7 @@ class TemplateJpaEntityTest {
             .id(id1)
             .templateType(TemplateTypeEnum.CADASTRO_SUCESSO)
             .messageType(MessageTypeEnum.EMAIL)
-            .tenantId("test-app")
+            .companyId("test-app")
             .name("Template 1")
             .content("Content 1")
             .build();
@@ -379,7 +379,7 @@ class TemplateJpaEntityTest {
             .id(id2)
             .templateType(TemplateTypeEnum.NOTIFICACAO_GERAL)
             .messageType(MessageTypeEnum.SMS)
-            .tenantId("notification-app")
+            .companyId("notification-app")
             .name("Template 2")
             .content("Content 2")
             .build();
@@ -408,7 +408,7 @@ class TemplateJpaEntityTest {
             TemplateJpaEntity entity = TemplateJpaEntity.builder()
                 .templateType(type)
                 .messageType(MessageTypeEnum.EMAIL)
-                .tenantId("test-app")
+                .companyId("test-app")
                 .name("Template " + type.name())
                 .description("Description for " + type.name())
                 .content("Content for " + type.name())
@@ -435,7 +435,7 @@ class TemplateJpaEntityTest {
             TemplateJpaEntity entity = TemplateJpaEntity.builder()
                 .templateType(TemplateTypeEnum.CADASTRO_SUCESSO)
                 .messageType(type)
-                .tenantId("test-app")
+                .companyId("test-app")
                 .name("Template for " + type.name())
                 .description("Description for " + type.name())
                 .content("Content for " + type.name())
@@ -480,7 +480,7 @@ class TemplateJpaEntityTest {
     @DisplayName("Deve permitir strings vazias")
     void shouldAllowEmptyStrings() {
         // When
-        templateJpaEntity.setTenantId("");
+        templateJpaEntity.setCompanyId("");
         templateJpaEntity.setName("");
         templateJpaEntity.setDescription("");
         templateJpaEntity.setSubject("");
@@ -488,7 +488,7 @@ class TemplateJpaEntityTest {
         templateJpaEntity.setVariables("");
 
         // Then
-        assertEquals("", templateJpaEntity.getTenantId());
+        assertEquals("", templateJpaEntity.getCompanyId());
         assertEquals("", templateJpaEntity.getName());
         assertEquals("", templateJpaEntity.getDescription());
         assertEquals("", templateJpaEntity.getSubject());

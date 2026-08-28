@@ -29,7 +29,7 @@ public class TemplateJpaEntity {
     private MessageTypeEnum messageType;
 
     @Column(name = "tenant_id", nullable = false, length = 100)
-    private String tenantId;
+    private String companyId;
 
     @Column(nullable = false, length = 200)
     private String name;

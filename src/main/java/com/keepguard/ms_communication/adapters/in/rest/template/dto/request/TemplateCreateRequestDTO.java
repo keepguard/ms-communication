@@ -59,8 +59,8 @@ public class TemplateCreateRequestDTO {
             requiredMode = Schema.RequiredMode.REQUIRED)
     @NotBlank(message = "Aplicação é obrigatória")
     @Size(max = 100, message = "Aplicação deve ter no máximo 100 caracteres")
-    @JsonProperty("tenantId")
-    private String tenantId;
+    @JsonProperty("companyId")
+    private String companyId;
 
     @Schema(description = "Indica se o template está ativo",
             example = "true")

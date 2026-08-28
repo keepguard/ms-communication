@@ -17,8 +17,8 @@ import java.util.UUID;
 @AllArgsConstructor
 public class TemplateCreateCommandDTO {
     
-    @NotNull(message = "O header X-Tenant-Id é obrigatório")
-    private UUID tenantId;
+    @NotNull(message = "O header X-Company-Id é obrigatório")
+    private UUID companyId;
     
     @NotBlank(message = "Nome é obrigatório")
     private String name;

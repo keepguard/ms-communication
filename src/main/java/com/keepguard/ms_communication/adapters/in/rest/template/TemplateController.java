@@ -64,13 +64,12 @@ public class TemplateController {
     )
     public ResponseEntity<TemplateCreateResponseDTO> createTemplate(
             @Valid @RequestBody TemplateCreateRequestDTO createDTO,
-            @Parameter(description = "UUID da aplicação", required = true)
-            @RequestHeader("X-Tenant-Id") String tenantIdHeader) {
+            @Parameter(description = "UUID da empresa", required = true)
+            @RequestHeader("X-Company-Id") UUID companyId) {
         
-        log.info("Criando template - tenantIdHeader={}", tenantIdHeader);
+        log.info("Criando template - companyId={}", companyId);
         
-        var tenantId = ValidationUtils.validateTenantId(tenantIdHeader);
-        com.keepguard.ms_communication.domain.dto.template.TemplateCreateCommandDTO requestCommand = adapterMapper.toCreateCommand(createDTO, tenantId);
+        com.keepguard.ms_communication.domain.dto.template.TemplateCreateCommandDTO requestCommand = adapterMapper.toCreateCommand(createDTO, companyId);
         com.keepguard.ms_communication.domain.dto.template.TemplateCreateCommandDTO command = applicationMapper.toCreateCommand(requestCommand);
         TemplateView view = templatePort.create(command);
         TemplateCreateResponseDTO response = adapterMapper.toCreateResponseDTO(view);
@@ -98,13 +97,12 @@ public class TemplateController {
     public ResponseEntity<TemplateUpdateResponseDTO> updateTemplate(
             @Parameter(description = "ID único do template") @PathVariable UUID id,
             @Valid @RequestBody TemplateUpdateRequestDTO updateDTO,
-            @Parameter(description = "UUID da aplicação", required = true)
-            @RequestHeader("X-Tenant-Id") String tenantIdHeader) {
+            @Parameter(description = "UUID da empresa", required = true)
+            @RequestHeader("X-Company-Id") UUID companyId) {
 
-        log.info("Atualizando template: {} - tenantIdHeader={}", id, tenantIdHeader);
+        log.info("Atualizando template: {} - companyId={}", id, companyId);
         
-        var tenantId = ValidationUtils.validateTenantId(tenantIdHeader);
-        com.keepguard.ms_communication.domain.dto.template.TemplateUpdateCommandDTO requestCommand = adapterMapper.toUpdateCommand(id, updateDTO, tenantId);
+        com.keepguard.ms_communication.domain.dto.template.TemplateUpdateCommandDTO requestCommand = adapterMapper.toUpdateCommand(id, updateDTO, companyId);
         com.keepguard.ms_communication.domain.dto.template.TemplateUpdateCommandDTO command = applicationMapper.toUpdateCommand(requestCommand);
         TemplateView view = templatePort.update(command);
         TemplateUpdateResponseDTO response = adapterMapper.toUpdateResponseDTO(view);
@@ -129,12 +127,11 @@ public class TemplateController {
     )
     public ResponseEntity<Void> deleteTemplate(
             @Parameter(description = "ID único do template") @PathVariable UUID id,
-            @Parameter(description = "UUID da aplicação", required = true)
-            @RequestHeader("X-Tenant-Id") String tenantIdHeader) {
+            @Parameter(description = "UUID da empresa", required = true)
+            @RequestHeader("X-Company-Id") UUID companyId) {
 
-        log.info("Deletando template: {} - tenantIdHeader={}", id, tenantIdHeader);
+        log.info("Deletando template: {} - companyId={}", id, companyId);
         
-        var tenantId = ValidationUtils.validateTenantId(tenantIdHeader);
         templatePort.delete(id);
         
         return ResponseEntity.noContent().build();
@@ -157,12 +154,11 @@ public class TemplateController {
     )
     public ResponseEntity<TemplateGetTemplateByIdResponseDTO> getTemplateById(
             @Parameter(description = "ID único do template") @PathVariable UUID id,
-            @Parameter(description = "UUID da aplicação", required = true)
-            @RequestHeader("X-Tenant-Id") String tenantIdHeader) {
+            @Parameter(description = "UUID da empresa", required = true)
+            @RequestHeader("X-Company-Id") UUID companyId) {
 
-        log.info("Buscando template por ID: {} - tenantIdHeader={}", id, tenantIdHeader);
+        log.info("Buscando template por ID: {} - companyId={}", id, companyId);
         
-        var tenantId = ValidationUtils.validateTenantId(tenantIdHeader);
         TemplateView view = templatePort.getById(id).orElseThrow(() -> new RuntimeException("Template not found"));
         TemplateGetTemplateByIdResponseDTO response = adapterMapper.toGetTemplateByIdResponseDTO(view);
         
@@ -188,12 +184,11 @@ public class TemplateController {
     public ResponseEntity<TemplateGetTemplateByTypeResponseDTO> getTemplateByType(
             @Parameter(description = "Tipo do template (WELCOME, PASSWORD_RESET, etc.)") @RequestParam TemplateTypeEnum type,
             @Parameter(description = "Tipo da mensagem (EMAIL, SMS, WHATSAPP, etc.)") @RequestParam MessageTypeEnum messageType,
-            @Parameter(description = "UUID da aplicação", required = true)
-            @RequestHeader("X-Tenant-Id") String tenantIdHeader) {
+            @Parameter(description = "UUID da empresa", required = true)
+            @RequestHeader("X-Company-Id") UUID companyId) {
 
-        log.info("Buscando template por tipo: {} e messageType: {} - tenantIdHeader={}", type, messageType, tenantIdHeader);
+        log.info("Buscando template por tipo: {} e messageType: {} - companyId={}", type, messageType, companyId);
         
-        var tenantId = ValidationUtils.validateTenantId(tenantIdHeader);
         TemplateView view = templatePort.getById(UUID.randomUUID()).orElseThrow(() -> new RuntimeException("Template not found"));
         TemplateGetTemplateByTypeResponseDTO response = adapterMapper.toGetTemplateByTypeResponseDTO(view);
         
@@ -215,12 +210,11 @@ public class TemplateController {
         operation = "listar templates"
     )
     public ResponseEntity<List<TemplateGetTemplatesResponseDTO>> getTemplates(
-            @Parameter(description = "UUID da aplicação", required = true)
-            @RequestHeader("X-Tenant-Id") String tenantIdHeader) {
+            @Parameter(description = "UUID da empresa", required = true)
+            @RequestHeader("X-Company-Id") UUID companyId) {
 
-        log.info("Listando templates - tenantIdHeader={}", tenantIdHeader);
+        log.info("Listando templates - companyId={}", companyId);
         
-        var tenantId = ValidationUtils.validateTenantId(tenantIdHeader);
         List<TemplateView> views = templatePort.getAllActive();
         List<TemplateGetTemplatesResponseDTO> response = views.stream()
                 .map(adapterMapper::toGetTemplatesResponseDTO)

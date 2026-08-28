@@ -1,5 +1,7 @@
 package com.keepguard.ms_communication.adapters.in.rest.message;
 
+
+import java.util.UUID;
 import com.keepguard.lib_common.logging.annotation.LogOperation;
 import com.keepguard.lib_common.metrics.annotation.MetricsEndpoint;
 import com.keepguard.lib_common.utils.ValidationUtils;
@@ -67,22 +69,21 @@ public class MessageController {
     )
     @LogOperation(
         operation = "SEND_MESSAGE",
-        description = "Enviando mensagem - tipo: {dto.messageType}, destinatário: {dto.recipient}, codeUser: {dto.codeUser}, application: {tenantId}",
+        description = "Enviando mensagem - tipo: {dto.messageType}, destinatário: {dto.recipient}, codeUser: {dto.codeUser}, application: {companyId}",
         audit = true,
         auditAction = "SEND_MESSAGE",
         auditEntityType = "MESSAGE"
     )
     public ResponseEntity<MessageSendResponseDTO> send(
             @Valid @RequestBody MessageSendRequestDTO dto,
-            @Parameter(description = "UUID da aplicação", required = true)
-            @RequestHeader("X-Tenant-Id") String tenantIdHeader) {
+            @Parameter(description = "UUID da empresa", required = true)
+            @RequestHeader("X-Company-Id") UUID companyId) {
 
-        log.info("Realizando envio de mensagem - tipo: {}, destinatário: {}, codeUser: {}, tenantIdHeader: {}", 
-            dto.getMessageType(), dto.getRecipient(), dto.getCodeUser(), tenantIdHeader);
+        log.info("Realizando envio de mensagem - tipo: {}, destinatário: {}, codeUser: {}, companyId: {}", 
+            dto.getMessageType(), dto.getRecipient(), dto.getCodeUser(), companyId);
 
-        var tenantId = ValidationUtils.validateTenantId(tenantIdHeader);
 
-        var command = adapterMapper.toSendCommand(dto, tenantId);
+        var command = adapterMapper.toSendCommand(dto, companyId);
         boolean sent = messagePort.sendWithFallback(command);
         
         var response = MessageSendResponseDTO.builder()
@@ -92,7 +93,7 @@ public class MessageController {
         
         log.info("Mensagem {} - tipo: {}, destinatário: {}, codeUser: {}, application: {}", 
             sent ? "enviada com sucesso" : "falhou ao enviar", 
-            dto.getMessageType(), dto.getRecipient(), dto.getCodeUser(), tenantId);
+            dto.getMessageType(), dto.getRecipient(), dto.getCodeUser(), companyId);
         
         return ResponseEntity.ok(response);
     }

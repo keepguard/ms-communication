@@ -33,15 +33,15 @@ public class TemplateProcessorService {
         auditEntityType = "TEMPLATE"
     )
     public ProcessedTemplate processTemplate(TemplateTypeEnum templateType, MessageTypeEnum messageType, 
-                                           String tenantId, Map<String, Object> variables) {
-        log.info("Processando template: {} para aplicação: {}", templateType, tenantId);
+                                           String companyId, Map<String, Object> variables) {
+        log.info("Processando template: {} para aplicação: {}", templateType, companyId);
 
         // Buscar template ativo
         Optional<Template> templateOpt = templateRepositoryPort.findByTemplateTypeAndMessageTypeAndApplicationAndIsActive(
-            templateType, messageType, tenantId, true);
+            templateType, messageType, companyId, true);
 
         if (templateOpt.isEmpty()) {
-            log.warn("Template não encontrado: {} - {} - {}", templateType, messageType, tenantId);
+            log.warn("Template não encontrado: {} - {} - {}", templateType, messageType, companyId);
             throw new TemplateNotFoundException("Template não encontrado: " + templateType);
         }
 

@@ -40,9 +40,9 @@ public class MessageSendRabbitMQConsumer {
                 org.slf4j.MDC.put("correlationId", rabbitMQMessage.xCorrelationId());
                 org.slf4j.MDC.put("traceId", rabbitMQMessage.xCorrelationId());
             }
-            if (rabbitMQMessage.tenantId() != null) {
-                org.slf4j.MDC.put("tenantId", rabbitMQMessage.tenantId());
-                org.slf4j.MDC.put("X-Tenant-Id", rabbitMQMessage.tenantId());
+            if (rabbitMQMessage.companyId() != null) {
+                org.slf4j.MDC.put("companyId", rabbitMQMessage.companyId());
+                org.slf4j.MDC.put("X-Tenant-Id", rabbitMQMessage.companyId());
             }
 
             // Validar mensagem recebida

@@ -46,12 +46,12 @@ public interface TemplateSpringRepository extends JpaRepository<TemplateJpaEntit
     @Query("SELECT t FROM TemplateJpaEntity t WHERE " +
            "t.templateType = :templateType AND " +
            "t.messageType = :messageType AND " +
-           "t.tenantId = :tenantId AND " +
+           "t.companyId = :companyId AND " +
            "t.isActive = :isActive")
     Optional<TemplateJpaEntity> findByTemplateTypeAndMessageTypeAndTenantIdAndIsActive(
         @Param("templateType") TemplateTypeEnum templateType,
         @Param("messageType") MessageTypeEnum messageType,
-        @Param("tenantId") String tenantId,
+        @Param("companyId") String companyId,
         @Param("isActive") Boolean isActive
     );
     
@@ -59,12 +59,12 @@ public interface TemplateSpringRepository extends JpaRepository<TemplateJpaEntit
     @Query("SELECT t FROM TemplateJpaEntity t WHERE " +
            "t.templateType = :templateType AND " +
            "t.messageType = :messageType AND " +
-           "t.tenantId = :tenantId AND " +
+           "t.companyId = :companyId AND " +
            "t.isActive = :isActive")
     Optional<TemplateJpaEntity> findTemplateByTypeMessageAndApp(
         @Param("templateType") TemplateTypeEnum templateType,
         @Param("messageType") MessageTypeEnum messageType,
-        @Param("tenantId") String tenantId,
+        @Param("companyId") String companyId,
         @Param("isActive") Boolean isActive
     );
 }

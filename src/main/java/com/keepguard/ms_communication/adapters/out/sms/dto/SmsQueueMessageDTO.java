@@ -15,8 +15,8 @@ public class SmsQueueMessageDTO {
     @JsonProperty("id")
     private String id;
 
-    @JsonProperty("tenantId")
-    private String tenantId;
+    @JsonProperty("companyId")
+    private String companyId;
 
     @JsonProperty("recipient")
     private String recipient;

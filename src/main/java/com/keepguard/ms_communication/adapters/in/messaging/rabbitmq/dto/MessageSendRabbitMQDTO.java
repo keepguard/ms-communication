@@ -14,10 +14,10 @@ import java.util.Map;
 
 public record MessageSendRabbitMQDTO(
     
-    @JsonProperty("tenantId")
-    @NotBlank(message = "tenantId é obrigatório")
-    @Size(max = 100, message = "tenantId deve ter no máximo 100 caracteres")
-    String tenantId,
+    @JsonProperty("companyId")
+    @NotBlank(message = "companyId é obrigatório")
+    @Size(max = 100, message = "companyId deve ter no máximo 100 caracteres")
+    String companyId,
     
     @JsonProperty("xCorrelationId")
     @NotBlank(message = "xCorrelationId é obrigatório")
@@ -64,7 +64,7 @@ public record MessageSendRabbitMQDTO(
      * @return true se a mensagem for válida
      */
     public boolean isValid() {
-        return tenantId != null && !tenantId.trim().isEmpty()
+        return companyId != null && !companyId.trim().isEmpty()
             && xCorrelationId != null && !xCorrelationId.trim().isEmpty()
             && messageType != null
             && recipient != null && !recipient.trim().isEmpty()
@@ -79,8 +79,8 @@ public record MessageSendRabbitMQDTO(
      */
     public String toLogString() {
         return String.format(
-            "MessageSendRabbitMQDTO{tenantId='%s', xCorrelationId='%s', messageType=%s, recipient=%s, templateType=%s, communicationType=%s, codeUser='%s'}",
-            tenantId, xCorrelationId, messageType, recipient, templateType, communicationType, codeUser
+            "MessageSendRabbitMQDTO{companyId='%s', xCorrelationId='%s', messageType=%s, recipient=%s, templateType=%s, communicationType=%s, codeUser='%s'}",
+            companyId, xCorrelationId, messageType, recipient, templateType, communicationType, codeUser
         );
     }
     

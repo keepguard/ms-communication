@@ -57,7 +57,7 @@ class MessageRabbitMQProcessorServiceTest {
         );
 
         validCommand = MessageSendCommandDTO.builder()
-            .tenantId(java.util.UUID.randomUUID())
+            .companyId(java.util.UUID.randomUUID())
             .communicationType(CommunicationTypeEnum.EMAIL)
             .recipient("test@example.com")
             .subject("Test Subject")
@@ -152,7 +152,7 @@ class MessageRabbitMQProcessorServiceTest {
         );
 
         MessageSendCommandDTO commandWithNulls = MessageSendCommandDTO.builder()
-            .tenantId(java.util.UUID.randomUUID())
+            .companyId(java.util.UUID.randomUUID())
             .communicationType(CommunicationTypeEnum.EMAIL)
             .recipient("test@example.com")
             .subject(null)
@@ -193,7 +193,7 @@ class MessageRabbitMQProcessorServiceTest {
         );
 
         MessageSendCommandDTO smsCommand = MessageSendCommandDTO.builder()
-            .tenantId(java.util.UUID.randomUUID())
+            .companyId(java.util.UUID.randomUUID())
             .communicationType(CommunicationTypeEnum.SMS)
             .recipient("+5511999999999")
             .subject("SMS Subject")
@@ -240,7 +240,7 @@ class MessageRabbitMQProcessorServiceTest {
         );
 
         MessageSendCommandDTO complexCommand = MessageSendCommandDTO.builder()
-            .tenantId(java.util.UUID.randomUUID())
+            .companyId(java.util.UUID.randomUUID())
             .communicationType(CommunicationTypeEnum.EMAIL)
             .recipient("test@example.com")
             .subject("Complex Subject")

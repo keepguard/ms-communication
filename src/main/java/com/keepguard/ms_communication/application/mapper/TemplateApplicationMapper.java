@@ -126,7 +126,7 @@ public class TemplateApplicationMapper {
                 template.getDescription(),
                 template.getMessageType(),
                 template.getTemplateType(),
-                template.getTenantId(),
+                template.getCompanyId(),
                 template.getContent(),
                 template.getSubject(),
                 template.getIsActive(),
