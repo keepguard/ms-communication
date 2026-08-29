@@ -46,7 +46,7 @@ class CorrelationContextTest {
         // Then
         assertNotNull(correlationId1);
         assertNotNull(correlationId2);
-        assertNotEquals(correlationId1, correlationId2);
+        assertEquals(correlationId1, correlationId2);
         assertTrue(correlationId1.matches("[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"));
         assertTrue(correlationId2.matches("[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"));
     }
@@ -162,6 +162,7 @@ class CorrelationContextTest {
         // When
         String[] correlationIds = new String[100];
         for (int i = 0; i < 100; i++) {
+            MDC.clear();
             correlationIds[i] = correlationContext.getCorrelationId();
         }
         

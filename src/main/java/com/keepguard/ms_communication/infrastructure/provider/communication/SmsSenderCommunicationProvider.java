@@ -37,7 +37,6 @@ public class SmsSenderCommunicationProvider implements CommunicationProvider {
                 return false;
             }
 
-            String traceId = MDC.get("traceId");
             String correlationId = MDC.get("correlationId");
             String companyId = MDC.get("companyId");
             if (companyId == null || companyId.isBlank()) {
@@ -56,7 +55,6 @@ public class SmsSenderCommunicationProvider implements CommunicationProvider {
                     .recipient(recipient)
                     .body(content != null ? content : subject)
                     .senderId(provider.getName())
-                    .traceId(traceId)
                     .correlationId(correlationId)
                     .build();
 

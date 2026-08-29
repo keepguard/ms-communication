@@ -42,7 +42,7 @@ public class SmsSenderRabbitMQProducer {
 
             Message rabbitMsg = MessageBuilder.withBody(jsonPayload.getBytes())
                     .setContentType(MessageProperties.CONTENT_TYPE_JSON)
-                    .setHeader("traceId", message.getTraceId())
+                    .setHeader("X-Correlation-ID", message.getCorrelationId())
                     .setHeader("correlationId", message.getCorrelationId())
                     .build();
 

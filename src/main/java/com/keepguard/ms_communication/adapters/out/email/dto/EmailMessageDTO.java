@@ -25,6 +25,9 @@ public class EmailMessageDTO implements Serializable {
     @JsonProperty("x_correlation_id")
     private String xCorrelationId;
 
+    @JsonProperty("correlationId")
+    private String correlationId;
+
     @JsonProperty("to")
     private String to;
 

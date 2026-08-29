@@ -38,7 +38,6 @@ public class MessageSendRabbitMQConsumer {
         try {
             if (rabbitMQMessage.xCorrelationId() != null) {
                 org.slf4j.MDC.put("correlationId", rabbitMQMessage.xCorrelationId());
-                org.slf4j.MDC.put("traceId", rabbitMQMessage.xCorrelationId());
             }
             if (rabbitMQMessage.companyId() != null) {
                 org.slf4j.MDC.put("companyId", rabbitMQMessage.companyId());

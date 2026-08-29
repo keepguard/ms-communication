@@ -12,7 +12,12 @@ public class CorrelationContext {
     public static final String CORRELATION_ID_MDC_KEY = "correlationId";
 
     public String getCorrelationId() {
-        return UUID.randomUUID().toString();
+        String correlationId = MDC.get(CORRELATION_ID_MDC_KEY);
+        if (correlationId == null || correlationId.isBlank()) {
+            correlationId = UUID.randomUUID().toString();
+            MDC.put(CORRELATION_ID_MDC_KEY, correlationId);
+        }
+        return correlationId;
     }
 
     public void setCorrelationId(String correlationId) {

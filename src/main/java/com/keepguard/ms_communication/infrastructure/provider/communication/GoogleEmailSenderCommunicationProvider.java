@@ -12,6 +12,7 @@ import com.keepguard.ms_communication.domain.enums.ProviderTypeEnum;
 import com.keepguard.ms_communication.infrastructure.provider.CommunicationProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -47,12 +48,17 @@ public class GoogleEmailSenderCommunicationProvider implements CommunicationProv
             // PRIMEIRO: Tentar via RabbitMQ (método principal)
             try {
                 if (emailSenderRabbitMQProducer.isConfigured()) {
+                    String correlationId = MDC.get("correlationId");
+                    if (correlationId == null || correlationId.isBlank()) {
+                        correlationId = UUID.randomUUID().toString();
+                    }
                     EmailMessageDTO emailMessage = EmailMessageDTO.builder()
                         .to(recipient)
                         .subject(subject)
                         .html(content)
                         .companyId(currentTenantId())
-                        .xCorrelationId(UUID.randomUUID().toString())
+                        .xCorrelationId(correlationId)
+                        .correlationId(correlationId)
                         .build();
                     
                     emailSenderRabbitMQProducer.publishEmailMessage(emailMessage);

@@ -1,5 +1,6 @@
 package com.keepguard.ms_communication.adapters.in.messaging.rabbitmq.dto;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.keepguard.lib_common.communication.enums.CommunicationTypeEnum;
 import com.keepguard.lib_common.communication.enums.MessageTypeEnum;
@@ -20,6 +21,7 @@ public record MessageSendRabbitMQDTO(
     String companyId,
     
     @JsonProperty("xCorrelationId")
+    @JsonAlias({"correlationId"})
     @NotBlank(message = "xCorrelationId é obrigatório")
     @Size(max = 100, message = "xCorrelationId deve ter no máximo 100 caracteres")
     String xCorrelationId,
