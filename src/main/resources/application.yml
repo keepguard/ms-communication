@@ -219,4 +219,12 @@ springdoc:
   swagger-ui:
     enabled: true
   api-docs:
-    enabled: true 
+    enabled: true
+
+keepguard:
+  audit:
+    enabled: true
+    exchange: srv-audit-exchange-local
+    routing-key: audit.event
+    source-service: ms-communication
+ 

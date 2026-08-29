@@ -61,4 +61,8 @@ cache:
     prefix:
       template: "template_cache"
       provider: "provider_cache"
-      providers-by-type: "providers_by_type" 
+      providers-by-type: "providers_by_type"
+
+keepguard:
+  audit:
+    enabled: false 

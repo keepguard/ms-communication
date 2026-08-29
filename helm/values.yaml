@@ -18,7 +18,7 @@ env:
   redisHost: "redis"
   redisPort: 6379
   rabbitmqHost: "rabbitmq-service"
-  rabbitmqPort: 5672
+  rabbitmqPort: "5672"
   postgresDb: "keepguard_api_db"
   postgresUser: "keepguard_api_user"
 

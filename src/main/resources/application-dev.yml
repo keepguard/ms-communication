@@ -130,4 +130,8 @@ logging:
     org.springframework.amqp: WARN
   logstash:
     port: 5000
-    enabled: true 
+    enabled: true
+
+keepguard:
+  audit:
+    exchange: srv-audit-exchange-dev 
