@@ -16,6 +16,7 @@ import java.util.Map;
 public record MessageSendRabbitMQDTO(
     
     @JsonProperty("companyId")
+    @JsonAlias({"tenantId", "application"})
     @NotBlank(message = "companyId é obrigatório")
     @Size(max = 100, message = "companyId deve ter no máximo 100 caracteres")
     String companyId,
