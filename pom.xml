@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.keepguard</groupId>
 	<artifactId>ms-communication</artifactId>
-	<version>1.0.26-1.0.0</version>
+	<version>1.0.27-1.0.0</version>
 	<name>ms-communication</name>
 	<description>Communication Service</description>
 	<url/>
