@@ -1,0 +1,53 @@
+<!--
+  Shell KeepGuard (e-mail-safe). Copiar header/footer para cada template.
+  O processor do ms-communication NÃO faz include — cada .html deve ser um documento completo.
+
+  Tokens (backoffice light):
+    bg-page      #f4f5f6
+    bg-card      #ffffff
+    bg-muted     #f8f9fa
+    primary      #673de6
+    text-main    #1d2129
+    text-body    #3c4043
+    text-muted   #5f6368
+    text-sub     #80868b
+    border       #e3e5e8
+    danger       #eb1e3a
+    success      #00b090
+
+  Regras: tabelas + estilos inline; Arial/Helvetica; sem JS; sem webfont; max-width 600px.
+  Variáveis: {{nome}} — não alterar os nomes usados pelos producers.
+-->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KeepGuard</title>
+</head>
+<body style="margin:0;padding:0;background-color:#f4f5f6;font-family:Arial,Helvetica,sans-serif;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#f4f5f6;">
+    <tr>
+      <td align="center" style="padding:24px 16px;">
+        <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;width:100%;background-color:#ffffff;border:1px solid #e3e5e8;">
+          <tr>
+            <td style="background-color:#673de6;padding:20px 24px;">
+              <p style="margin:0;font-size:20px;font-weight:700;color:#ffffff;letter-spacing:0.4px;">KEEP<span style="font-weight:600;opacity:0.9;">GUARD</span></p>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:28px 24px;">
+              <!-- CONTEÚDO -->
+            </td>
+          </tr>
+          <tr>
+            <td style="background-color:#f8f9fa;padding:16px 24px;border-top:1px solid #e3e5e8;">
+              <p style="margin:0;font-size:12px;line-height:1.5;color:#80868b;text-align:center;">Este é um e-mail automático · KeepGuard</p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>

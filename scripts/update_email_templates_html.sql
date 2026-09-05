@@ -1,27 +1,28 @@
--- Seed / upsert dos templates EMAIL HTML KeepGuard (onboarding).
+-- Templates EMAIL HTML KeepGuard.
 -- Fonte dos documentos: scripts/email-templates/*.html
--- Aplica o mesmo conteúdo de update_email_templates_html.sql.
+-- SMS / WhatsApp: não alterar.
 --
 -- Aplicação
---   1. Dev: psql neste arquivo (ajusta provider URL + templates).
---   2. Smoke P0: AUTENTICACAO_EMAIL_TOKEN, AUTENTICACAO_DISPOSITIVO_EMAIL_TOKEN,
---      RECUPERACAO_SENHA, CADASTRO_SUCESSO, NOVO_DISPOSITIVO_AUTENTICADO,
---      SENHA_ALTERADA_SUCESSO.
---   3. Prod: preferir update_email_templates_html.sql se o provider já estiver correto;
---      este seed também pode ser reaplicado (UPDATE + INSERT if missing).
+--   1. Dev: psql no schema ms_communication → este arquivo.
+--   2. Smoke P0 (um envio real por tipo):
+--        AUTENTICACAO_EMAIL_TOKEN
+--        AUTENTICACAO_DISPOSITIVO_EMAIL_TOKEN
+--        RECUPERACAO_SENHA
+--        CADASTRO_SUCESSO
+--        NOVO_DISPOSITIVO_AUTENTICADO
+--        SENHA_ALTERADA_SUCESSO
+--   3. Prod: o mesmo SQL (UPDATE cobre qualquer tenant_id já existente).
+--   4. Conferir Gmail/Apple Mail: código legível, botão revogar clicável,
+--      fallback text/plain (stripTags) não vira lixo.
 --
 -- Tenants com INSERT se ausente:
---   ae3 f7fc7350-b9fc-4e54-9c58-ac9385b23ae3
---   ae4 f7fc7350-b9fc-4e54-9c58-ac9385b23ae4
+--   ae3 f7fc7350-b9fc-4e54-9c58-ac9385b23ae3 (local/dev)
+--   ae4 f7fc7350-b9fc-4e54-9c58-ac9385b23ae4 (KeepGuard Secondary)
+--
+-- Substitui scripts/update_senha_alterada_sucesso_template.sql (obsoleto).
+-- Cache Redis de template não é lido no envio; restart não é obrigatório.
 
 BEGIN;
-
--- Provider URL: serviço real em k8s/docker é srv-email-sender
-UPDATE ms_communication.providers
-SET url = 'http://srv-email-sender:8601',
-    updated_at = NOW()
-WHERE provider_type = 'EMAIL_GOOGLE_SENDER'
-  AND (url IS NULL OR url LIKE '%srv-email-google-sender%');
 
 -- AUTENTICACAO_EMAIL_TOKEN
 UPDATE ms_communication.templates
