@@ -2,7 +2,6 @@ package com.keepguard.ms_communication.adapters.in.rest.message;
 
 
 import java.util.UUID;
-import com.keepguard.lib_common.logging.annotation.LogOperation;
 import com.keepguard.lib_common.metrics.annotation.MetricsEndpoint;
 import com.keepguard.lib_common.utils.ValidationUtils;
 import com.keepguard.ms_communication.adapters.in.rest.message.mapper.MessageAdapterMapper;
@@ -66,13 +65,6 @@ public class MessageController {
     @MetricsEndpoint(
         endpoint = "message_send",
         operation = "enviar mensagem"
-    )
-    @LogOperation(
-        operation = "SEND_MESSAGE",
-        description = "Enviando mensagem - tipo: {dto.messageType}, destinatário: {dto.recipient}, codeUser: {dto.codeUser}, application: {companyId}",
-        audit = true,
-        auditAction = "SEND_MESSAGE",
-        auditEntityType = "MESSAGE"
     )
     public ResponseEntity<MessageSendResponseDTO> send(
             @Valid @RequestBody MessageSendRequestDTO dto,

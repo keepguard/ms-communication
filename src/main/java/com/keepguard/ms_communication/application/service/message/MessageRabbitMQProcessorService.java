@@ -21,9 +21,9 @@ public class MessageRabbitMQProcessorService implements MessageSendRabbitMQPort 
     @LogOperation(
         operation = "PROCESS_RABBITMQ_MESSAGE_SEND",
         description = "Processando mensagem de envio via RabbitMQ - xCorrelationId: {rabbitMQMessage.xCorrelationId}, recipient: {rabbitMQMessage.recipient}",
-        audit = true,
-        auditAction = "PROCESS_MESSAGE_SEND",
-        auditEntityType = "MESSAGE"
+            audit = false,
+            auditAction = "PROCESS_MESSAGE_SEND",
+            auditEntityType = "MESSAGE"
     )
     public void processMessageSend(MessageSendRabbitMQDTO rabbitMQMessage) {
         log.info("Iniciando processamento de mensagem RabbitMQ: xCorrelationId={}, recipient={}", 
