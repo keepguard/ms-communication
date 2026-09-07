@@ -7,8 +7,7 @@ import com.keepguard.ms_communication.adapters.in.rest.template.dto.response.*;
 import com.keepguard.ms_communication.adapters.in.rest.template.dto.request.TemplateUpdateRequestDTO;
 import com.keepguard.ms_communication.adapters.in.rest.template.mapper.TemplateAdapterMapper;
 import com.keepguard.ms_communication.application.dto.template.*;
-import com.keepguard.ms_communication.application.mapper.TemplateApplicationMapper;
-import com.keepguard.ms_communication.application.port.in.service.TemplatePort;
+import com.keepguard.ms_communication.application.port.in.TemplatePort;
 import com.keepguard.lib_common.communication.enums.MessageTypeEnum;
 import com.keepguard.lib_common.communication.enums.TemplateTypeEnum;
 import io.swagger.v3.oas.annotations.Operation;
@@ -38,7 +37,6 @@ public class TemplateController {
 
     private final TemplatePort templatePort;
     private final TemplateAdapterMapper adapterMapper;
-    private final TemplateApplicationMapper applicationMapper;
 
     @PostMapping
     @Operation(
@@ -69,9 +67,8 @@ public class TemplateController {
         
         log.info("Criando template - companyId={}", companyId);
         
-        com.keepguard.ms_communication.domain.dto.template.TemplateCreateCommandDTO requestCommand = adapterMapper.toCreateCommand(createDTO, companyId);
-        com.keepguard.ms_communication.domain.dto.template.TemplateCreateCommandDTO command = applicationMapper.toCreateCommand(requestCommand);
-        TemplateView view = templatePort.create(command);
+        TemplateCreateCommandDTO command = adapterMapper.toCreateCommand(createDTO, companyId);
+        TemplateViewDTO view = templatePort.create(command);
         TemplateCreateResponseDTO response = adapterMapper.toCreateResponseDTO(view);
         
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
@@ -102,9 +99,8 @@ public class TemplateController {
 
         log.info("Atualizando template: {} - companyId={}", id, companyId);
         
-        com.keepguard.ms_communication.domain.dto.template.TemplateUpdateCommandDTO requestCommand = adapterMapper.toUpdateCommand(id, updateDTO, companyId);
-        com.keepguard.ms_communication.domain.dto.template.TemplateUpdateCommandDTO command = applicationMapper.toUpdateCommand(requestCommand);
-        TemplateView view = templatePort.update(command);
+        TemplateUpdateCommandDTO command = adapterMapper.toUpdateCommand(id, updateDTO, companyId);
+        TemplateViewDTO view = templatePort.update(command);
         TemplateUpdateResponseDTO response = adapterMapper.toUpdateResponseDTO(view);
         
         return ResponseEntity.ok(response);
@@ -159,7 +155,7 @@ public class TemplateController {
 
         log.info("Buscando template por ID: {} - companyId={}", id, companyId);
         
-        TemplateView view = templatePort.getById(id).orElseThrow(() -> new RuntimeException("Template not found"));
+        TemplateViewDTO view = templatePort.getById(id).orElseThrow(() -> new RuntimeException("Template not found"));
         TemplateGetTemplateByIdResponseDTO response = adapterMapper.toGetTemplateByIdResponseDTO(view);
         
         return ResponseEntity.ok(response);
@@ -189,7 +185,7 @@ public class TemplateController {
 
         log.info("Buscando template por tipo: {} e messageType: {} - companyId={}", type, messageType, companyId);
         
-        TemplateView view = templatePort.getById(UUID.randomUUID()).orElseThrow(() -> new RuntimeException("Template not found"));
+        TemplateViewDTO view = templatePort.getById(UUID.randomUUID()).orElseThrow(() -> new RuntimeException("Template not found"));
         TemplateGetTemplateByTypeResponseDTO response = adapterMapper.toGetTemplateByTypeResponseDTO(view);
         
         return ResponseEntity.ok(response);
@@ -215,7 +211,7 @@ public class TemplateController {
 
         log.info("Listando templates - companyId={}", companyId);
         
-        List<TemplateView> views = templatePort.getAllActive();
+        List<TemplateViewDTO> views = templatePort.getAllActive();
         List<TemplateGetTemplatesResponseDTO> response = views.stream()
                 .map(adapterMapper::toGetTemplatesResponseDTO)
                 .collect(java.util.stream.Collectors.toList());

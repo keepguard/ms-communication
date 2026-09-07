@@ -1,8 +1,8 @@
 package com.keepguard.ms_communication.application.mapper;
 
-import com.keepguard.ms_communication.application.dto.provider.ProviderView;
-import com.keepguard.ms_communication.domain.dto.provider.ProviderCreateCommandDTO;
-import com.keepguard.ms_communication.domain.dto.provider.ProviderUpdateCommandDTO;
+import com.keepguard.ms_communication.application.dto.provider.ProviderViewDTO;
+import com.keepguard.ms_communication.application.dto.provider.ProviderCreateCommandDTO;
+import com.keepguard.ms_communication.application.dto.provider.ProviderUpdateCommandDTO;
 import com.keepguard.ms_communication.domain.entity.Provider;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class ProviderApplicationMapper {
 
-    public ProviderCreateCommandDTO toCreateCommand(com.keepguard.ms_communication.domain.dto.provider.ProviderCreateCommandDTO dto) {
+    public ProviderCreateCommandDTO toCreateCommand(com.keepguard.ms_communication.application.dto.provider.ProviderCreateCommandDTO dto) {
         if (dto == null) {
             return null;
         }
@@ -26,7 +26,7 @@ public class ProviderApplicationMapper {
         }
     }
 
-    public ProviderUpdateCommandDTO toUpdateCommand(com.keepguard.ms_communication.domain.dto.provider.ProviderUpdateCommandDTO dto) {
+    public ProviderUpdateCommandDTO toUpdateCommand(com.keepguard.ms_communication.application.dto.provider.ProviderUpdateCommandDTO dto) {
         if (dto == null) {
             return null;
         }
@@ -40,13 +40,13 @@ public class ProviderApplicationMapper {
         }
     }
 
-    public ProviderView toView(Provider provider) {
+    public ProviderViewDTO toView(Provider provider) {
         if (provider == null) {
             return null;
         }
 
         try {
-            return new ProviderView(
+            return new ProviderViewDTO(
                 provider.getId(),
                 provider.getName(),
                 provider.getProviderType(),
@@ -65,7 +65,7 @@ public class ProviderApplicationMapper {
                 provider.getUpdatedAt()
             );
         } catch (Exception e) {
-            log.error("Erro ao mapear Provider para ProviderView: {}", e.getMessage(), e);
+            log.error("Erro ao mapear Provider para ProviderViewDTO: {}", e.getMessage(), e);
             throw e;
         }
     }

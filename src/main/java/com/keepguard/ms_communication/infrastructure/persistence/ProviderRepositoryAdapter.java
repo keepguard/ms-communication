@@ -1,7 +1,7 @@
 package com.keepguard.ms_communication.infrastructure.persistence;
 
-import com.keepguard.ms_communication.application.dto.common.PageResultView;
-import com.keepguard.ms_communication.application.dto.provider.ProviderSearchCriteriaView;
+import com.keepguard.ms_communication.application.dto.common.PageResultViewDTO;
+import com.keepguard.ms_communication.application.dto.provider.ProviderSearchCriteriaViewDTO;
 import com.keepguard.ms_communication.application.port.out.persistence.ProviderRepositoryPort;
 import com.keepguard.lib_common.communication.enums.CommunicationTypeEnum;
 import com.keepguard.ms_communication.domain.entity.Provider;
@@ -46,7 +46,7 @@ public class ProviderRepositoryAdapter implements ProviderRepositoryPort {
     }
 
     @Override
-    public PageResultView<Provider> search(ProviderSearchCriteriaView criteria) {
+    public PageResultViewDTO<Provider> search(ProviderSearchCriteriaViewDTO criteria) {
         Pageable pageable = createPageable(criteria);
 
         Page<ProviderJpaEntity> page = springRepository.findWithFilters(
@@ -62,7 +62,7 @@ public class ProviderRepositoryAdapter implements ProviderRepositoryPort {
                 .map(mapper::toDomain)
                 .collect(Collectors.toList());
 
-        return PageResultView.of(content, page.getNumber(), page.getSize(), page.getTotalElements());
+        return PageResultViewDTO.of(content, page.getNumber(), page.getSize(), page.getTotalElements());
     }
 
     @Override
@@ -100,7 +100,7 @@ public class ProviderRepositoryAdapter implements ProviderRepositoryPort {
         return springRepository.existsByNameAndIdNot(name, id);
     }
 
-    private Pageable createPageable(ProviderSearchCriteriaView criteria) {
+    private Pageable createPageable(ProviderSearchCriteriaViewDTO criteria) {
         Sort sort = Sort.by(Sort.Direction.fromString(criteria.sortDirection()), criteria.sortBy());
         return PageRequest.of(criteria.page(), criteria.size(), sort);
     }

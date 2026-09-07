@@ -1,10 +1,10 @@
 package com.keepguard.ms_communication.application.service;
 
-import com.keepguard.ms_communication.application.dto.common.PageResultView;
-import com.keepguard.ms_communication.domain.dto.template.TemplateCreateCommandDTO;
-import com.keepguard.ms_communication.application.dto.template.TemplateSearchCriteriaView;
-import com.keepguard.ms_communication.domain.dto.template.TemplateUpdateCommandDTO;
-import com.keepguard.ms_communication.application.dto.template.TemplateView;
+import com.keepguard.ms_communication.application.dto.common.PageResultViewDTO;
+import com.keepguard.ms_communication.application.dto.template.TemplateCreateCommandDTO;
+import com.keepguard.ms_communication.application.dto.template.TemplateSearchCriteriaViewDTO;
+import com.keepguard.ms_communication.application.dto.template.TemplateUpdateCommandDTO;
+import com.keepguard.ms_communication.application.dto.template.TemplateViewDTO;
 import com.keepguard.ms_communication.application.service.exception.NotFoundException;
 import com.keepguard.ms_communication.application.service.template.TemplateCommandService;
 import com.keepguard.ms_communication.application.service.template.TemplateQueryService;
@@ -46,8 +46,8 @@ class TemplateUseCaseServiceTest {
 
     private TemplateCreateCommandDTO templateCreateCommand;
     private TemplateUpdateCommandDTO templateUpdateCommand;
-    private TemplateView templateView;
-    private TemplateSearchCriteriaView searchCriteria;
+    private TemplateViewDTO templateView;
+    private TemplateSearchCriteriaViewDTO searchCriteria;
     private UUID templateId;
 
     @BeforeEach
@@ -79,7 +79,7 @@ class TemplateUseCaseServiceTest {
                 .withIsActive(false)
                 .buildUpdateCommand();
 
-        templateView = new TemplateView(
+        templateView = new TemplateViewDTO(
                 templateId,
                 "Test Template",
                 "Test Description",
@@ -94,7 +94,7 @@ class TemplateUseCaseServiceTest {
                 now
         );
 
-        searchCriteria = new TemplateSearchCriteriaView(
+        searchCriteria = new TemplateSearchCriteriaViewDTO(
                 0,
                 10,
                 null,
@@ -113,7 +113,7 @@ class TemplateUseCaseServiceTest {
         when(commandService.create(templateCreateCommand)).thenReturn(templateView);
 
         // When
-        TemplateView result = templateUseCaseService.create(templateCreateCommand);
+        TemplateViewDTO result = templateUseCaseService.create(templateCreateCommand);
 
         // Then
         assertNotNull(result);
@@ -133,7 +133,7 @@ class TemplateUseCaseServiceTest {
         when(commandService.update(templateUpdateCommand.getId(), templateUpdateCommand)).thenReturn(templateView);
 
         // When
-        TemplateView result = templateUseCaseService.update(templateUpdateCommand);
+        TemplateViewDTO result = templateUseCaseService.update(templateUpdateCommand);
 
         // Then
         assertNotNull(result);
@@ -150,7 +150,7 @@ class TemplateUseCaseServiceTest {
         when(queryService.getById(templateId)).thenReturn(templateView);
 
         // When
-        Optional<TemplateView> result = templateUseCaseService.getById(templateId);
+        Optional<TemplateViewDTO> result = templateUseCaseService.getById(templateId);
 
         // Then
         assertTrue(result.isPresent());
@@ -170,7 +170,7 @@ class TemplateUseCaseServiceTest {
                 .thenThrow(new NotFoundException("Template not found"));
 
         // When
-        Optional<TemplateView> result = templateUseCaseService.getById(templateId);
+        Optional<TemplateViewDTO> result = templateUseCaseService.getById(templateId);
 
         // Then
         assertFalse(result.isPresent());
@@ -188,7 +188,7 @@ class TemplateUseCaseServiceTest {
                 .thenThrow(new RuntimeException("Database error"));
 
         // When
-        Optional<TemplateView> result = templateUseCaseService.getById(templateId);
+        Optional<TemplateViewDTO> result = templateUseCaseService.getById(templateId);
 
         // Then
         assertFalse(result.isPresent());
@@ -202,12 +202,12 @@ class TemplateUseCaseServiceTest {
     @DisplayName("Should search templates successfully")
     void shouldSearchTemplatesSuccessfully() {
         // Given
-        List<TemplateView> templates = Arrays.asList(templateView);
-        PageResultView<TemplateView> pageResult = PageResultView.of(templates, 0, 10, 1L);
+        List<TemplateViewDTO> templates = Arrays.asList(templateView);
+        PageResultViewDTO<TemplateViewDTO> pageResult = PageResultViewDTO.of(templates, 0, 10, 1L);
         when(queryService.search(searchCriteria)).thenReturn(pageResult);
 
         // When
-        PageResultView<TemplateView> result = templateUseCaseService.search(searchCriteria);
+        PageResultViewDTO<TemplateViewDTO> result = templateUseCaseService.search(searchCriteria);
 
         // Then
         assertNotNull(result);
@@ -226,11 +226,11 @@ class TemplateUseCaseServiceTest {
     @DisplayName("Should get all active templates successfully")
     void shouldGetAllActiveTemplatesSuccessfully() {
         // Given
-        List<TemplateView> templates = Arrays.asList(templateView);
+        List<TemplateViewDTO> templates = Arrays.asList(templateView);
         when(queryService.getAllActive()).thenReturn(templates);
 
         // When
-        List<TemplateView> result = templateUseCaseService.getAllActive();
+        List<TemplateViewDTO> result = templateUseCaseService.getAllActive();
 
         // Then
         assertNotNull(result);
@@ -247,11 +247,11 @@ class TemplateUseCaseServiceTest {
     @DisplayName("Should get templates by type successfully")
     void shouldGetTemplatesByTypeSuccessfully() {
         // Given
-        List<TemplateView> templates = Arrays.asList(templateView);
+        List<TemplateViewDTO> templates = Arrays.asList(templateView);
         when(queryService.getByType(TemplateTypeEnum.CADASTRO_SUCESSO)).thenReturn(templates);
 
         // When
-        List<TemplateView> result = templateUseCaseService.getByType(TemplateTypeEnum.CADASTRO_SUCESSO);
+        List<TemplateViewDTO> result = templateUseCaseService.getByType(TemplateTypeEnum.CADASTRO_SUCESSO);
 
         // Then
         assertNotNull(result);
@@ -268,11 +268,11 @@ class TemplateUseCaseServiceTest {
     @DisplayName("Should get templates by message type successfully")
     void shouldGetTemplatesByMessageTypeSuccessfully() {
         // Given
-        List<TemplateView> templates = Arrays.asList(templateView);
+        List<TemplateViewDTO> templates = Arrays.asList(templateView);
         when(queryService.getByMessageType(MessageTypeEnum.EMAIL)).thenReturn(templates);
 
         // When
-        List<TemplateView> result = templateUseCaseService.getByMessageType(MessageTypeEnum.EMAIL);
+        List<TemplateViewDTO> result = templateUseCaseService.getByMessageType(MessageTypeEnum.EMAIL);
 
         // Then
         assertNotNull(result);
@@ -309,7 +309,7 @@ class TemplateUseCaseServiceTest {
         when(queryService.getById(templateId)).thenReturn(templateView);
 
         // When
-        TemplateView result = templateUseCaseService.activate(templateId);
+        TemplateViewDTO result = templateUseCaseService.activate(templateId);
 
         // Then
         assertNotNull(result);
@@ -330,7 +330,7 @@ class TemplateUseCaseServiceTest {
         when(queryService.getById(templateId)).thenReturn(templateView);
 
         // When
-        TemplateView result = templateUseCaseService.deactivate(templateId);
+        TemplateViewDTO result = templateUseCaseService.deactivate(templateId);
 
         // Then
         assertNotNull(result);
@@ -471,7 +471,7 @@ class TemplateUseCaseServiceTest {
                 .thenThrow(new IllegalArgumentException("ID cannot be null"));
 
         // When
-        Optional<TemplateView> result = templateUseCaseService.getById(null);
+        Optional<TemplateViewDTO> result = templateUseCaseService.getById(null);
 
         // Then
         assertFalse(result.isPresent());

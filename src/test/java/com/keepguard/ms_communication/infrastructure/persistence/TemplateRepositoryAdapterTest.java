@@ -1,7 +1,7 @@
 package com.keepguard.ms_communication.infrastructure.persistence;
 
-import com.keepguard.ms_communication.application.dto.common.PageResultView;
-import com.keepguard.ms_communication.application.dto.template.TemplateSearchCriteriaView;
+import com.keepguard.ms_communication.application.dto.common.PageResultViewDTO;
+import com.keepguard.ms_communication.application.dto.template.TemplateSearchCriteriaViewDTO;
 import com.keepguard.ms_communication.domain.entity.Template;
 import com.keepguard.lib_common.communication.enums.MessageTypeEnum;
 import com.keepguard.lib_common.communication.enums.TemplateTypeEnum;
@@ -127,7 +127,7 @@ class TemplateRepositoryAdapterTest {
     @DisplayName("Deve buscar templates com critérios de busca com sucesso")
     void shouldSearchTemplatesWithCriteriaSuccessfully() {
         // Given
-        TemplateSearchCriteriaView criteria = new TemplateSearchCriteriaView(
+        TemplateSearchCriteriaViewDTO criteria = new TemplateSearchCriteriaViewDTO(
             0, 10, "name", "ASC", "Test", MessageTypeEnum.EMAIL, 
             TemplateTypeEnum.CADASTRO_SUCESSO, true
         );
@@ -139,7 +139,7 @@ class TemplateRepositoryAdapterTest {
         when(mapper.toDomain(templateJpaEntity)).thenReturn(template);
         
         // When
-        PageResultView<Template> result = templateRepositoryAdapter.search(criteria);
+        PageResultViewDTO<Template> result = templateRepositoryAdapter.search(criteria);
         
         // Then
         assertNotNull(result);
@@ -159,7 +159,7 @@ class TemplateRepositoryAdapterTest {
     @DisplayName("Deve buscar templates com critérios nulos")
     void shouldSearchTemplatesWithNullCriteria() {
         // Given
-        TemplateSearchCriteriaView criteria = new TemplateSearchCriteriaView(
+        TemplateSearchCriteriaViewDTO criteria = new TemplateSearchCriteriaViewDTO(
             0, 10, "name", "ASC", null, null, null, null
         );
         
@@ -170,7 +170,7 @@ class TemplateRepositoryAdapterTest {
         when(mapper.toDomain(templateJpaEntity)).thenReturn(template);
         
         // When
-        PageResultView<Template> result = templateRepositoryAdapter.search(criteria);
+        PageResultViewDTO<Template> result = templateRepositoryAdapter.search(criteria);
         
         // Then
         assertNotNull(result);
@@ -321,7 +321,7 @@ class TemplateRepositoryAdapterTest {
     @DisplayName("Deve buscar templates com página vazia")
     void shouldSearchTemplatesWithEmptyPage() {
         // Given
-        TemplateSearchCriteriaView criteria = new TemplateSearchCriteriaView(
+        TemplateSearchCriteriaViewDTO criteria = new TemplateSearchCriteriaViewDTO(
             0, 10, "name", "ASC", "NonExistent", null, null, null
         );
         
@@ -331,7 +331,7 @@ class TemplateRepositoryAdapterTest {
         )).thenReturn(emptyPage);
         
         // When
-        PageResultView<Template> result = templateRepositoryAdapter.search(criteria);
+        PageResultViewDTO<Template> result = templateRepositoryAdapter.search(criteria);
         
         // Then
         assertNotNull(result);
@@ -348,10 +348,10 @@ class TemplateRepositoryAdapterTest {
     @DisplayName("Deve buscar templates com diferentes tipos de ordenação")
     void shouldSearchTemplatesWithDifferentSortOrders() {
         // Given
-        TemplateSearchCriteriaView criteriaAsc = new TemplateSearchCriteriaView(
+        TemplateSearchCriteriaViewDTO criteriaAsc = new TemplateSearchCriteriaViewDTO(
             0, 10, "name", "ASC", null, null, null, null
         );
-        TemplateSearchCriteriaView criteriaDesc = new TemplateSearchCriteriaView(
+        TemplateSearchCriteriaViewDTO criteriaDesc = new TemplateSearchCriteriaViewDTO(
             0, 10, "name", "DESC", null, null, null, null
         );
         
@@ -362,8 +362,8 @@ class TemplateRepositoryAdapterTest {
         when(mapper.toDomain(templateJpaEntity)).thenReturn(template);
         
         // When
-        PageResultView<Template> resultAsc = templateRepositoryAdapter.search(criteriaAsc);
-        PageResultView<Template> resultDesc = templateRepositoryAdapter.search(criteriaDesc);
+        PageResultViewDTO<Template> resultAsc = templateRepositoryAdapter.search(criteriaAsc);
+        PageResultViewDTO<Template> resultDesc = templateRepositoryAdapter.search(criteriaDesc);
         
         // Then
         assertNotNull(resultAsc);

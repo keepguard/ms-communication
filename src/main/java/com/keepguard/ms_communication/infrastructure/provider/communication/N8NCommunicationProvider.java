@@ -6,8 +6,8 @@ import com.keepguard.ms_communication.infrastructure.provider.CommunicationProvi
 import com.keepguard.lib_common.communication.enums.CommunicationTypeEnum;
 import com.keepguard.ms_communication.domain.entity.Provider;
 import com.keepguard.ms_communication.domain.enums.ProviderTypeEnum;
+import com.keepguard.ms_communication.adapters.out.feign.N8nWebhookFeignAdapter;
 import com.keepguard.ms_communication.infrastructure.provider.n8n.N8NConfigParser;
-import com.keepguard.ms_communication.infrastructure.provider.n8n.N8NHttpClient;
 import com.keepguard.ms_communication.infrastructure.provider.n8n.PayloadFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class N8NCommunicationProvider implements CommunicationProvider {
 
-    private final N8NHttpClient httpClient;
+    private final N8nWebhookFeignAdapter httpClient;
     private final PayloadFactory payloadFactory;
     private final N8NConfigParser configParser;
 

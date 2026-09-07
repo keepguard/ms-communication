@@ -4,7 +4,7 @@ import com.keepguard.lib_common.communication.enums.CommunicationTypeEnum;
 import com.keepguard.lib_common.communication.enums.MessageTypeEnum;
 import com.keepguard.lib_common.communication.enums.TemplateTypeEnum;
 import com.keepguard.ms_communication.adapters.in.messaging.rabbitmq.dto.MessageSendRabbitMQDTO;
-import com.keepguard.ms_communication.domain.dto.message.MessageSendCommandDTO;
+import com.keepguard.ms_communication.application.dto.message.MessageSendCommandDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

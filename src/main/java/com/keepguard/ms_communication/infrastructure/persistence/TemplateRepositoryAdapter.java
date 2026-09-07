@@ -1,7 +1,7 @@
 package com.keepguard.ms_communication.infrastructure.persistence;
 
-import com.keepguard.ms_communication.application.dto.common.PageResultView;
-import com.keepguard.ms_communication.application.dto.template.TemplateSearchCriteriaView;
+import com.keepguard.ms_communication.application.dto.common.PageResultViewDTO;
+import com.keepguard.ms_communication.application.dto.template.TemplateSearchCriteriaViewDTO;
 import com.keepguard.ms_communication.application.port.out.persistence.TemplateRepositoryPort;
 import com.keepguard.lib_common.communication.enums.MessageTypeEnum;
 import com.keepguard.ms_communication.domain.entity.Template;
@@ -47,7 +47,7 @@ public class TemplateRepositoryAdapter implements TemplateRepositoryPort {
     }
 
     @Override
-    public PageResultView<Template> search(TemplateSearchCriteriaView criteria) {
+    public PageResultViewDTO<Template> search(TemplateSearchCriteriaViewDTO criteria) {
         Pageable pageable = createPageable(criteria);
 
         Page<TemplateJpaEntity> page = springRepository.findWithFilters(
@@ -62,7 +62,7 @@ public class TemplateRepositoryAdapter implements TemplateRepositoryPort {
                 .map(mapper::toDomain)
                 .collect(Collectors.toList());
 
-        return PageResultView.of(content, page.getNumber(), page.getSize(), page.getTotalElements());
+        return PageResultViewDTO.of(content, page.getNumber(), page.getSize(), page.getTotalElements());
     }
 
     @Override
@@ -109,7 +109,7 @@ public class TemplateRepositoryAdapter implements TemplateRepositoryPort {
                 .map(mapper::toDomain);
     }
 
-    private Pageable createPageable(TemplateSearchCriteriaView criteria) {
+    private Pageable createPageable(TemplateSearchCriteriaViewDTO criteria) {
         Sort sort = Sort.by(Sort.Direction.fromString(criteria.sortDirection()), criteria.sortBy());
         return PageRequest.of(criteria.page(), criteria.size(), sort);
     }

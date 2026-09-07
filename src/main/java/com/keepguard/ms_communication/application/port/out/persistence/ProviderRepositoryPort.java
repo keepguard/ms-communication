@@ -1,7 +1,7 @@
 package com.keepguard.ms_communication.application.port.out.persistence;
 
-import com.keepguard.ms_communication.application.dto.common.PageResultView;
-import com.keepguard.ms_communication.application.dto.provider.ProviderSearchCriteriaView;
+import com.keepguard.ms_communication.application.dto.common.PageResultViewDTO;
+import com.keepguard.ms_communication.application.dto.provider.ProviderSearchCriteriaViewDTO;
 import com.keepguard.lib_common.communication.enums.CommunicationTypeEnum;
 import com.keepguard.ms_communication.domain.entity.Provider;
 
@@ -15,7 +15,7 @@ public interface ProviderRepositoryPort {
 
     Optional<Provider> findById(UUID id);
 
-    PageResultView<Provider> search(ProviderSearchCriteriaView criteria);
+    PageResultViewDTO<Provider> search(ProviderSearchCriteriaViewDTO criteria);
 
     List<Provider> findAllActive();
 

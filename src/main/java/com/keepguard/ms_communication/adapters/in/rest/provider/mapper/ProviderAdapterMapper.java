@@ -3,9 +3,9 @@ package com.keepguard.ms_communication.adapters.in.rest.provider.mapper;
 import com.keepguard.ms_communication.adapters.in.rest.provider.dto.request.ProviderCreateRequestDTO;
 import com.keepguard.ms_communication.adapters.in.rest.provider.dto.request.ProviderUpdateRequestDTO;
 import com.keepguard.ms_communication.adapters.in.rest.provider.dto.response.*;
-import com.keepguard.ms_communication.application.dto.provider.ProviderView;
-import com.keepguard.ms_communication.domain.dto.provider.ProviderCreateCommandDTO;
-import com.keepguard.ms_communication.domain.dto.provider.ProviderUpdateCommandDTO;
+import com.keepguard.ms_communication.application.dto.provider.ProviderViewDTO;
+import com.keepguard.ms_communication.application.dto.provider.ProviderCreateCommandDTO;
+import com.keepguard.ms_communication.application.dto.provider.ProviderUpdateCommandDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -72,7 +72,7 @@ public class ProviderAdapterMapper {
         }
     }
 
-    public ProviderCreateResponseDTO toCreateResponseDTO(ProviderView view) {
+    public ProviderCreateResponseDTO toCreateResponseDTO(ProviderViewDTO view) {
         if (view == null) {
             return null;
         }
@@ -97,12 +97,12 @@ public class ProviderAdapterMapper {
                     .updatedAt(view.updatedAt())
                     .build();
         } catch (Exception e) {
-            log.error("Erro ao mapear ProviderView para ProviderCreateResponseDTO: {}", e.getMessage(), e);
+            log.error("Erro ao mapear ProviderViewDTO para ProviderCreateResponseDTO: {}", e.getMessage(), e);
             throw e;
         }
     }
 
-    public ProviderUpdateResponseDTO toUpdateResponseDTO(ProviderView view) {
+    public ProviderUpdateResponseDTO toUpdateResponseDTO(ProviderViewDTO view) {
         if (view == null) {
             return null;
         }
@@ -127,12 +127,12 @@ public class ProviderAdapterMapper {
                     .updatedAt(view.updatedAt())
                     .build();
         } catch (Exception e) {
-            log.error("Erro ao mapear ProviderView para ProviderUpdateResponseDTO: {}", e.getMessage(), e);
+            log.error("Erro ao mapear ProviderViewDTO para ProviderUpdateResponseDTO: {}", e.getMessage(), e);
             throw e;
         }
     }
 
-    public ProviderGetProviderByIdResponseDTO toGetProviderByIdResponseDTO(ProviderView view) {
+    public ProviderGetProviderByIdResponseDTO toGetProviderByIdResponseDTO(ProviderViewDTO view) {
         if (view == null) {
             return null;
         }
@@ -157,12 +157,12 @@ public class ProviderAdapterMapper {
                     .updatedAt(view.updatedAt())
                     .build();
         } catch (Exception e) {
-            log.error("Erro ao mapear ProviderView para ProviderGetProviderByIdResponseDTO: {}", e.getMessage(), e);
+            log.error("Erro ao mapear ProviderViewDTO para ProviderGetProviderByIdResponseDTO: {}", e.getMessage(), e);
             throw e;
         }
     }
 
-    public ProviderGetAllProvidersResponseDTO toGetAllProvidersResponseDTO(ProviderView view) {
+    public ProviderGetAllProvidersResponseDTO toGetAllProvidersResponseDTO(ProviderViewDTO view) {
         if (view == null) {
             return null;
         }
@@ -187,12 +187,12 @@ public class ProviderAdapterMapper {
                     .updatedAt(view.updatedAt())
                     .build();
         } catch (Exception e) {
-            log.error("Erro ao mapear ProviderView para ProviderGetAllProvidersResponseDTO: {}", e.getMessage(), e);
+            log.error("Erro ao mapear ProviderViewDTO para ProviderGetAllProvidersResponseDTO: {}", e.getMessage(), e);
             throw e;
         }
     }
 
-    public ProviderGetActiveProvidersResponseDTO toGetActiveProvidersResponseDTO(ProviderView view) {
+    public ProviderGetActiveProvidersResponseDTO toGetActiveProvidersResponseDTO(ProviderViewDTO view) {
         if (view == null) {
             return null;
         }
@@ -217,12 +217,12 @@ public class ProviderAdapterMapper {
                     .updatedAt(view.updatedAt())
                     .build();
         } catch (Exception e) {
-            log.error("Erro ao mapear ProviderView para ProviderGetActiveProvidersResponseDTO: {}", e.getMessage(), e);
+            log.error("Erro ao mapear ProviderViewDTO para ProviderGetActiveProvidersResponseDTO: {}", e.getMessage(), e);
             throw e;
         }
     }
 
-    public ProviderGetProvidersByCommunicationTypeResponseDTO toGetProvidersByCommunicationTypeResponseDTO(ProviderView view) {
+    public ProviderGetProvidersByCommunicationTypeResponseDTO toGetProvidersByCommunicationTypeResponseDTO(ProviderViewDTO view) {
         if (view == null) {
             return null;
         }
@@ -247,12 +247,12 @@ public class ProviderAdapterMapper {
                     .updatedAt(view.updatedAt())
                     .build();
         } catch (Exception e) {
-            log.error("Erro ao mapear ProviderView para ProviderGetProvidersByCommunicationTypeResponseDTO: {}", e.getMessage(), e);
+            log.error("Erro ao mapear ProviderViewDTO para ProviderGetProvidersByCommunicationTypeResponseDTO: {}", e.getMessage(), e);
             throw e;
         }
     }
 
-    public ProviderGetDefaultProviderResponseDTO toGetDefaultProviderResponseDTO(ProviderView view) {
+    public ProviderGetDefaultProviderResponseDTO toGetDefaultProviderResponseDTO(ProviderViewDTO view) {
         if (view == null) {
             return null;
         }
@@ -277,12 +277,12 @@ public class ProviderAdapterMapper {
                     .updatedAt(view.updatedAt())
                     .build();
         } catch (Exception e) {
-            log.error("Erro ao mapear ProviderView para ProviderGetDefaultProviderResponseDTO: {}", e.getMessage(), e);
+            log.error("Erro ao mapear ProviderViewDTO para ProviderGetDefaultProviderResponseDTO: {}", e.getMessage(), e);
             throw e;
         }
     }
 
-    public ProviderActivateProviderResponseDTO toActivateProviderResponseDTO(ProviderView view) {
+    public ProviderActivateProviderResponseDTO toActivateProviderResponseDTO(ProviderViewDTO view) {
         if (view == null) {
             return null;
         }
@@ -307,12 +307,12 @@ public class ProviderAdapterMapper {
                     .updatedAt(view.updatedAt())
                     .build();
         } catch (Exception e) {
-            log.error("Erro ao mapear ProviderView para ProviderActivateProviderResponseDTO: {}", e.getMessage(), e);
+            log.error("Erro ao mapear ProviderViewDTO para ProviderActivateProviderResponseDTO: {}", e.getMessage(), e);
             throw e;
         }
     }
 
-    public ProviderDeactivateProviderResponseDTO toDeactivateProviderResponseDTO(ProviderView view) {
+    public ProviderDeactivateProviderResponseDTO toDeactivateProviderResponseDTO(ProviderViewDTO view) {
         if (view == null) {
             return null;
         }
@@ -337,12 +337,12 @@ public class ProviderAdapterMapper {
                     .updatedAt(view.updatedAt())
                     .build();
         } catch (Exception e) {
-            log.error("Erro ao mapear ProviderView para ProviderDeactivateProviderResponseDTO: {}", e.getMessage(), e);
+            log.error("Erro ao mapear ProviderViewDTO para ProviderDeactivateProviderResponseDTO: {}", e.getMessage(), e);
             throw e;
         }
     }
 
-    public ProviderSetAsDefaultResponseDTO toSetAsDefaultResponseDTO(ProviderView view) {
+    public ProviderSetAsDefaultResponseDTO toSetAsDefaultResponseDTO(ProviderViewDTO view) {
         if (view == null) {
             return null;
         }
@@ -367,7 +367,7 @@ public class ProviderAdapterMapper {
                     .updatedAt(view.updatedAt())
                     .build();
         } catch (Exception e) {
-            log.error("Erro ao mapear ProviderView para ProviderSetAsDefaultResponseDTO: {}", e.getMessage(), e);
+            log.error("Erro ao mapear ProviderViewDTO para ProviderSetAsDefaultResponseDTO: {}", e.getMessage(), e);
             throw e;
         }
     }

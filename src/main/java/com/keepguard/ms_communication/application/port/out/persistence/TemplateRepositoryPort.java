@@ -1,7 +1,7 @@
 package com.keepguard.ms_communication.application.port.out.persistence;
 
-import com.keepguard.ms_communication.application.dto.common.PageResultView;
-import com.keepguard.ms_communication.application.dto.template.TemplateSearchCriteriaView;
+import com.keepguard.ms_communication.application.dto.common.PageResultViewDTO;
+import com.keepguard.ms_communication.application.dto.template.TemplateSearchCriteriaViewDTO;
 import com.keepguard.lib_common.communication.enums.MessageTypeEnum;
 import com.keepguard.ms_communication.domain.entity.Template;
 import com.keepguard.lib_common.communication.enums.TemplateTypeEnum;
@@ -16,7 +16,7 @@ public interface TemplateRepositoryPort {
 
     Optional<Template> findById(UUID id);
 
-    PageResultView<Template> search(TemplateSearchCriteriaView criteria);
+    PageResultViewDTO<Template> search(TemplateSearchCriteriaViewDTO criteria);
 
     List<Template> findAllActive();
 

@@ -1,6 +1,6 @@
 package com.keepguard.ms_communication.application.mapper;
 
-import com.keepguard.ms_communication.application.dto.provider.ProviderCacheView;
+import com.keepguard.ms_communication.application.dto.provider.ProviderCacheViewDTO;
 import com.keepguard.ms_communication.domain.entity.Provider;
 import org.springframework.stereotype.Component;
 
@@ -10,12 +10,12 @@ import java.util.stream.Collectors;
 @Component
 public class ProviderCacheMapper {
 
-    public ProviderCacheView toCacheView(Provider provider) {
+    public ProviderCacheViewDTO toCacheView(Provider provider) {
         if (provider == null) {
             return null;
         }
 
-        return new ProviderCacheView(
+        return new ProviderCacheViewDTO(
             provider.getId(),
             provider.getName(),
             provider.getProviderType(),
@@ -35,7 +35,7 @@ public class ProviderCacheMapper {
         );
     }
 
-    public Provider toEntity(ProviderCacheView dto) {
+    public Provider toEntity(ProviderCacheViewDTO dto) {
         if (dto == null) {
             return null;
         }
@@ -55,13 +55,13 @@ public class ProviderCacheMapper {
             dto.rateLimitPerMinute(),
             dto.dailyLimit(),
             dto.monthlyLimit(),
-            null, // variables - ProviderCacheView não tem este campo
+            null, // variables - ProviderCacheViewDTO não tem este campo
             dto.createdAt(),
             dto.updatedAt()
         );
     }
 
-    public List<ProviderCacheView> toCacheViewList(List<Provider> providers) {
+    public List<ProviderCacheViewDTO> toCacheViewList(List<Provider> providers) {
         if (providers == null) {
             return null;
         }
@@ -70,7 +70,7 @@ public class ProviderCacheMapper {
             .collect(Collectors.toList());
     }
 
-    public List<Provider> toEntityList(List<ProviderCacheView> dtos) {
+    public List<Provider> toEntityList(List<ProviderCacheViewDTO> dtos) {
         if (dtos == null) {
             return null;
         }

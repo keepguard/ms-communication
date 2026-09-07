@@ -8,7 +8,7 @@ import com.keepguard.lib_common.utils.ValidationUtils;
 import com.keepguard.ms_communication.adapters.in.rest.message.mapper.MessageAdapterMapper;
 import com.keepguard.ms_communication.adapters.in.rest.message.dto.response.MessageSendResponseDTO;
 import com.keepguard.ms_communication.adapters.in.rest.message.dto.request.MessageSendRequestDTO;
-import com.keepguard.ms_communication.application.port.in.service.MessagePort;
+import com.keepguard.ms_communication.application.port.in.MessagePort;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;

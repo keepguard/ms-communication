@@ -1,10 +1,10 @@
 package com.keepguard.ms_communication.application.service;
 
-import com.keepguard.ms_communication.application.dto.common.PageResultView;
-import com.keepguard.ms_communication.domain.dto.provider.ProviderCreateCommandDTO;
-import com.keepguard.ms_communication.application.dto.provider.ProviderSearchCriteriaView;
-import com.keepguard.ms_communication.domain.dto.provider.ProviderUpdateCommandDTO;
-import com.keepguard.ms_communication.application.dto.provider.ProviderView;
+import com.keepguard.ms_communication.application.dto.common.PageResultViewDTO;
+import com.keepguard.ms_communication.application.dto.provider.ProviderCreateCommandDTO;
+import com.keepguard.ms_communication.application.dto.provider.ProviderSearchCriteriaViewDTO;
+import com.keepguard.ms_communication.application.dto.provider.ProviderUpdateCommandDTO;
+import com.keepguard.ms_communication.application.dto.provider.ProviderViewDTO;
 import com.keepguard.ms_communication.application.service.exception.NotFoundException;
 import com.keepguard.ms_communication.application.service.provider.ProviderCommandService;
 import com.keepguard.ms_communication.application.service.provider.ProviderQueryService;
@@ -48,8 +48,8 @@ class ProviderUseCaseServiceTest {
 
     private ProviderCreateCommandDTO providerCreateCommand;
     private ProviderUpdateCommandDTO providerUpdateCommand;
-    private ProviderView providerView;
-    private ProviderSearchCriteriaView searchCriteria;
+    private ProviderViewDTO providerView;
+    private ProviderSearchCriteriaViewDTO searchCriteria;
     private UUID providerId;
 
     @BeforeEach
@@ -91,7 +91,7 @@ class ProviderUseCaseServiceTest {
                 .withMonthlyLimit(60000)
                 .buildUpdateCommand();
 
-        providerView = new ProviderView(
+        providerView = new ProviderViewDTO(
                 providerId,
                 "Test Provider",
                 ProviderTypeEnum.N8N,
@@ -110,7 +110,7 @@ class ProviderUseCaseServiceTest {
                 now
         );
 
-        searchCriteria = new ProviderSearchCriteriaView(
+        searchCriteria = new ProviderSearchCriteriaViewDTO(
                 0,
                 10,
                 null,
@@ -130,7 +130,7 @@ class ProviderUseCaseServiceTest {
         when(commandService.create(providerCreateCommand)).thenReturn(providerView);
 
         // When
-        ProviderView result = providerUseCaseService.create(providerCreateCommand);
+        ProviderViewDTO result = providerUseCaseService.create(providerCreateCommand);
 
         // Then
         assertNotNull(result);
@@ -150,7 +150,7 @@ class ProviderUseCaseServiceTest {
         when(commandService.update(providerUpdateCommand.getId(), providerUpdateCommand)).thenReturn(providerView);
 
         // When
-        ProviderView result = providerUseCaseService.update(providerUpdateCommand);
+        ProviderViewDTO result = providerUseCaseService.update(providerUpdateCommand);
 
         // Then
         assertNotNull(result);
@@ -167,7 +167,7 @@ class ProviderUseCaseServiceTest {
         when(queryService.getById(providerId)).thenReturn(providerView);
 
         // When
-        Optional<ProviderView> result = providerUseCaseService.getById(providerId);
+        Optional<ProviderViewDTO> result = providerUseCaseService.getById(providerId);
 
         // Then
         assertTrue(result.isPresent());
@@ -187,7 +187,7 @@ class ProviderUseCaseServiceTest {
                 .thenThrow(new NotFoundException("Provider not found"));
 
         // When
-        Optional<ProviderView> result = providerUseCaseService.getById(providerId);
+        Optional<ProviderViewDTO> result = providerUseCaseService.getById(providerId);
 
         // Then
         assertFalse(result.isPresent());
@@ -205,7 +205,7 @@ class ProviderUseCaseServiceTest {
                 .thenThrow(new RuntimeException("Database error"));
 
         // When
-        Optional<ProviderView> result = providerUseCaseService.getById(providerId);
+        Optional<ProviderViewDTO> result = providerUseCaseService.getById(providerId);
 
         // Then
         assertFalse(result.isPresent());
@@ -219,12 +219,12 @@ class ProviderUseCaseServiceTest {
     @DisplayName("Should search providers successfully")
     void shouldSearchProvidersSuccessfully() {
         // Given
-        List<ProviderView> providers = Arrays.asList(providerView);
-        PageResultView<ProviderView> pageResult = PageResultView.of(providers, 0, 10, 1L);
+        List<ProviderViewDTO> providers = Arrays.asList(providerView);
+        PageResultViewDTO<ProviderViewDTO> pageResult = PageResultViewDTO.of(providers, 0, 10, 1L);
         when(queryService.search(searchCriteria)).thenReturn(pageResult);
 
         // When
-        PageResultView<ProviderView> result = providerUseCaseService.search(searchCriteria);
+        PageResultViewDTO<ProviderViewDTO> result = providerUseCaseService.search(searchCriteria);
 
         // Then
         assertNotNull(result);
@@ -243,11 +243,11 @@ class ProviderUseCaseServiceTest {
     @DisplayName("Should get all active providers successfully")
     void shouldGetAllActiveProvidersSuccessfully() {
         // Given
-        List<ProviderView> providers = Arrays.asList(providerView);
+        List<ProviderViewDTO> providers = Arrays.asList(providerView);
         when(queryService.getAllActive()).thenReturn(providers);
 
         // When
-        List<ProviderView> result = providerUseCaseService.getAllActive();
+        List<ProviderViewDTO> result = providerUseCaseService.getAllActive();
 
         // Then
         assertNotNull(result);
@@ -264,11 +264,11 @@ class ProviderUseCaseServiceTest {
     @DisplayName("Should get providers by communication type successfully")
     void shouldGetProvidersByCommunicationTypeSuccessfully() {
         // Given
-        List<ProviderView> providers = Arrays.asList(providerView);
+        List<ProviderViewDTO> providers = Arrays.asList(providerView);
         when(queryService.getByCommunicationType(CommunicationTypeEnum.EMAIL)).thenReturn(providers);
 
         // When
-        List<ProviderView> result = providerUseCaseService.getByCommunicationType(CommunicationTypeEnum.EMAIL);
+        List<ProviderViewDTO> result = providerUseCaseService.getByCommunicationType(CommunicationTypeEnum.EMAIL);
 
         // Then
         assertNotNull(result);
@@ -288,7 +288,7 @@ class ProviderUseCaseServiceTest {
         when(queryService.getDefaultByCommunicationType(CommunicationTypeEnum.EMAIL)).thenReturn(Optional.of(providerView));
 
         // When
-        Optional<ProviderView> result = providerUseCaseService.getDefaultByCommunicationType(CommunicationTypeEnum.EMAIL);
+        Optional<ProviderViewDTO> result = providerUseCaseService.getDefaultByCommunicationType(CommunicationTypeEnum.EMAIL);
 
         // Then
         assertTrue(result.isPresent());
@@ -308,7 +308,7 @@ class ProviderUseCaseServiceTest {
                 .thenThrow(new NotFoundException("Default provider not found"));
 
         // When
-        Optional<ProviderView> result = providerUseCaseService.getDefaultByCommunicationType(CommunicationTypeEnum.EMAIL);
+        Optional<ProviderViewDTO> result = providerUseCaseService.getDefaultByCommunicationType(CommunicationTypeEnum.EMAIL);
 
         // Then
         assertFalse(result.isPresent());
@@ -341,7 +341,7 @@ class ProviderUseCaseServiceTest {
         when(commandService.activate(providerId)).thenReturn(providerView);
 
         // When
-        ProviderView result = providerUseCaseService.activate(providerId);
+        ProviderViewDTO result = providerUseCaseService.activate(providerId);
 
         // Then
         assertNotNull(result);
@@ -361,7 +361,7 @@ class ProviderUseCaseServiceTest {
         when(commandService.deactivate(providerId)).thenReturn(providerView);
 
         // When
-        ProviderView result = providerUseCaseService.deactivate(providerId);
+        ProviderViewDTO result = providerUseCaseService.deactivate(providerId);
 
         // Then
         assertNotNull(result);
@@ -380,7 +380,7 @@ class ProviderUseCaseServiceTest {
         when(commandService.setAsDefault(providerId)).thenReturn(providerView);
 
         // When
-        ProviderView result = providerUseCaseService.setAsDefault(providerId);
+        ProviderViewDTO result = providerUseCaseService.setAsDefault(providerId);
 
         // Then
         assertNotNull(result);
@@ -465,7 +465,7 @@ class ProviderUseCaseServiceTest {
                 .thenThrow(new IllegalArgumentException("ID cannot be null"));
 
         // When
-        Optional<ProviderView> result = providerUseCaseService.getById(null);
+        Optional<ProviderViewDTO> result = providerUseCaseService.getById(null);
 
         // Then
         assertFalse(result.isPresent());
@@ -513,7 +513,7 @@ class ProviderUseCaseServiceTest {
                 .thenThrow(new IllegalArgumentException("Communication type cannot be null"));
 
         // When
-        Optional<ProviderView> result = providerUseCaseService.getDefaultByCommunicationType(null);
+        Optional<ProviderViewDTO> result = providerUseCaseService.getDefaultByCommunicationType(null);
 
         // Then
         assertFalse(result.isPresent());

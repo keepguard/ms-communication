@@ -2,11 +2,11 @@ package com.keepguard.ms_communication.application.mapper;
 
 import com.keepguard.ms_communication.adapters.in.rest.template.dto.request.TemplateCreateRequestDTO;
 import com.keepguard.ms_communication.adapters.in.rest.template.dto.request.TemplateUpdateRequestDTO;
-import com.keepguard.ms_communication.domain.dto.template.TemplateCreateCommandDTO;
-import com.keepguard.ms_communication.domain.dto.template.TemplateUpdateCommandDTO;
-import com.keepguard.ms_communication.application.dto.template.TemplateView;
-import com.keepguard.ms_communication.domain.dto.template.TemplateCreateCommandDTO;
-import com.keepguard.ms_communication.domain.dto.template.TemplateUpdateCommandDTO;
+import com.keepguard.ms_communication.application.dto.template.TemplateCreateCommandDTO;
+import com.keepguard.ms_communication.application.dto.template.TemplateUpdateCommandDTO;
+import com.keepguard.ms_communication.application.dto.template.TemplateViewDTO;
+import com.keepguard.ms_communication.application.dto.template.TemplateCreateCommandDTO;
+import com.keepguard.ms_communication.application.dto.template.TemplateUpdateCommandDTO;
 import com.keepguard.ms_communication.domain.entity.Template;
 import com.keepguard.lib_common.communication.enums.MessageTypeEnum;
 import com.keepguard.lib_common.communication.enums.TemplateTypeEnum;
@@ -32,7 +32,7 @@ class TemplateApplicationMapperTest {
 
     private TemplateCreateRequestDTO templateCreateRequestDTO;
     private TemplateUpdateRequestDTO templateUpdateRequestDTO;
-    private TemplateView templateView;
+    private TemplateViewDTO templateView;
     private Template domainTemplate;
     private UUID templateId;
     private UUID companyId;
@@ -70,8 +70,8 @@ class TemplateApplicationMapperTest {
         templateUpdateRequestDTO.setIsActive(false);
         templateUpdateRequestDTO.setVariables("{\"name\":\"Jane\"}");
 
-        // Setup TemplateView
-        templateView = new TemplateView(
+        // Setup TemplateViewDTO
+        templateView = new TemplateViewDTO(
                 templateId,
                 "Test Template",
                 "Test Description",
@@ -227,7 +227,7 @@ class TemplateApplicationMapperTest {
     @DisplayName("Should convert Template to TemplateViewDTO successfully")
     void shouldConvertTemplateToViewDTOSuccessfully() {
         // When
-        TemplateView result = templateMapper.toView(template);
+        TemplateViewDTO result = templateMapper.toView(template);
 
         // Then
         assertNotNull(result);
@@ -248,7 +248,7 @@ class TemplateApplicationMapperTest {
     @DisplayName("Should return null when TemplateViewDTO is null")
     void shouldReturnNullWhenTemplateViewIsNull() {
         // When
-        TemplateView result = templateMapper.toView(null);
+        TemplateViewDTO result = templateMapper.toView(null);
 
         // Then
         assertNull(result);
@@ -434,7 +434,7 @@ class TemplateApplicationMapperTest {
     @DisplayName("Should convert Template domain to TemplateViewDTO successfully")
     void shouldConvertTemplateDomainToViewSuccessfully() {
         // When
-        TemplateView result = templateMapper.toView(domainTemplate);
+        TemplateViewDTO result = templateMapper.toView(domainTemplate);
 
         // Then
         assertNotNull(result);
@@ -455,7 +455,7 @@ class TemplateApplicationMapperTest {
     @DisplayName("Should return null when Template domain is null")
     void shouldReturnNullWhenTemplateDomainIsNull() {
         // When
-        TemplateView result = templateMapper.toView(null);
+        TemplateViewDTO result = templateMapper.toView(null);
 
         // Then
         assertNull(result);
@@ -575,7 +575,7 @@ class TemplateApplicationMapperTest {
     @DisplayName("Should handle TemplateViewDTO with null variables successfully")
     void shouldHandleTemplateViewWithNullVariablesSuccessfully() {
         // Given
-        TemplateView templateViewWithNullVariables = new TemplateView(
+        TemplateViewDTO templateViewWithNullVariables = new TemplateViewDTO(
                 templateId,
                 "Test Template",
                 "Test Description",
@@ -591,7 +591,7 @@ class TemplateApplicationMapperTest {
         );
 
         // When
-        TemplateView result = templateMapper.toView(templateWithNullVariables);
+        TemplateViewDTO result = templateMapper.toView(templateWithNullVariables);
 
         // Then
         assertNotNull(result);

@@ -1,11 +1,11 @@
 package com.keepguard.ms_communication.application.service.provider;
 
-import com.keepguard.ms_communication.application.dto.common.PageResultView;
-import com.keepguard.ms_communication.application.dto.provider.ProviderSearchCriteriaView;
-import com.keepguard.ms_communication.application.dto.provider.ProviderView;
-import com.keepguard.ms_communication.application.port.in.service.ProviderPort;
-import com.keepguard.ms_communication.domain.dto.provider.ProviderCreateCommandDTO;
-import com.keepguard.ms_communication.domain.dto.provider.ProviderUpdateCommandDTO;
+import com.keepguard.ms_communication.application.dto.common.PageResultViewDTO;
+import com.keepguard.ms_communication.application.dto.provider.ProviderSearchCriteriaViewDTO;
+import com.keepguard.ms_communication.application.dto.provider.ProviderViewDTO;
+import com.keepguard.ms_communication.application.port.in.ProviderPort;
+import com.keepguard.ms_communication.application.dto.provider.ProviderCreateCommandDTO;
+import com.keepguard.ms_communication.application.dto.provider.ProviderUpdateCommandDTO;
 import com.keepguard.lib_common.communication.enums.CommunicationTypeEnum;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,19 +24,19 @@ public class ProviderUseCaseService implements ProviderPort {
     private final ProviderQueryService queryService;
 
     @Override
-    public ProviderView create(ProviderCreateCommandDTO command) {
+    public ProviderViewDTO create(ProviderCreateCommandDTO command) {
         return commandService.create(command);
     }
 
     @Override
-    public ProviderView update(ProviderUpdateCommandDTO command) {
+    public ProviderViewDTO update(ProviderUpdateCommandDTO command) {
         return commandService.update(command.getId(), command);
     }
 
     @Override
-    public Optional<ProviderView> getById(UUID id) {
+    public Optional<ProviderViewDTO> getById(UUID id) {
         try {
-            ProviderView view = queryService.getById(id);
+            ProviderViewDTO view = queryService.getById(id);
             return Optional.of(view);
         } catch (Exception e) {
             return Optional.empty();
@@ -44,25 +44,25 @@ public class ProviderUseCaseService implements ProviderPort {
     }
 
     @Override
-    public PageResultView<ProviderView> search(ProviderSearchCriteriaView criteria) {
-        PageResultView<ProviderView> result = queryService.search(criteria);
+    public PageResultViewDTO<ProviderViewDTO> search(ProviderSearchCriteriaViewDTO criteria) {
+        PageResultViewDTO<ProviderViewDTO> result = queryService.search(criteria);
         return result;
     }
 
     @Override
-    public List<ProviderView> getAllActive() {
+    public List<ProviderViewDTO> getAllActive() {
         return queryService.getAllActive();
     }
 
     @Override
-    public List<ProviderView> getByCommunicationType(CommunicationTypeEnum communicationType) {
+    public List<ProviderViewDTO> getByCommunicationType(CommunicationTypeEnum communicationType) {
         return queryService.getByCommunicationType(communicationType);
     }
 
     @Override
-    public Optional<ProviderView> getDefaultByCommunicationType(CommunicationTypeEnum communicationType) {
+    public Optional<ProviderViewDTO> getDefaultByCommunicationType(CommunicationTypeEnum communicationType) {
         try {
-            ProviderView view = queryService.getDefaultByCommunicationType(communicationType).orElse(null);
+            ProviderViewDTO view = queryService.getDefaultByCommunicationType(communicationType).orElse(null);
             return Optional.of(view);
         } catch (Exception e) {
             return Optional.empty();
@@ -75,17 +75,17 @@ public class ProviderUseCaseService implements ProviderPort {
     }
 
     @Override
-    public ProviderView activate(UUID id) {
+    public ProviderViewDTO activate(UUID id) {
         return commandService.activate(id);
     }
 
     @Override
-    public ProviderView deactivate(UUID id) {
+    public ProviderViewDTO deactivate(UUID id) {
         return commandService.deactivate(id);
     }
 
     @Override
-    public ProviderView setAsDefault(UUID id) {
+    public ProviderViewDTO setAsDefault(UUID id) {
         return commandService.setAsDefault(id);
     }
 }

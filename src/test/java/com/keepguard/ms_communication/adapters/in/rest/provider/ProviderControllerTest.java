@@ -3,12 +3,11 @@ package com.keepguard.ms_communication.adapters.in.rest.provider;
 import com.keepguard.ms_communication.adapters.in.rest.provider.dto.request.ProviderCreateRequestDTO;
 import com.keepguard.ms_communication.adapters.in.rest.provider.dto.response.*;
 import com.keepguard.ms_communication.adapters.in.rest.provider.dto.request.ProviderUpdateRequestDTO;
-import com.keepguard.ms_communication.domain.dto.provider.ProviderCreateCommandDTO;
-import com.keepguard.ms_communication.domain.dto.provider.ProviderUpdateCommandDTO;
-import com.keepguard.ms_communication.application.dto.provider.ProviderView;
+import com.keepguard.ms_communication.application.dto.provider.ProviderCreateCommandDTO;
+import com.keepguard.ms_communication.application.dto.provider.ProviderUpdateCommandDTO;
+import com.keepguard.ms_communication.application.dto.provider.ProviderViewDTO;
 import com.keepguard.ms_communication.adapters.in.rest.provider.mapper.ProviderAdapterMapper;
-import com.keepguard.ms_communication.application.mapper.ProviderApplicationMapper;
-import com.keepguard.ms_communication.application.port.in.service.ProviderPort;
+import com.keepguard.ms_communication.application.port.in.ProviderPort;
 import com.keepguard.lib_common.communication.enums.CommunicationTypeEnum;
 import com.keepguard.ms_communication.domain.enums.ProviderTypeEnum;
 import com.keepguard.ms_communication.application.port.out.metrics.MetricsPort;
@@ -44,9 +43,6 @@ class ProviderControllerTest {
     private ProviderAdapterMapper adapterMapper;
 
     @Mock
-    private ProviderApplicationMapper applicationMapper;
-
-    @Mock
     private MetricsPort metricsPort;
     
     @InjectMocks
@@ -64,7 +60,7 @@ class ProviderControllerTest {
     private ProviderDeactivateProviderResponseDTO providerDeactivateProviderResponseDTO;
     private ProviderSetAsDefaultResponseDTO providerSetAsDefaultResponseDTO;
     private ProviderTestProviderConnectionResponseDTO providerTestProviderConnectionResponseDTO;
-    private ProviderView providerView;
+    private ProviderViewDTO providerView;
     private ProviderCreateCommandDTO providerCreateCommand;
     private ProviderUpdateCommandDTO providerUpdateCommand;
     private UUID providerId;
@@ -286,7 +282,7 @@ class ProviderControllerTest {
             .testedAt(LocalDateTime.now())
             .build();
         
-        providerView = new ProviderView(
+        providerView = new ProviderViewDTO(
             providerId,
             "Test Provider",
             ProviderTypeEnum.N8N,
@@ -345,22 +341,7 @@ class ProviderControllerTest {
     @DisplayName("Deve criar provedor com sucesso")
     void shouldCreateProviderSuccessfully() {
         // Given
-        when(adapterMapper.toCreateCommand(providerCreateRequestDTO, companyId)).thenReturn(com.keepguard.ms_communication.domain.dto.provider.ProviderCreateCommandDTO.builder()
-                .name("Test Provider")
-                .providerType(ProviderTypeEnum.N8N)
-                .communicationType(CommunicationTypeEnum.EMAIL)
-                .isActive(true)
-                .isDefault(false)
-                .priority(1)
-                .url("https://test.com/webhook")
-                .configuration("{\"apiKey\": \"test-key\"}")
-                .maxRetries(3)
-                .timeoutSeconds(30)
-                .rateLimitPerMinute(60)
-                .dailyLimit(1000)
-                .monthlyLimit(30000)
-                .build());
-        when(applicationMapper.toCreateCommand(any(com.keepguard.ms_communication.domain.dto.provider.ProviderCreateCommandDTO.class))).thenReturn(providerCreateCommand);
+        when(adapterMapper.toCreateCommand(providerCreateRequestDTO, companyId)).thenReturn(providerCreateCommand);
         when(providerPort.create(providerCreateCommand)).thenReturn(providerView);
         when(adapterMapper.toCreateResponseDTO(providerView)).thenReturn(providerCreateResponseDTO);
         
@@ -386,24 +367,7 @@ class ProviderControllerTest {
     @DisplayName("Deve lidar com exceções durante criação de provedor")
     void shouldHandleExceptionsDuringProviderCreation() {
         // Given
-        com.keepguard.ms_communication.domain.dto.provider.ProviderCreateCommandDTO requestCommand = com.keepguard.ms_communication.domain.dto.provider.ProviderCreateCommandDTO.builder()
-                .name("Test Provider")
-                .providerType(ProviderTypeEnum.N8N)
-                .communicationType(CommunicationTypeEnum.EMAIL)
-                .isActive(true)
-                .isDefault(false)
-                .priority(1)
-                .url("https://test.com/webhook")
-                .configuration("{\"apiKey\": \"test-key\"}")
-                .maxRetries(3)
-                .timeoutSeconds(30)
-                .rateLimitPerMinute(60)
-                .dailyLimit(1000)
-                .monthlyLimit(30000)
-                .build();
-        
-        when(adapterMapper.toCreateCommand(providerCreateRequestDTO, companyId)).thenReturn(requestCommand);
-        when(applicationMapper.toCreateCommand(requestCommand)).thenReturn(providerCreateCommand);
+        when(adapterMapper.toCreateCommand(providerCreateRequestDTO, companyId)).thenReturn(providerCreateCommand);
         when(providerPort.create(providerCreateCommand))
             .thenThrow(new RuntimeException("Service error"));
         
@@ -420,22 +384,7 @@ class ProviderControllerTest {
     @DisplayName("Deve atualizar provedor com sucesso")
     void shouldUpdateProviderSuccessfully() {
         // Given
-        when(adapterMapper.toUpdateCommand(providerId, providerUpdateRequestDTO, companyId)).thenReturn(com.keepguard.ms_communication.domain.dto.provider.ProviderUpdateCommandDTO.builder()
-                .name("Updated Provider")
-                .providerType(ProviderTypeEnum.SENDGRID)
-                .communicationType(CommunicationTypeEnum.EMAIL)
-                .isActive(false)
-                .isDefault(true)
-                .priority(2)
-                .url("https://updated.com/webhook")
-                .configuration("{\"apiKey\": \"updated-key\"}")
-                .maxRetries(5)
-                .timeoutSeconds(60)
-                .rateLimitPerMinute(120)
-                .dailyLimit(2000)
-                .monthlyLimit(60000)
-                .build());
-        when(applicationMapper.toUpdateCommand(any(com.keepguard.ms_communication.domain.dto.provider.ProviderUpdateCommandDTO.class))).thenReturn(providerUpdateCommand);
+        when(adapterMapper.toUpdateCommand(providerId, providerUpdateRequestDTO, companyId)).thenReturn(providerUpdateCommand);
         when(providerPort.update(providerUpdateCommand)).thenReturn(providerView);
         when(adapterMapper.toUpdateResponseDTO(providerView)).thenReturn(ProviderUpdateResponseDTO.builder()
                 .id(providerId)
@@ -504,7 +453,7 @@ class ProviderControllerTest {
     @DisplayName("Deve listar todos os provedores")
     void shouldGetAllProviders() {
         // Given
-        List<ProviderView> views = List.of(providerView);
+        List<ProviderViewDTO> views = List.of(providerView);
         when(providerPort.getAllActive()).thenReturn(views);
         when(adapterMapper.toGetAllProvidersResponseDTO(providerView)).thenReturn(providerGetAllProvidersResponseDTO);
         
@@ -526,7 +475,7 @@ class ProviderControllerTest {
     @DisplayName("Deve listar provedores ativos")
     void shouldGetActiveProviders() {
         // Given
-        List<ProviderView> views = List.of(providerView);
+        List<ProviderViewDTO> views = List.of(providerView);
         when(providerPort.getAllActive()).thenReturn(views);
         when(adapterMapper.toGetActiveProvidersResponseDTO(providerView)).thenReturn(providerGetActiveProvidersResponseDTO);
         
@@ -548,7 +497,7 @@ class ProviderControllerTest {
     @DisplayName("Deve listar provedores por tipo de comunicação")
     void shouldGetProvidersByCommunicationType() {
         // Given
-        List<ProviderView> views = List.of(providerView);
+        List<ProviderViewDTO> views = List.of(providerView);
         when(providerPort.getByCommunicationType(CommunicationTypeEnum.EMAIL)).thenReturn(views);
         when(adapterMapper.toGetProvidersByCommunicationTypeResponseDTO(providerView)).thenReturn(providerGetProvidersByCommunicationTypeResponseDTO);
         
@@ -833,12 +782,25 @@ class ProviderControllerTest {
         dto.setDailyLimit(1000);
         dto.setMonthlyLimit(30000);
         
-        when(adapterMapper.toCreateCommand(dto, companyId)).thenReturn(com.keepguard.ms_communication.domain.dto.provider.ProviderCreateCommandDTO.builder().build());
-        when(applicationMapper.toCreateCommand(any(com.keepguard.ms_communication.domain.dto.provider.ProviderCreateCommandDTO.class))).thenReturn(providerCreateCommand);
+        ProviderCreateCommandDTO mapped = ProviderCreateCommandDTO.builder()
+                .name(dto.getName())
+                .providerType(dto.getProviderType())
+                .communicationType(dto.getCommunicationType())
+                .isActive(dto.getIsActive())
+                .isDefault(dto.getIsDefault())
+                .priority(dto.getPriority())
+                .url(dto.getUrl())
+                .configuration(dto.getConfiguration())
+                .maxRetries(dto.getMaxRetries())
+                .timeoutSeconds(dto.getTimeoutSeconds())
+                .rateLimitPerMinute(dto.getRateLimitPerMinute())
+                .dailyLimit(dto.getDailyLimit())
+                .monthlyLimit(dto.getMonthlyLimit())
+                .build();
+        when(adapterMapper.toCreateCommand(dto, companyId)).thenReturn(mapped);
         
         // When
-        com.keepguard.ms_communication.domain.dto.provider.ProviderCreateCommandDTO requestCommand = adapterMapper.toCreateCommand(dto, companyId);
-        ProviderCreateCommandDTO result = applicationMapper.toCreateCommand(requestCommand);
+        ProviderCreateCommandDTO result = adapterMapper.toCreateCommand(dto, companyId);
         
         // Then
         assertNotNull(result);
@@ -848,8 +810,8 @@ class ProviderControllerTest {
         assertTrue(result.getIsActive());
         assertFalse(result.getIsDefault());
         assertEquals(1, result.getPriority());
-        assertEquals("https://test.com/webhook", result.getUrl());
-        assertEquals("{\"apiKey\": \"test-key\"}", result.getConfiguration());
+        assertEquals("https://test.com", result.getUrl());
+        assertEquals("{\"key\": \"value\"}", result.getConfiguration());
         assertEquals(3, result.getMaxRetries());
         assertEquals(30, result.getTimeoutSeconds());
         assertEquals(60, result.getRateLimitPerMinute());
@@ -878,24 +840,38 @@ class ProviderControllerTest {
         dto.setDailyLimit(2000);
         dto.setMonthlyLimit(60000);
         
-        when(adapterMapper.toUpdateCommand(providerId, dto, companyId)).thenReturn(com.keepguard.ms_communication.domain.dto.provider.ProviderUpdateCommandDTO.builder().build());
-        when(applicationMapper.toUpdateCommand(any(com.keepguard.ms_communication.domain.dto.provider.ProviderUpdateCommandDTO.class))).thenReturn(providerUpdateCommand);
+        ProviderUpdateCommandDTO mapped = ProviderUpdateCommandDTO.builder()
+                .id(providerId)
+                .name(dto.getName())
+                .providerType(dto.getProviderType())
+                .communicationType(dto.getCommunicationType())
+                .isActive(dto.getIsActive())
+                .isDefault(dto.getIsDefault())
+                .priority(dto.getPriority())
+                .url(dto.getUrl())
+                .configuration(dto.getConfiguration())
+                .maxRetries(dto.getMaxRetries())
+                .timeoutSeconds(dto.getTimeoutSeconds())
+                .rateLimitPerMinute(dto.getRateLimitPerMinute())
+                .dailyLimit(dto.getDailyLimit())
+                .monthlyLimit(dto.getMonthlyLimit())
+                .build();
+        when(adapterMapper.toUpdateCommand(providerId, dto, companyId)).thenReturn(mapped);
         
         // When
-        com.keepguard.ms_communication.domain.dto.provider.ProviderUpdateCommandDTO requestCommand = adapterMapper.toUpdateCommand(providerId, dto, companyId);
-        ProviderUpdateCommandDTO result = applicationMapper.toUpdateCommand(requestCommand);
+        ProviderUpdateCommandDTO result = adapterMapper.toUpdateCommand(providerId, dto, companyId);
         
         // Then
         assertNotNull(result);
         assertEquals(providerId, result.getId());
         assertEquals("Updated Provider", result.getName());
         assertEquals(ProviderTypeEnum.SENDGRID, result.getProviderType());
-        assertEquals(CommunicationTypeEnum.EMAIL, result.getCommunicationType());
+        assertEquals(CommunicationTypeEnum.SMS, result.getCommunicationType());
         assertFalse(result.getIsActive());
         assertTrue(result.getIsDefault());
         assertEquals(2, result.getPriority());
-        assertEquals("https://updated.com/webhook", result.getUrl());
-        assertEquals("{\"apiKey\": \"updated-key\"}", result.getConfiguration());
+        assertEquals("https://updated.com", result.getUrl());
+        assertEquals("{\"key\": \"updated\"}", result.getConfiguration());
         assertEquals(5, result.getMaxRetries());
         assertEquals(60, result.getTimeoutSeconds());
         assertEquals(120, result.getRateLimitPerMinute());

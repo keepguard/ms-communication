@@ -3,13 +3,12 @@ package com.keepguard.ms_communication.application.service.message;
 import com.keepguard.lib_common.communication.enums.MessageTypeEnum;
 import com.keepguard.lib_common.communication.enums.TemplateTypeEnum;
 import com.keepguard.lib_common.logging.annotation.LogOperation;
-import com.keepguard.ms_communication.application.port.in.service.MessagePort;
 import com.keepguard.ms_communication.application.port.out.metrics.MetricsPort;
 import com.keepguard.ms_communication.application.port.out.persistence.ProviderRepositoryPort;
 import com.keepguard.ms_communication.application.service.exception.MessageSendException;
 import com.keepguard.ms_communication.application.service.exception.NotFoundException;
 import com.keepguard.ms_communication.application.service.template.TemplateProcessorService;
-import com.keepguard.ms_communication.domain.dto.message.MessageSendCommandDTO;
+import com.keepguard.ms_communication.application.dto.message.MessageSendCommandDTO;
 import com.keepguard.ms_communication.domain.entity.Provider;
 import com.keepguard.ms_communication.infrastructure.provider.CommunicationProvider;
 import com.keepguard.ms_communication.infrastructure.provider.strategy.ProviderStrategy;
@@ -26,7 +25,7 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class MessageCommandService implements MessagePort {
+public class MessageCommandService {
 
     private final ProviderRepositoryPort providerRepositoryPort;
     private final ProviderStrategyFactory strategyFactory;

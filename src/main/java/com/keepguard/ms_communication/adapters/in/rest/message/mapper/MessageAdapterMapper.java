@@ -1,7 +1,7 @@
 package com.keepguard.ms_communication.adapters.in.rest.message.mapper;
 
 import com.keepguard.ms_communication.adapters.in.rest.message.dto.request.MessageSendRequestDTO;
-import com.keepguard.ms_communication.domain.dto.message.MessageSendCommandDTO;
+import com.keepguard.ms_communication.application.dto.message.MessageSendCommandDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 

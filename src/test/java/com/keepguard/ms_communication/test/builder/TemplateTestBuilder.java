@@ -2,9 +2,9 @@ package com.keepguard.ms_communication.test.builder;
 
 import com.keepguard.ms_communication.adapters.in.rest.template.dto.request.TemplateCreateRequestDTO;
 import com.keepguard.ms_communication.adapters.in.rest.template.dto.request.TemplateUpdateRequestDTO;
-import com.keepguard.ms_communication.domain.dto.template.TemplateCreateCommandDTO;
-import com.keepguard.ms_communication.domain.dto.template.TemplateUpdateCommandDTO;
-import com.keepguard.ms_communication.application.dto.template.TemplateView;
+import com.keepguard.ms_communication.application.dto.template.TemplateCreateCommandDTO;
+import com.keepguard.ms_communication.application.dto.template.TemplateUpdateCommandDTO;
+import com.keepguard.ms_communication.application.dto.template.TemplateViewDTO;
 import com.keepguard.ms_communication.domain.entity.Template;
 import com.keepguard.lib_common.communication.enums.MessageTypeEnum;
 import com.keepguard.lib_common.communication.enums.TemplateTypeEnum;
@@ -221,8 +221,8 @@ public class TemplateTestBuilder {
         return template;
     }
     
-    public TemplateView buildView() {
-        return new TemplateView(
+    public TemplateViewDTO buildView() {
+        return new TemplateViewDTO(
             id,
             name,
             description,

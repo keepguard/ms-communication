@@ -3,9 +3,9 @@ package com.keepguard.ms_communication.test.builder;
 import com.keepguard.ms_communication.adapters.in.rest.provider.dto.request.ProviderCreateRequestDTO;
 import com.keepguard.ms_communication.adapters.in.rest.provider.dto.response.ProviderCreateResponseDTO;
 import com.keepguard.ms_communication.adapters.in.rest.provider.dto.request.ProviderUpdateRequestDTO;
-import com.keepguard.ms_communication.domain.dto.provider.ProviderCreateCommandDTO;
-import com.keepguard.ms_communication.domain.dto.provider.ProviderUpdateCommandDTO;
-import com.keepguard.ms_communication.application.dto.provider.ProviderView;
+import com.keepguard.ms_communication.application.dto.provider.ProviderCreateCommandDTO;
+import com.keepguard.ms_communication.application.dto.provider.ProviderUpdateCommandDTO;
+import com.keepguard.ms_communication.application.dto.provider.ProviderViewDTO;
 import com.keepguard.ms_communication.domain.entity.Provider;
 import com.keepguard.lib_common.communication.enums.CommunicationTypeEnum;
 import com.keepguard.ms_communication.domain.enums.ProviderTypeEnum;
@@ -218,8 +218,8 @@ public class ProviderTestBuilder {
         return provider;
     }
     
-    public ProviderView buildView() {
-        return new ProviderView(
+    public ProviderViewDTO buildView() {
+        return new ProviderViewDTO(
             id,
             name,
             providerType,

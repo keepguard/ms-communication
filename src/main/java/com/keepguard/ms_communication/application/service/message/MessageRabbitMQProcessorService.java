@@ -4,7 +4,7 @@ import com.keepguard.lib_common.logging.annotation.LogOperation;
 import com.keepguard.ms_communication.adapters.in.messaging.rabbitmq.dto.MessageSendRabbitMQDTO;
 import com.keepguard.ms_communication.adapters.in.messaging.rabbitmq.mapper.MessageRabbitMQMapper;
 import com.keepguard.ms_communication.application.port.in.messaging.MessageSendRabbitMQPort;
-import com.keepguard.ms_communication.application.port.in.service.MessagePort;
+import com.keepguard.ms_communication.application.port.in.MessagePort;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

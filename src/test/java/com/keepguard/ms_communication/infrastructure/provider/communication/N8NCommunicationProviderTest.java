@@ -5,8 +5,8 @@ import com.keepguard.ms_communication.application.service.exception.ProviderConn
 import com.keepguard.ms_communication.domain.entity.Provider;
 import com.keepguard.lib_common.communication.enums.CommunicationTypeEnum;
 import com.keepguard.ms_communication.domain.enums.ProviderTypeEnum;
+import com.keepguard.ms_communication.adapters.out.feign.N8nWebhookFeignAdapter;
 import com.keepguard.ms_communication.infrastructure.provider.n8n.N8NConfigParser;
-import com.keepguard.ms_communication.infrastructure.provider.n8n.N8NHttpClient;
 import com.keepguard.ms_communication.infrastructure.provider.n8n.PayloadFactory;
 import com.keepguard.ms_communication.infrastructure.provider.n8n.payload.EmailPayload;
 import com.keepguard.ms_communication.infrastructure.provider.n8n.payload.SMSPayload;
@@ -31,7 +31,7 @@ import static org.mockito.Mockito.*;
 class N8NCommunicationProviderTest {
 
     @Mock
-    private N8NHttpClient httpClient;
+    private N8nWebhookFeignAdapter httpClient;
 
     @Mock
     private PayloadFactory payloadFactory;

@@ -4,7 +4,7 @@ import com.keepguard.ms_communication.application.port.out.metrics.MetricsPort;
 import com.keepguard.ms_communication.application.port.out.persistence.ProviderRepositoryPort;
 import com.keepguard.ms_communication.application.service.exception.NotFoundException;
 import com.keepguard.ms_communication.application.service.template.TemplateProcessorService;
-import com.keepguard.ms_communication.domain.dto.message.MessageSendCommandDTO;
+import com.keepguard.ms_communication.application.dto.message.MessageSendCommandDTO;
 import com.keepguard.ms_communication.domain.entity.Provider;
 import com.keepguard.lib_common.communication.enums.CommunicationTypeEnum;
 import com.keepguard.ms_communication.domain.enums.ProviderTypeEnum;

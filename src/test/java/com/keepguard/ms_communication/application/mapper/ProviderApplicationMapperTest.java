@@ -2,11 +2,11 @@ package com.keepguard.ms_communication.application.mapper;
 
 import com.keepguard.ms_communication.adapters.in.rest.provider.dto.request.ProviderCreateRequestDTO;
 import com.keepguard.ms_communication.adapters.in.rest.provider.dto.request.ProviderUpdateRequestDTO;
-import com.keepguard.ms_communication.domain.dto.provider.ProviderCreateCommandDTO;
-import com.keepguard.ms_communication.domain.dto.provider.ProviderUpdateCommandDTO;
-import com.keepguard.ms_communication.application.dto.provider.ProviderView;
-import com.keepguard.ms_communication.domain.dto.provider.ProviderCreateCommandDTO;
-import com.keepguard.ms_communication.domain.dto.provider.ProviderUpdateCommandDTO;
+import com.keepguard.ms_communication.application.dto.provider.ProviderCreateCommandDTO;
+import com.keepguard.ms_communication.application.dto.provider.ProviderUpdateCommandDTO;
+import com.keepguard.ms_communication.application.dto.provider.ProviderViewDTO;
+import com.keepguard.ms_communication.application.dto.provider.ProviderCreateCommandDTO;
+import com.keepguard.ms_communication.application.dto.provider.ProviderUpdateCommandDTO;
 import com.keepguard.ms_communication.domain.entity.Provider;
 import com.keepguard.lib_common.communication.enums.CommunicationTypeEnum;
 import com.keepguard.ms_communication.domain.enums.ProviderTypeEnum;
@@ -32,7 +32,7 @@ class ProviderApplicationMapperTest {
 
     private ProviderCreateRequestDTO providerCreateRequestDTO;
     private ProviderUpdateRequestDTO providerUpdateRequestDTO;
-    private ProviderView providerView;
+    private ProviderViewDTO providerView;
     private Provider domainProvider;
     private UUID providerId;
     private UUID companyId;
@@ -78,8 +78,8 @@ class ProviderApplicationMapperTest {
         providerUpdateRequestDTO.setDailyLimit(2000);
         providerUpdateRequestDTO.setMonthlyLimit(60000);
 
-        // Setup ProviderView
-        providerView = new ProviderView(
+        // Setup ProviderViewDTO
+        providerView = new ProviderViewDTO(
                 providerId,
                 "Test Provider",
                 ProviderTypeEnum.N8N,
@@ -249,7 +249,7 @@ class ProviderApplicationMapperTest {
     @DisplayName("Should convert ProviderViewDTO to ProviderResponseDTO successfully")
     void shouldConvertProviderViewToResponseDTOSuccessfully() {
         // When
-        ProviderView result = providerMapper.toView(provider);
+        ProviderViewDTO result = providerMapper.toView(provider);
 
         // Then
         assertNotNull(result);
@@ -275,7 +275,7 @@ class ProviderApplicationMapperTest {
     @DisplayName("Should return null when ProviderViewDTO is null")
     void shouldReturnNullWhenProviderViewIsNull() {
         // When
-        ProviderView result = providerMapper.toView(null);
+        ProviderViewDTO result = providerMapper.toView(null);
 
         // Then
         assertNull(result);
@@ -506,7 +506,7 @@ class ProviderApplicationMapperTest {
     @DisplayName("Should convert Provider domain to ProviderViewDTO successfully")
     void shouldConvertProviderDomainToViewSuccessfully() {
         // When
-        ProviderView result = providerMapper.toView(domainProvider);
+        ProviderViewDTO result = providerMapper.toView(domainProvider);
 
         // Then
         assertNotNull(result);
@@ -532,7 +532,7 @@ class ProviderApplicationMapperTest {
     @DisplayName("Should return null when Provider domain is null")
     void shouldReturnNullWhenProviderDomainIsNull() {
         // When
-        ProviderView result = providerMapper.toView(null);
+        ProviderViewDTO result = providerMapper.toView(null);
 
         // Then
         assertNull(result);

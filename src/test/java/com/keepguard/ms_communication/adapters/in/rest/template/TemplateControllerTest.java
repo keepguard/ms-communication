@@ -3,12 +3,11 @@ package com.keepguard.ms_communication.adapters.in.rest.template;
 import com.keepguard.ms_communication.adapters.in.rest.template.dto.request.TemplateCreateRequestDTO;
 import com.keepguard.ms_communication.adapters.in.rest.template.dto.response.*;
 import com.keepguard.ms_communication.adapters.in.rest.template.dto.request.TemplateUpdateRequestDTO;
-import com.keepguard.ms_communication.domain.dto.template.TemplateCreateCommandDTO;
-import com.keepguard.ms_communication.domain.dto.template.TemplateUpdateCommandDTO;
-import com.keepguard.ms_communication.application.dto.template.TemplateView;
+import com.keepguard.ms_communication.application.dto.template.TemplateCreateCommandDTO;
+import com.keepguard.ms_communication.application.dto.template.TemplateUpdateCommandDTO;
+import com.keepguard.ms_communication.application.dto.template.TemplateViewDTO;
 import com.keepguard.ms_communication.adapters.in.rest.template.mapper.TemplateAdapterMapper;
-import com.keepguard.ms_communication.application.mapper.TemplateApplicationMapper;
-import com.keepguard.ms_communication.application.port.in.service.TemplatePort;
+import com.keepguard.ms_communication.application.port.in.TemplatePort;
 import com.keepguard.lib_common.communication.enums.MessageTypeEnum;
 import com.keepguard.lib_common.communication.enums.TemplateTypeEnum;
 import com.keepguard.ms_communication.application.port.out.metrics.MetricsPort;
@@ -45,9 +44,6 @@ class TemplateControllerTest {
     private TemplateAdapterMapper adapterMapper;
 
     @Mock
-    private TemplateApplicationMapper applicationMapper;
-
-    @Mock
     private MetricsPort metricsPort;
     
     @InjectMocks
@@ -60,7 +56,7 @@ class TemplateControllerTest {
     private TemplateGetTemplateByIdResponseDTO templateGetTemplateByIdResponseDTO;
     private TemplateGetTemplateByTypeResponseDTO templateGetTemplateByTypeResponseDTO;
     private TemplateGetTemplatesResponseDTO templateGetTemplatesResponseDTO;
-    private TemplateView templateView;
+    private TemplateViewDTO templateView;
     private TemplateCreateCommandDTO templateCreateCommand;
     private TemplateUpdateCommandDTO templateUpdateCommand;
     private UUID templateId;
@@ -175,7 +171,7 @@ class TemplateControllerTest {
             .updatedAt(LocalDateTime.now())
             .build();
         
-        templateView = new TemplateView(
+        templateView = new TemplateViewDTO(
             templateId,
             "Test Template",
             "Test template description",
@@ -222,18 +218,7 @@ class TemplateControllerTest {
     void shouldCreateTemplateSuccessfully() {
         // Given
         Timer.Sample sample = mock(Timer.Sample.class);
-        when(adapterMapper.toCreateCommand(templateCreateRequestDTO, companyId)).thenReturn(com.keepguard.ms_communication.domain.dto.template.TemplateCreateCommandDTO.builder()
-                .name("Test Template")
-                .description("Test template description")
-                .messageType(MessageTypeEnum.EMAIL)
-                .templateType(TemplateTypeEnum.CADASTRO_SUCESSO)
-                .content("Hello {{userName}}, welcome to our system!")
-                .subject("Welcome")
-                .variables("[\"userName\", \"activationLink\"]")
-                .application("test-app")
-                .isActive(true)
-                .build());
-        when(applicationMapper.toCreateCommand(any(com.keepguard.ms_communication.domain.dto.template.TemplateCreateCommandDTO.class))).thenReturn(templateCreateCommand);
+        when(adapterMapper.toCreateCommand(templateCreateRequestDTO, companyId)).thenReturn(templateCreateCommand);
         when(templatePort.create(templateCreateCommand)).thenReturn(templateView);
         when(adapterMapper.toCreateResponseDTO(templateView)).thenReturn(templateCreateResponseDTO);
         
@@ -260,21 +245,7 @@ class TemplateControllerTest {
     @DisplayName("Deve lidar com exceções durante criação de template")
     void shouldHandleExceptionsDuringTemplateCreation() {
         // Given
-        Timer.Sample sample = mock(Timer.Sample.class);
-        com.keepguard.ms_communication.domain.dto.template.TemplateCreateCommandDTO requestCommand = com.keepguard.ms_communication.domain.dto.template.TemplateCreateCommandDTO.builder()
-                .name("Test Template")
-                .description("Test template description")
-                .messageType(MessageTypeEnum.EMAIL)
-                .templateType(TemplateTypeEnum.CADASTRO_SUCESSO)
-                .content("Hello {{userName}}, welcome to our system!")
-                .subject("Welcome")
-                .variables("[\"userName\", \"activationLink\"]")
-                .application("test-app")
-                .isActive(true)
-                .build();
-        
-        when(adapterMapper.toCreateCommand(templateCreateRequestDTO, companyId)).thenReturn(requestCommand);
-        when(applicationMapper.toCreateCommand(requestCommand)).thenReturn(templateCreateCommand);
+        when(adapterMapper.toCreateCommand(templateCreateRequestDTO, companyId)).thenReturn(templateCreateCommand);
         when(templatePort.create(templateCreateCommand))
             .thenThrow(new RuntimeException("Service error"));
         
@@ -291,17 +262,7 @@ class TemplateControllerTest {
     @DisplayName("Deve atualizar template com sucesso")
     void shouldUpdateTemplateSuccessfully() {
         // Given
-        when(adapterMapper.toUpdateCommand(templateId, templateUpdateRequestDTO, companyId)).thenReturn(com.keepguard.ms_communication.domain.dto.template.TemplateUpdateCommandDTO.builder()
-                .name("Updated Template")
-                .description("Updated template description")
-                .messageType(MessageTypeEnum.EMAIL)
-                .templateType(TemplateTypeEnum.CADASTRO_SUCESSO)
-                .content("Updated content with {{userName}}")
-                .subject("Updated Subject")
-                .variables("[\"userName\", \"companyName\"]")
-                .isActive(false)
-                .build());
-        when(applicationMapper.toUpdateCommand(any(com.keepguard.ms_communication.domain.dto.template.TemplateUpdateCommandDTO.class))).thenReturn(templateUpdateCommand);
+        when(adapterMapper.toUpdateCommand(templateId, templateUpdateRequestDTO, companyId)).thenReturn(templateUpdateCommand);
         when(templatePort.update(templateUpdateCommand)).thenReturn(templateView);
         when(adapterMapper.toUpdateResponseDTO(templateView)).thenReturn(templateUpdateResponseDTO);
         
@@ -387,7 +348,7 @@ class TemplateControllerTest {
     @DisplayName("Deve listar templates com sucesso")
     void shouldGetTemplatesSuccessfully() {
         // Given
-        List<TemplateView> views = List.of(templateView);
+        List<TemplateViewDTO> views = List.of(templateView);
         when(templatePort.getAllActive()).thenReturn(views);
         when(adapterMapper.toGetTemplatesResponseDTO(templateView)).thenReturn(templateGetTemplatesResponseDTO);
         
@@ -489,12 +450,22 @@ class TemplateControllerTest {
         dto.setCompanyId("test-app");
         dto.setIsActive(true);
         
-        when(adapterMapper.toCreateCommand(dto, companyId)).thenReturn(com.keepguard.ms_communication.domain.dto.template.TemplateCreateCommandDTO.builder().build());
-        when(applicationMapper.toCreateCommand(any(com.keepguard.ms_communication.domain.dto.template.TemplateCreateCommandDTO.class))).thenReturn(templateCreateCommand);
+        TemplateCreateCommandDTO mapped = TemplateCreateCommandDTO.builder()
+                .templateType(dto.getTemplateType())
+                .messageType(dto.getMessageType())
+                .application(dto.getCompanyId())
+                .name(dto.getName())
+                .description(dto.getDescription())
+                .subject(dto.getSubject())
+                .content(dto.getContent())
+                .variables(dto.getVariables())
+                .isActive(dto.getIsActive())
+                .companyId(companyId)
+                .build();
+        when(adapterMapper.toCreateCommand(dto, companyId)).thenReturn(mapped);
         
         // When
-        com.keepguard.ms_communication.domain.dto.template.TemplateCreateCommandDTO requestCommand = adapterMapper.toCreateCommand(dto, companyId);
-        TemplateCreateCommandDTO result = applicationMapper.toCreateCommand(requestCommand);
+        TemplateCreateCommandDTO result = adapterMapper.toCreateCommand(dto, companyId);
         
         // Then
         assertNotNull(result);
@@ -504,8 +475,8 @@ class TemplateControllerTest {
         assertEquals("Test Template", result.getName());
         assertEquals("Test template description", result.getDescription());
         assertEquals("Test Subject", result.getSubject());
-        assertEquals("Hello {{userName}}, welcome to our system!", result.getContent());
-        assertEquals("[\"userName\", \"activationLink\"]", result.getVariables());
+        assertEquals("Hello {{userName}}, welcome!", result.getContent());
+        assertEquals("[\"userName\"]", result.getVariables());
         assertTrue(result.getIsActive());
         
         verify(adapterMapper, times(1)).toCreateCommand(dto, companyId);
@@ -525,12 +496,22 @@ class TemplateControllerTest {
         dto.setTemplateType(TemplateTypeEnum.RECUPERACAO_SENHA);
         dto.setIsActive(false);
         
-        when(adapterMapper.toUpdateCommand(templateId, dto, companyId)).thenReturn(com.keepguard.ms_communication.domain.dto.template.TemplateUpdateCommandDTO.builder().build());
-        when(applicationMapper.toUpdateCommand(any(com.keepguard.ms_communication.domain.dto.template.TemplateUpdateCommandDTO.class))).thenReturn(templateUpdateCommand);
+        TemplateUpdateCommandDTO mapped = TemplateUpdateCommandDTO.builder()
+                .id(templateId)
+                .companyId(companyId)
+                .name(dto.getName())
+                .description(dto.getDescription())
+                .subject(dto.getSubject())
+                .content(dto.getContent())
+                .variables(dto.getVariables())
+                .messageType(dto.getMessageType())
+                .templateType(dto.getTemplateType())
+                .isActive(dto.getIsActive())
+                .build();
+        when(adapterMapper.toUpdateCommand(templateId, dto, companyId)).thenReturn(mapped);
         
         // When
-        com.keepguard.ms_communication.domain.dto.template.TemplateUpdateCommandDTO requestCommand = adapterMapper.toUpdateCommand(templateId, dto, companyId);
-        TemplateUpdateCommandDTO result = applicationMapper.toUpdateCommand(requestCommand);
+        TemplateUpdateCommandDTO result = adapterMapper.toUpdateCommand(templateId, dto, companyId);
         
         // Then
         assertNotNull(result);

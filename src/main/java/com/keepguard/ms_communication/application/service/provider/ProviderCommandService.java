@@ -1,8 +1,8 @@
 package com.keepguard.ms_communication.application.service.provider;
 
-import com.keepguard.ms_communication.application.dto.provider.ProviderView;
-import com.keepguard.ms_communication.domain.dto.provider.ProviderCreateCommandDTO;
-import com.keepguard.ms_communication.domain.dto.provider.ProviderUpdateCommandDTO;
+import com.keepguard.ms_communication.application.dto.provider.ProviderViewDTO;
+import com.keepguard.ms_communication.application.dto.provider.ProviderCreateCommandDTO;
+import com.keepguard.ms_communication.application.dto.provider.ProviderUpdateCommandDTO;
 import com.keepguard.lib_common.logging.annotation.LogOperation;
 import com.keepguard.ms_communication.application.port.out.metrics.MetricsPort;
 import com.keepguard.ms_communication.application.service.exception.AlreadyExistsException;
@@ -35,7 +35,7 @@ public class ProviderCommandService  {
         auditAction = "CREATE",
         auditEntityType = "PROVIDER"
     )
-    public ProviderView create(ProviderCreateCommandDTO command) {
+    public ProviderViewDTO create(ProviderCreateCommandDTO command) {
         log.info("Criando provedor: {}", command.getName());
 
         // Validar se já existe provedor com mesmo nome
@@ -95,7 +95,7 @@ public class ProviderCommandService  {
         auditAction = "UPDATE",
         auditEntityType = "PROVIDER"
     )
-    public ProviderView update(UUID id, ProviderUpdateCommandDTO command) {
+    public ProviderViewDTO update(UUID id, ProviderUpdateCommandDTO command) {
         log.info("Atualizando provedor: {}", id);
 
         // Buscar provedor existente
@@ -161,7 +161,7 @@ public class ProviderCommandService  {
         auditAction = "ACTIVATE",
         auditEntityType = "PROVIDER"
     )
-    public ProviderView activate(UUID id) {
+    public ProviderViewDTO activate(UUID id) {
         log.info("Ativando provedor: {}", id);
 
         Provider provider = repositoryPort.findById(id)
@@ -181,7 +181,7 @@ public class ProviderCommandService  {
         auditAction = "DEACTIVATE",
         auditEntityType = "PROVIDER"
     )
-    public ProviderView deactivate(UUID id) {
+    public ProviderViewDTO deactivate(UUID id) {
         log.info("Desativando provedor: {}", id);
 
         Provider provider = repositoryPort.findById(id)
@@ -201,7 +201,7 @@ public class ProviderCommandService  {
         auditAction = "UPDATE",
         auditEntityType = "PROVIDER"
     )
-    public ProviderView setAsDefault(UUID id) {
+    public ProviderViewDTO setAsDefault(UUID id) {
         log.info("Definindo provedor como padrão: {}", id);
 
         Provider provider = repositoryPort.findById(id)

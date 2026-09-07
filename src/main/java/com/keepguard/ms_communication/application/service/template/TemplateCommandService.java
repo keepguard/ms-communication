@@ -1,8 +1,8 @@
 package com.keepguard.ms_communication.application.service.template;
 
-import com.keepguard.ms_communication.application.dto.template.TemplateView;
-import com.keepguard.ms_communication.domain.dto.template.TemplateCreateCommandDTO;
-import com.keepguard.ms_communication.domain.dto.template.TemplateUpdateCommandDTO;
+import com.keepguard.ms_communication.application.dto.template.TemplateViewDTO;
+import com.keepguard.ms_communication.application.dto.template.TemplateCreateCommandDTO;
+import com.keepguard.ms_communication.application.dto.template.TemplateUpdateCommandDTO;
 import com.keepguard.lib_common.logging.annotation.LogOperation;
 import com.keepguard.ms_communication.application.port.out.metrics.MetricsPort;
 import com.keepguard.ms_communication.application.service.exception.AlreadyExistsException;
@@ -35,7 +35,7 @@ public class TemplateCommandService  {
         auditAction = "CREATE",
         auditEntityType = "TEMPLATE"
     )
-    public TemplateView create(TemplateCreateCommandDTO command) {
+    public TemplateViewDTO create(TemplateCreateCommandDTO command) {
         log.info("Criando template: {} - Application: {}", command.getName(), command.getApplication());
 
         // Validar se já existe template com mesmo nome
@@ -82,7 +82,7 @@ public class TemplateCommandService  {
         auditAction = "UPDATE",
         auditEntityType = "TEMPLATE"
     )
-    public TemplateView update(UUID id, TemplateUpdateCommandDTO command) {
+    public TemplateViewDTO update(UUID id, TemplateUpdateCommandDTO command) {
         log.info("Atualizando template: {}", id);
 
         // Buscar template existente

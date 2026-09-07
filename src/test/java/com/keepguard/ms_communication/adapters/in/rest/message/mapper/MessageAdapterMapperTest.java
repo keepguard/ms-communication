@@ -1,7 +1,7 @@
 package com.keepguard.ms_communication.adapters.in.rest.message.mapper;
 
 import com.keepguard.ms_communication.adapters.in.rest.message.dto.request.MessageSendRequestDTO;
-import com.keepguard.ms_communication.domain.dto.message.MessageSendCommandDTO;
+import com.keepguard.ms_communication.application.dto.message.MessageSendCommandDTO;
 import com.keepguard.lib_common.communication.enums.CommunicationTypeEnum;
 import com.keepguard.lib_common.communication.enums.MessageTypeEnum;
 import com.keepguard.lib_common.communication.enums.TemplateTypeEnum;

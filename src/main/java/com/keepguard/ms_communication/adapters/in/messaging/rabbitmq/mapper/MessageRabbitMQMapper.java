@@ -1,7 +1,7 @@
 package com.keepguard.ms_communication.adapters.in.messaging.rabbitmq.mapper;
 
 import com.keepguard.ms_communication.adapters.in.messaging.rabbitmq.dto.MessageSendRabbitMQDTO;
-import com.keepguard.ms_communication.domain.dto.message.MessageSendCommandDTO;
+import com.keepguard.ms_communication.application.dto.message.MessageSendCommandDTO;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;

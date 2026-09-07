@@ -1,8 +1,8 @@
 package com.keepguard.ms_communication.application.mapper;
 
-import com.keepguard.ms_communication.application.dto.template.TemplateView;
-import com.keepguard.ms_communication.domain.dto.template.TemplateCreateCommandDTO;
-import com.keepguard.ms_communication.domain.dto.template.TemplateUpdateCommandDTO;
+import com.keepguard.ms_communication.application.dto.template.TemplateViewDTO;
+import com.keepguard.ms_communication.application.dto.template.TemplateCreateCommandDTO;
+import com.keepguard.ms_communication.application.dto.template.TemplateUpdateCommandDTO;
 import com.keepguard.ms_communication.domain.entity.Template;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class TemplateApplicationMapper {
 
-    public TemplateCreateCommandDTO toCreateCommand(com.keepguard.ms_communication.domain.dto.template.TemplateCreateCommandDTO dto) {
+    public TemplateCreateCommandDTO toCreateCommand(com.keepguard.ms_communication.application.dto.template.TemplateCreateCommandDTO dto) {
         if (dto == null) {
             return null;
         }
@@ -26,7 +26,7 @@ public class TemplateApplicationMapper {
         }
     }
 
-    public TemplateUpdateCommandDTO toUpdateCommand(com.keepguard.ms_communication.domain.dto.template.TemplateUpdateCommandDTO dto) {
+    public TemplateUpdateCommandDTO toUpdateCommand(com.keepguard.ms_communication.application.dto.template.TemplateUpdateCommandDTO dto) {
         if (dto == null) {
             return null;
         }
@@ -114,13 +114,13 @@ public class TemplateApplicationMapper {
         }
     }
 
-    public TemplateView toView(Template template) {
+    public TemplateViewDTO toView(Template template) {
         if (template == null) {
             return null;
         }
 
         try {
-            return new TemplateView(
+            return new TemplateViewDTO(
                 template.getId(),
                 template.getName(),
                 template.getDescription(),
@@ -135,7 +135,7 @@ public class TemplateApplicationMapper {
                 template.getUpdatedAt()
             );
         } catch (Exception e) {
-            log.error("Erro ao mapear Template para TemplateView: {}", e.getMessage(), e);
+            log.error("Erro ao mapear Template para TemplateViewDTO: {}", e.getMessage(), e);
             throw e;
         }
     }

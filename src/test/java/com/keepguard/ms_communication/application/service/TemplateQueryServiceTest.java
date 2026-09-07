@@ -1,8 +1,8 @@
 package com.keepguard.ms_communication.application.service;
 
-import com.keepguard.ms_communication.application.dto.common.PageResultView;
-import com.keepguard.ms_communication.application.dto.template.TemplateSearchCriteriaView;
-import com.keepguard.ms_communication.application.dto.template.TemplateView;
+import com.keepguard.ms_communication.application.dto.common.PageResultViewDTO;
+import com.keepguard.ms_communication.application.dto.template.TemplateSearchCriteriaViewDTO;
+import com.keepguard.ms_communication.application.dto.template.TemplateViewDTO;
 import com.keepguard.ms_communication.application.mapper.TemplateApplicationMapper;
 import com.keepguard.ms_communication.application.port.out.persistence.TemplateRepositoryPort;
 import com.keepguard.ms_communication.application.service.exception.NotFoundException;
@@ -44,7 +44,7 @@ class TemplateQueryServiceTest {
     private TemplateApplicationMapper mapper;
     
     private Template template;
-    private TemplateView templateView;
+    private TemplateViewDTO templateView;
     private UUID templateId;
     
     @BeforeEach
@@ -59,7 +59,7 @@ class TemplateQueryServiceTest {
             .withIsActive(true)
             .buildDomain();
         
-        templateView = new TemplateView(
+        templateView = new TemplateViewDTO(
             templateId,
             "Test Template",
             "Test template description",
@@ -83,7 +83,7 @@ class TemplateQueryServiceTest {
         when(mapper.toView(template)).thenReturn(templateView);
         
         // When
-        TemplateView result = templateQueryService.getById(templateId);
+        TemplateViewDTO result = templateQueryService.getById(templateId);
         
         // Then
         assertNotNull(result);
@@ -119,12 +119,12 @@ class TemplateQueryServiceTest {
     @DisplayName("Deve buscar templates com critérios de busca com sucesso")
     void shouldSearchTemplatesWithCriteriaSuccessfully() {
         // Given
-        TemplateSearchCriteriaView criteria = new TemplateSearchCriteriaView(
+        TemplateSearchCriteriaViewDTO criteria = new TemplateSearchCriteriaViewDTO(
             0, 10, "name", "ASC", "Test", MessageTypeEnum.EMAIL, 
             TemplateTypeEnum.CADASTRO_SUCESSO, true
         );
         
-        PageResultView<Template> domainResult = PageResultView.of(
+        PageResultViewDTO<Template> domainResult = PageResultViewDTO.of(
             List.of(template), 0, 10, 1L
         );
         
@@ -132,7 +132,7 @@ class TemplateQueryServiceTest {
         when(mapper.toView(template)).thenReturn(templateView);
         
         // When
-        PageResultView<TemplateView> result = templateQueryService.search(criteria);
+        PageResultViewDTO<TemplateViewDTO> result = templateQueryService.search(criteria);
         
         // Then
         assertNotNull(result);
@@ -147,18 +147,18 @@ class TemplateQueryServiceTest {
     @DisplayName("Deve retornar lista vazia quando busca não retorna resultados")
     void shouldReturnEmptyListWhenSearchReturnsNoResults() {
         // Given
-        TemplateSearchCriteriaView criteria = new TemplateSearchCriteriaView(
+        TemplateSearchCriteriaViewDTO criteria = new TemplateSearchCriteriaViewDTO(
             0, 10, "name", "ASC", "NonExistent", null, null, null
         );
         
-        PageResultView<Template> domainResult = PageResultView.of(
+        PageResultViewDTO<Template> domainResult = PageResultViewDTO.of(
             List.of(), 0, 10, 0L
         );
         
         when(repositoryPort.search(criteria)).thenReturn(domainResult);
         
         // When
-        PageResultView<TemplateView> result = templateQueryService.search(criteria);
+        PageResultViewDTO<TemplateViewDTO> result = templateQueryService.search(criteria);
         
         // Then
         assertNotNull(result);
@@ -177,7 +177,7 @@ class TemplateQueryServiceTest {
         when(mapper.toView(template)).thenReturn(templateView);
         
         // When
-        List<TemplateView> result = templateQueryService.getAllActive();
+        List<TemplateViewDTO> result = templateQueryService.getAllActive();
         
         // Then
         assertNotNull(result);
@@ -199,7 +199,7 @@ class TemplateQueryServiceTest {
         when(mapper.toView(template)).thenReturn(templateView);
         
         // When
-        List<TemplateView> result = templateQueryService.getByType(type);
+        List<TemplateViewDTO> result = templateQueryService.getByType(type);
         
         // Then
         assertNotNull(result);
@@ -221,7 +221,7 @@ class TemplateQueryServiceTest {
         when(mapper.toView(template)).thenReturn(templateView);
         
         // When
-        List<TemplateView> result = templateQueryService.getByMessageType(messageType);
+        List<TemplateViewDTO> result = templateQueryService.getByMessageType(messageType);
         
         // Then
         assertNotNull(result);
@@ -303,7 +303,7 @@ class TemplateQueryServiceTest {
             .withName("Test Template 2")
             .buildDomain();
             
-        TemplateView templateView2 = new TemplateView(
+        TemplateViewDTO templateView2 = new TemplateViewDTO(
             template2.getId(),
             "Test Template 2",
             null,
@@ -318,11 +318,11 @@ class TemplateQueryServiceTest {
             null
         );
         
-        TemplateSearchCriteriaView criteria = new TemplateSearchCriteriaView(
+        TemplateSearchCriteriaViewDTO criteria = new TemplateSearchCriteriaViewDTO(
             0, 10, "name", "ASC", "Test", null, null, null
         );
         
-        PageResultView<Template> domainResult = PageResultView.of(
+        PageResultViewDTO<Template> domainResult = PageResultViewDTO.of(
             List.of(template, template2), 0, 10, 2L
         );
         
@@ -331,7 +331,7 @@ class TemplateQueryServiceTest {
         when(mapper.toView(template2)).thenReturn(templateView2);
         
         // When
-        PageResultView<TemplateView> result = templateQueryService.search(criteria);
+        PageResultViewDTO<TemplateViewDTO> result = templateQueryService.search(criteria);
         
         // Then
         assertNotNull(result);
@@ -361,7 +361,7 @@ class TemplateQueryServiceTest {
                 .withTemplateType(type)
                 .buildDomain();
                 
-            TemplateView testTemplateView = new TemplateView(
+            TemplateViewDTO testTemplateView = new TemplateViewDTO(
                 null, null, null, null, type, null, null, null, null, null, null, null
             );
             
@@ -369,7 +369,7 @@ class TemplateQueryServiceTest {
             when(mapper.toView(testTemplate)).thenReturn(testTemplateView);
             
             // When
-            List<TemplateView> result = templateQueryService.getByType(type);
+            List<TemplateViewDTO> result = templateQueryService.getByType(type);
             
             // Then
             assertNotNull(result);
@@ -396,7 +396,7 @@ class TemplateQueryServiceTest {
                 .withMessageType(messageType)
                 .buildDomain();
                 
-            TemplateView testTemplateView = new TemplateView(
+            TemplateViewDTO testTemplateView = new TemplateViewDTO(
                 null, null, null, messageType, null, null, null, null, null, null, null, null
             );
             
@@ -404,7 +404,7 @@ class TemplateQueryServiceTest {
             when(mapper.toView(testTemplate)).thenReturn(testTemplateView);
             
             // When
-            List<TemplateView> result = templateQueryService.getByMessageType(messageType);
+            List<TemplateViewDTO> result = templateQueryService.getByMessageType(messageType);
             
             // Then
             assertNotNull(result);

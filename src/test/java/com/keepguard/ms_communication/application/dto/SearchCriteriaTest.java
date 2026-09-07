@@ -1,6 +1,6 @@
 package com.keepguard.ms_communication.application.dto;
 
-import com.keepguard.ms_communication.application.dto.common.SearchCriteriaView;
+import com.keepguard.ms_communication.application.dto.common.SearchCriteriaViewDTO;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -21,7 +21,7 @@ class SearchCriteriaTest {
         String sortDirection = "DESC";
 
         // When
-        SearchCriteriaView criteria = SearchCriteriaView.of(page, size, sortBy, sortDirection);
+        SearchCriteriaViewDTO criteria = SearchCriteriaViewDTO.of(page, size, sortBy, sortDirection);
 
         // Then
         assertNotNull(criteria);
@@ -39,7 +39,7 @@ class SearchCriteriaTest {
         int size = 20;
 
         // When
-        SearchCriteriaView criteria = new SearchCriteriaView(page, size, null, null);
+        SearchCriteriaViewDTO criteria = new SearchCriteriaViewDTO(page, size, null, null);
 
         // Then
         assertNotNull(criteria);
@@ -57,7 +57,7 @@ class SearchCriteriaTest {
         int size = 15;
 
         // When
-        SearchCriteriaView criteria = SearchCriteriaView.of(page, size);
+        SearchCriteriaViewDTO criteria = SearchCriteriaViewDTO.of(page, size);
 
         // Then
         assertNotNull(criteria);
@@ -76,7 +76,7 @@ class SearchCriteriaTest {
         String sortBy = "createdAt";
 
         // When
-        SearchCriteriaView criteria = SearchCriteriaView.of(page, size, sortBy);
+        SearchCriteriaViewDTO criteria = SearchCriteriaViewDTO.of(page, size, sortBy);
 
         // Then
         assertNotNull(criteria);
@@ -96,7 +96,7 @@ class SearchCriteriaTest {
         String sortDirection = "DESC";
 
         // When
-        SearchCriteriaView criteria = SearchCriteriaView.of(page, size, sortBy, sortDirection);
+        SearchCriteriaViewDTO criteria = SearchCriteriaViewDTO.of(page, size, sortBy, sortDirection);
 
         // Then
         assertNotNull(criteria);
@@ -114,7 +114,7 @@ class SearchCriteriaTest {
         int size = 0;
 
         // When
-        SearchCriteriaView criteria = new SearchCriteriaView(page, size, null, null);
+        SearchCriteriaViewDTO criteria = new SearchCriteriaViewDTO(page, size, null, null);
 
         // Then
         assertNotNull(criteria);
@@ -132,7 +132,7 @@ class SearchCriteriaTest {
         int size = -5;
 
         // When
-        SearchCriteriaView criteria = new SearchCriteriaView(page, size, null, null);
+        SearchCriteriaViewDTO criteria = new SearchCriteriaViewDTO(page, size, null, null);
 
         // Then
         assertNotNull(criteria);
@@ -152,7 +152,7 @@ class SearchCriteriaTest {
         String sortDirection = "";
 
         // When
-        SearchCriteriaView criteria = SearchCriteriaView.of(page, size, sortBy, sortDirection);
+        SearchCriteriaViewDTO criteria = SearchCriteriaViewDTO.of(page, size, sortBy, sortDirection);
 
         // Then
         assertNotNull(criteria);
@@ -172,7 +172,7 @@ class SearchCriteriaTest {
         String sortDirection = "desc";
 
         // When
-        SearchCriteriaView criteria = SearchCriteriaView.of(page, size, sortBy, sortDirection);
+        SearchCriteriaViewDTO criteria = SearchCriteriaViewDTO.of(page, size, sortBy, sortDirection);
 
         // Then
         assertNotNull(criteria);
@@ -186,8 +186,8 @@ class SearchCriteriaTest {
     @DisplayName("Deve criar múltiplas instâncias independentes")
     void shouldCreateMultipleIndependentInstances() {
         // Given
-        SearchCriteriaView criteria1 = new SearchCriteriaView(0, 10, "name", "ASC");
-        SearchCriteriaView criteria2 = new SearchCriteriaView(1, 20, "createdAt", "DESC");
+        SearchCriteriaViewDTO criteria1 = new SearchCriteriaViewDTO(0, 10, "name", "ASC");
+        SearchCriteriaViewDTO criteria2 = new SearchCriteriaViewDTO(1, 20, "createdAt", "DESC");
 
         // When & Then
         assertNotNull(criteria1);
@@ -215,7 +215,7 @@ class SearchCriteriaTest {
         String sortDirection = "ASC";
 
         // When
-        SearchCriteriaView criteria = SearchCriteriaView.of(page, size, sortBy, sortDirection);
+        SearchCriteriaViewDTO criteria = SearchCriteriaViewDTO.of(page, size, sortBy, sortDirection);
 
         // Then
         assertNotNull(criteria);
@@ -235,7 +235,7 @@ class SearchCriteriaTest {
         String sortDirection = "DESC";
 
         // When
-        SearchCriteriaView criteria = SearchCriteriaView.of(page, size, sortBy, sortDirection);
+        SearchCriteriaViewDTO criteria = SearchCriteriaViewDTO.of(page, size, sortBy, sortDirection);
 
         // Then
         assertNotNull(criteria);
@@ -249,9 +249,9 @@ class SearchCriteriaTest {
     @DisplayName("Deve testar equals e hashCode")
     void shouldTestEqualsAndHashCode() {
         // Given
-        SearchCriteriaView criteria1 = SearchCriteriaView.of(0, 10, "name", "ASC");
-        SearchCriteriaView criteria2 = SearchCriteriaView.of(0, 10, "name", "ASC");
-        SearchCriteriaView criteria3 = SearchCriteriaView.of(1, 10, "name", "ASC");
+        SearchCriteriaViewDTO criteria1 = SearchCriteriaViewDTO.of(0, 10, "name", "ASC");
+        SearchCriteriaViewDTO criteria2 = SearchCriteriaViewDTO.of(0, 10, "name", "ASC");
+        SearchCriteriaViewDTO criteria3 = SearchCriteriaViewDTO.of(1, 10, "name", "ASC");
 
         // When & Then
         assertEquals(criteria1, criteria2);
@@ -264,14 +264,14 @@ class SearchCriteriaTest {
     @DisplayName("Deve testar toString")
     void shouldTestToString() {
         // Given
-        SearchCriteriaView criteria = SearchCriteriaView.of(0, 10, "name", "ASC");
+        SearchCriteriaViewDTO criteria = SearchCriteriaViewDTO.of(0, 10, "name", "ASC");
 
         // When
         String result = criteria.toString();
 
         // Then
         assertNotNull(result);
-        assertTrue(result.contains("SearchCriteriaView"));
+        assertTrue(result.contains("SearchCriteriaViewDTO"));
         assertTrue(result.contains("page=0"));
         assertTrue(result.contains("size=10"));
         assertTrue(result.contains("sortBy=name"));

@@ -1,11 +1,11 @@
 package com.keepguard.ms_communication.application.service.template;
 
-import com.keepguard.ms_communication.application.dto.common.PageResultView;
-import com.keepguard.ms_communication.application.dto.template.TemplateSearchCriteriaView;
-import com.keepguard.ms_communication.application.dto.template.TemplateView;
-import com.keepguard.ms_communication.application.port.in.service.TemplatePort;
-import com.keepguard.ms_communication.domain.dto.template.TemplateCreateCommandDTO;
-import com.keepguard.ms_communication.domain.dto.template.TemplateUpdateCommandDTO;
+import com.keepguard.ms_communication.application.dto.common.PageResultViewDTO;
+import com.keepguard.ms_communication.application.dto.template.TemplateSearchCriteriaViewDTO;
+import com.keepguard.ms_communication.application.dto.template.TemplateViewDTO;
+import com.keepguard.ms_communication.application.port.in.TemplatePort;
+import com.keepguard.ms_communication.application.dto.template.TemplateCreateCommandDTO;
+import com.keepguard.ms_communication.application.dto.template.TemplateUpdateCommandDTO;
 import com.keepguard.lib_common.communication.enums.MessageTypeEnum;
 import com.keepguard.lib_common.communication.enums.TemplateTypeEnum;
 import lombok.RequiredArgsConstructor;
@@ -25,19 +25,19 @@ public class TemplateUseCaseService implements TemplatePort {
     private final TemplateQueryService queryService;
 
     @Override
-    public TemplateView create(TemplateCreateCommandDTO command) {
+    public TemplateViewDTO create(TemplateCreateCommandDTO command) {
         return commandService.create(command);
     }
 
     @Override
-    public TemplateView update(TemplateUpdateCommandDTO command) {
+    public TemplateViewDTO update(TemplateUpdateCommandDTO command) {
         return commandService.update(command.getId(), command);
     }
 
     @Override
-    public Optional<TemplateView> getById(UUID id) {
+    public Optional<TemplateViewDTO> getById(UUID id) {
         try {
-            TemplateView view = queryService.getById(id);
+            TemplateViewDTO view = queryService.getById(id);
             return Optional.of(view);
         } catch (Exception e) {
             return Optional.empty();
@@ -45,23 +45,23 @@ public class TemplateUseCaseService implements TemplatePort {
     }
 
     @Override
-    public PageResultView<TemplateView> search(TemplateSearchCriteriaView criteria) {
-        PageResultView<TemplateView> result = queryService.search(criteria);
+    public PageResultViewDTO<TemplateViewDTO> search(TemplateSearchCriteriaViewDTO criteria) {
+        PageResultViewDTO<TemplateViewDTO> result = queryService.search(criteria);
         return result;
     }
 
     @Override
-    public List<TemplateView> getAllActive() {
+    public List<TemplateViewDTO> getAllActive() {
         return queryService.getAllActive();
     }
 
     @Override
-    public List<TemplateView> getByType(TemplateTypeEnum type) {
+    public List<TemplateViewDTO> getByType(TemplateTypeEnum type) {
         return queryService.getByType(type);
     }
 
     @Override
-    public List<TemplateView> getByMessageType(MessageTypeEnum messageType) {
+    public List<TemplateViewDTO> getByMessageType(MessageTypeEnum messageType) {
         return queryService.getByMessageType(messageType);
     }
 
@@ -71,13 +71,13 @@ public class TemplateUseCaseService implements TemplatePort {
     }
 
     @Override
-    public TemplateView activate(UUID id) {
+    public TemplateViewDTO activate(UUID id) {
         commandService.activate(id);
         return queryService.getById(id);
     }
 
     @Override
-    public TemplateView deactivate(UUID id) {
+    public TemplateViewDTO deactivate(UUID id) {
         commandService.deactivate(id);
         return queryService.getById(id);
     }

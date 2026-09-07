@@ -1,7 +1,7 @@
 package com.keepguard.ms_communication.infrastructure.persistence;
 
-import com.keepguard.ms_communication.application.dto.common.PageResultView;
-import com.keepguard.ms_communication.application.dto.provider.ProviderSearchCriteriaView;
+import com.keepguard.ms_communication.application.dto.common.PageResultViewDTO;
+import com.keepguard.ms_communication.application.dto.provider.ProviderSearchCriteriaViewDTO;
 import com.keepguard.ms_communication.domain.entity.Provider;
 import com.keepguard.lib_common.communication.enums.CommunicationTypeEnum;
 import com.keepguard.ms_communication.domain.enums.ProviderTypeEnum;
@@ -127,7 +127,7 @@ class ProviderRepositoryAdapterTest {
     @DisplayName("Deve buscar providers com critérios de busca com sucesso")
     void shouldSearchProvidersWithCriteriaSuccessfully() {
         // Given
-        ProviderSearchCriteriaView criteria = new ProviderSearchCriteriaView(
+        ProviderSearchCriteriaViewDTO criteria = new ProviderSearchCriteriaViewDTO(
             0, 10, "name", "ASC", "Test", ProviderTypeEnum.N8N, 
             CommunicationTypeEnum.EMAIL, true, false
         );
@@ -139,7 +139,7 @@ class ProviderRepositoryAdapterTest {
         when(mapper.toDomain(providerJpaEntity)).thenReturn(provider);
         
         // When
-        PageResultView<Provider> result = providerRepositoryAdapter.search(criteria);
+        PageResultViewDTO<Provider> result = providerRepositoryAdapter.search(criteria);
         
         // Then
         assertNotNull(result);
@@ -159,7 +159,7 @@ class ProviderRepositoryAdapterTest {
     @DisplayName("Deve buscar providers com critérios nulos")
     void shouldSearchProvidersWithNullCriteria() {
         // Given
-        ProviderSearchCriteriaView criteria = new ProviderSearchCriteriaView(
+        ProviderSearchCriteriaViewDTO criteria = new ProviderSearchCriteriaViewDTO(
             0, 10, "name", "ASC", null, null, null, null, null
         );
         
@@ -170,7 +170,7 @@ class ProviderRepositoryAdapterTest {
         when(mapper.toDomain(providerJpaEntity)).thenReturn(provider);
         
         // When
-        PageResultView<Provider> result = providerRepositoryAdapter.search(criteria);
+        PageResultViewDTO<Provider> result = providerRepositoryAdapter.search(criteria);
         
         // Then
         assertNotNull(result);
@@ -338,7 +338,7 @@ class ProviderRepositoryAdapterTest {
     @DisplayName("Deve buscar providers com página vazia")
     void shouldSearchProvidersWithEmptyPage() {
         // Given
-        ProviderSearchCriteriaView criteria = new ProviderSearchCriteriaView(
+        ProviderSearchCriteriaViewDTO criteria = new ProviderSearchCriteriaViewDTO(
             0, 10, "name", "ASC", "NonExistent", null, null, null, null
         );
         
@@ -348,7 +348,7 @@ class ProviderRepositoryAdapterTest {
         )).thenReturn(emptyPage);
         
         // When
-        PageResultView<Provider> result = providerRepositoryAdapter.search(criteria);
+        PageResultViewDTO<Provider> result = providerRepositoryAdapter.search(criteria);
         
         // Then
         assertNotNull(result);
@@ -365,10 +365,10 @@ class ProviderRepositoryAdapterTest {
     @DisplayName("Deve buscar providers com diferentes tipos de ordenação")
     void shouldSearchProvidersWithDifferentSortOrders() {
         // Given
-        ProviderSearchCriteriaView criteriaAsc = new ProviderSearchCriteriaView(
+        ProviderSearchCriteriaViewDTO criteriaAsc = new ProviderSearchCriteriaViewDTO(
             0, 10, "name", "ASC", null, null, null, null, null
         );
-        ProviderSearchCriteriaView criteriaDesc = new ProviderSearchCriteriaView(
+        ProviderSearchCriteriaViewDTO criteriaDesc = new ProviderSearchCriteriaViewDTO(
             0, 10, "name", "DESC", null, null, null, null, null
         );
         
@@ -379,8 +379,8 @@ class ProviderRepositoryAdapterTest {
         when(mapper.toDomain(providerJpaEntity)).thenReturn(provider);
         
         // When
-        PageResultView<Provider> resultAsc = providerRepositoryAdapter.search(criteriaAsc);
-        PageResultView<Provider> resultDesc = providerRepositoryAdapter.search(criteriaDesc);
+        PageResultViewDTO<Provider> resultAsc = providerRepositoryAdapter.search(criteriaAsc);
+        PageResultViewDTO<Provider> resultDesc = providerRepositoryAdapter.search(criteriaDesc);
         
         // Then
         assertNotNull(resultAsc);

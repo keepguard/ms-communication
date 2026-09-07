@@ -1,7 +1,7 @@
 package com.keepguard.ms_communication.infrastructure.redis;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.keepguard.ms_communication.application.dto.template.TemplateCacheView;
+import com.keepguard.ms_communication.application.dto.template.TemplateCacheViewDTO;
 import com.keepguard.ms_communication.application.port.out.cache.TemplateCachePort;
 import com.keepguard.lib_common.communication.enums.MessageTypeEnum;
 import com.keepguard.lib_common.communication.enums.TemplateTypeEnum;
@@ -30,7 +30,7 @@ public class TemplateCacheService implements TemplateCachePort {
     private String templateCachePrefix;
 
     @CircuitBreaker(name = "redisCache")
-    public void cacheTemplate(TemplateTypeEnum templateType, MessageTypeEnum messageType, String application, TemplateCacheView template) {
+    public void cacheTemplate(TemplateTypeEnum templateType, MessageTypeEnum messageType, String application, TemplateCacheViewDTO template) {
         try {
             String key = buildTemplateKey(templateType, messageType, application);
             String value = objectMapper.writeValueAsString(template);
@@ -42,20 +42,20 @@ public class TemplateCacheService implements TemplateCachePort {
 
     @CircuitBreaker(name = "redisCache", fallbackMethod = "getTemplateFallback")
     @Retry(name = "redisCache")
-    public TemplateCacheView getTemplateFromCache(TemplateTypeEnum templateType, MessageTypeEnum messageType, String application) {
+    public TemplateCacheViewDTO getTemplateFromCache(TemplateTypeEnum templateType, MessageTypeEnum messageType, String application) {
         var key = buildTemplateKey(templateType, messageType, application);
         try {
             var value = redisTemplate.opsForValue().get(key);
             if (value == null || value.isBlank()) {
                 return null;
             }
-            return objectMapper.readValue(value, TemplateCacheView.class);
+            return objectMapper.readValue(value, TemplateCacheViewDTO.class);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
-    private TemplateCacheView getTemplateFallback(TemplateTypeEnum templateType, MessageTypeEnum messageType, String application, Exception ex) {
+    private TemplateCacheViewDTO getTemplateFallback(TemplateTypeEnum templateType, MessageTypeEnum messageType, String application, Exception ex) {
         log.warn("FALLBACK: Redis indisponivel");
         return null;
     }

@@ -2,7 +2,7 @@ package com.keepguard.ms_communication.infrastructure.redis;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.keepguard.ms_communication.application.dto.provider.ProviderCacheView;
+import com.keepguard.ms_communication.application.dto.provider.ProviderCacheViewDTO;
 import com.keepguard.ms_communication.application.port.out.cache.ProviderCachePort;
 import com.keepguard.lib_common.communication.enums.CommunicationTypeEnum;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
@@ -37,7 +37,7 @@ public class ProviderCacheService implements ProviderCachePort {
     private String providersByTypeCachePrefix;
 
     @CircuitBreaker(name = "redisCache")
-    public void cacheProviderById(String providerId, ProviderCacheView provider) {
+    public void cacheProviderById(String providerId, ProviderCacheViewDTO provider) {
         try {
             String key = providerKey(providerId);
             String value = objectMapper.writeValueAsString(provider);
@@ -49,20 +49,20 @@ public class ProviderCacheService implements ProviderCachePort {
 
     @CircuitBreaker(name = "redisCache", fallbackMethod = "getProviderFallback")
     @Retry(name = "redisCache")
-    public ProviderCacheView getProviderByIdFromCache(String providerId) {
+    public ProviderCacheViewDTO getProviderByIdFromCache(String providerId) {
         var key = providerKey(providerId);
         try {
             var value = redisTemplate.opsForValue().get(key);
             if (value == null || value.isBlank()) {
                 return null;
             }
-            return objectMapper.readValue(value, ProviderCacheView.class);
+            return objectMapper.readValue(value, ProviderCacheViewDTO.class);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
-    private ProviderCacheView getProviderFallback(String providerId, Exception ex) {
+    private ProviderCacheViewDTO getProviderFallback(String providerId, Exception ex) {
         log.warn("FALLBACK: Redis indisponivel");
         return null;
     }
@@ -78,7 +78,7 @@ public class ProviderCacheService implements ProviderCachePort {
     }
 
     @CircuitBreaker(name = "redisCache")
-    public void cacheProvidersByType(CommunicationTypeEnum communicationType, List<ProviderCacheView> providers) {
+    public void cacheProvidersByType(CommunicationTypeEnum communicationType, List<ProviderCacheViewDTO> providers) {
         try {
             String key = providersByTypeKey(communicationType);
             String value = objectMapper.writeValueAsString(providers);
@@ -90,20 +90,20 @@ public class ProviderCacheService implements ProviderCachePort {
 
     @CircuitBreaker(name = "redisCache", fallbackMethod = "getProvidersListFallback")
     @Retry(name = "redisCache")
-    public List<ProviderCacheView> getProvidersByTypeFromCache(CommunicationTypeEnum communicationType) {
+    public List<ProviderCacheViewDTO> getProvidersByTypeFromCache(CommunicationTypeEnum communicationType) {
         var key = providersByTypeKey(communicationType);
         try {
             var value = redisTemplate.opsForValue().get(key);
             if (value == null || value.isBlank()) {
                 return null;
             }
-            return objectMapper.readValue(value, new TypeReference<List<ProviderCacheView>>() {});
+            return objectMapper.readValue(value, new TypeReference<List<ProviderCacheViewDTO>>() {});
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
-    private List<ProviderCacheView> getProvidersListFallback(CommunicationTypeEnum communicationType, Exception ex) {
+    private List<ProviderCacheViewDTO> getProvidersListFallback(CommunicationTypeEnum communicationType, Exception ex) {
         log.warn("FALLBACK: Redis indisponivel");
         return null;
     }

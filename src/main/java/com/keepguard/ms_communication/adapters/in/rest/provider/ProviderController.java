@@ -6,11 +6,10 @@ import com.keepguard.ms_communication.adapters.in.rest.provider.dto.request.Prov
 import com.keepguard.ms_communication.adapters.in.rest.provider.dto.request.ProviderUpdateRequestDTO;
 import com.keepguard.ms_communication.adapters.in.rest.provider.dto.response.*;
 import com.keepguard.ms_communication.adapters.in.rest.provider.mapper.ProviderAdapterMapper;
-import com.keepguard.ms_communication.application.dto.provider.ProviderView;
-import com.keepguard.ms_communication.application.mapper.ProviderApplicationMapper;
-import com.keepguard.ms_communication.domain.dto.provider.ProviderCreateCommandDTO;
-import com.keepguard.ms_communication.domain.dto.provider.ProviderUpdateCommandDTO;
-import com.keepguard.ms_communication.application.port.in.service.ProviderPort;
+import com.keepguard.ms_communication.application.dto.provider.ProviderViewDTO;
+import com.keepguard.ms_communication.application.dto.provider.ProviderCreateCommandDTO;
+import com.keepguard.ms_communication.application.dto.provider.ProviderUpdateCommandDTO;
+import com.keepguard.ms_communication.application.port.in.ProviderPort;
 import com.keepguard.lib_common.communication.enums.CommunicationTypeEnum;
 import com.keepguard.ms_communication.domain.enums.ProviderTypeEnum;
 import io.swagger.v3.oas.annotations.Operation;
@@ -40,7 +39,6 @@ public class ProviderController {
 
     private final ProviderPort providerPort;
     private final ProviderAdapterMapper adapterMapper;
-    private final ProviderApplicationMapper applicationMapper;
 
     @PostMapping
     @Operation(
@@ -71,9 +69,8 @@ public class ProviderController {
         
         log.info("Criando provider - companyId={}", companyId);
         
-        com.keepguard.ms_communication.domain.dto.provider.ProviderCreateCommandDTO requestCommand = adapterMapper.toCreateCommand(dto, companyId);
-        ProviderCreateCommandDTO command = applicationMapper.toCreateCommand(requestCommand);
-        ProviderView view = providerPort.create(command);
+        ProviderCreateCommandDTO command = adapterMapper.toCreateCommand(dto, companyId);
+        ProviderViewDTO view = providerPort.create(command);
         ProviderCreateResponseDTO response = adapterMapper.toCreateResponseDTO(view);
         
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
@@ -104,9 +101,8 @@ public class ProviderController {
         
         log.info("Atualizando provider: {} - companyId={}", id, companyId);
         
-        com.keepguard.ms_communication.domain.dto.provider.ProviderUpdateCommandDTO requestCommand = adapterMapper.toUpdateCommand(id, dto, companyId);
-        ProviderUpdateCommandDTO command = applicationMapper.toUpdateCommand(requestCommand);
-        ProviderView view = providerPort.update(command);
+        ProviderUpdateCommandDTO command = adapterMapper.toUpdateCommand(id, dto, companyId);
+        ProviderViewDTO view = providerPort.update(command);
         ProviderUpdateResponseDTO response = adapterMapper.toUpdateResponseDTO(view);
         
         return ResponseEntity.ok(response);
@@ -134,7 +130,7 @@ public class ProviderController {
         
         log.info("Buscando provider por ID: {} - companyId={}", id, companyId);
         
-        ProviderView view = providerPort.getById(id).orElseThrow(() -> new RuntimeException("Provider not found"));
+        ProviderViewDTO view = providerPort.getById(id).orElseThrow(() -> new RuntimeException("Provider not found"));
         ProviderGetProviderByIdResponseDTO response = adapterMapper.toGetProviderByIdResponseDTO(view);
         
         return ResponseEntity.ok(response);
@@ -161,7 +157,7 @@ public class ProviderController {
         
         log.info("Listando todos providers - companyId={}", companyId);
         
-        List<ProviderView> views = providerPort.getAllActive();
+        List<ProviderViewDTO> views = providerPort.getAllActive();
         List<ProviderGetAllProvidersResponseDTO> response = views.stream()
                 .map(adapterMapper::toGetAllProvidersResponseDTO)
                 .collect(java.util.stream.Collectors.toList());
@@ -189,7 +185,7 @@ public class ProviderController {
         
         log.info("Listando providers ativos - companyId={}", companyId);
         
-        List<ProviderView> views = providerPort.getAllActive();
+        List<ProviderViewDTO> views = providerPort.getAllActive();
         List<ProviderGetActiveProvidersResponseDTO> response = views.stream()
                 .map(adapterMapper::toGetActiveProvidersResponseDTO)
                 .collect(java.util.stream.Collectors.toList());
@@ -220,7 +216,7 @@ public class ProviderController {
         
         log.info("Listando providers por tipo de comunicação: {} - companyId={}", communicationType, companyId);
         
-        List<ProviderView> views = providerPort.getByCommunicationType(communicationType);
+        List<ProviderViewDTO> views = providerPort.getByCommunicationType(communicationType);
         List<ProviderGetProvidersByCommunicationTypeResponseDTO> response = views.stream()
                 .map(adapterMapper::toGetProvidersByCommunicationTypeResponseDTO)
                 .collect(java.util.stream.Collectors.toList());
@@ -252,7 +248,7 @@ public class ProviderController {
         
         log.info("Buscando provider padrão por tipo: {} - companyId={}", communicationType, companyId);
         
-        ProviderView view = providerPort.getDefaultByCommunicationType(communicationType)
+        ProviderViewDTO view = providerPort.getDefaultByCommunicationType(communicationType)
                 .orElseThrow(() -> new com.keepguard.ms_communication.application.service.exception.NotFoundException(
                         "Provedor padrão não encontrado para o tipo: " + communicationType,
                         "DEFAULT_PROVIDER_NOT_FOUND",
@@ -312,7 +308,7 @@ public class ProviderController {
         
         log.info("Ativando provider: {} - companyId={}", id, companyId);
         
-        ProviderView view = providerPort.activate(id);
+        ProviderViewDTO view = providerPort.activate(id);
         ProviderActivateProviderResponseDTO response = adapterMapper.toActivateProviderResponseDTO(view);
         
         return ResponseEntity.ok(response);
@@ -340,7 +336,7 @@ public class ProviderController {
         
         log.info("Desativando provider: {} - companyId={}", id, companyId);
         
-        ProviderView view = providerPort.deactivate(id);
+        ProviderViewDTO view = providerPort.deactivate(id);
         ProviderDeactivateProviderResponseDTO response = adapterMapper.toDeactivateProviderResponseDTO(view);
         
         return ResponseEntity.ok(response);
@@ -369,7 +365,7 @@ public class ProviderController {
         
         log.info("Definindo provider como padrão: {} - companyId={}", id, companyId);
         
-        ProviderView view = providerPort.setAsDefault(id);
+        ProviderViewDTO view = providerPort.setAsDefault(id);
         ProviderSetAsDefaultResponseDTO response = adapterMapper.toSetAsDefaultResponseDTO(view);
         
         return ResponseEntity.ok(response);

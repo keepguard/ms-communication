@@ -1,18 +1,18 @@
 package com.keepguard.ms_communication.application.mapper;
 
-import com.keepguard.ms_communication.application.dto.template.TemplateCacheView;
+import com.keepguard.ms_communication.application.dto.template.TemplateCacheViewDTO;
 import com.keepguard.ms_communication.domain.entity.Template;
 import org.springframework.stereotype.Component;
 
 @Component
 public class TemplateCacheMapper {
 
-    public TemplateCacheView toCacheView(Template template) {
+    public TemplateCacheViewDTO toCacheView(Template template) {
         if (template == null) {
             return null;
         }
 
-        return new TemplateCacheView(
+        return new TemplateCacheViewDTO(
             template.getId(),
             template.getTemplateType(),
             template.getMessageType(),
@@ -28,7 +28,7 @@ public class TemplateCacheMapper {
         );
     }
 
-    public Template toEntity(TemplateCacheView dto) {
+    public Template toEntity(TemplateCacheViewDTO dto) {
         if (dto == null) {
             return null;
         }

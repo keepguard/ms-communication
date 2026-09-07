@@ -1,8 +1,8 @@
 package com.keepguard.ms_communication.application.service.template;
 
-import com.keepguard.ms_communication.application.dto.common.PageResultView;
-import com.keepguard.ms_communication.application.dto.template.TemplateSearchCriteriaView;
-import com.keepguard.ms_communication.application.dto.template.TemplateView;
+import com.keepguard.ms_communication.application.dto.common.PageResultViewDTO;
+import com.keepguard.ms_communication.application.dto.template.TemplateSearchCriteriaViewDTO;
+import com.keepguard.ms_communication.application.dto.template.TemplateViewDTO;
 import com.keepguard.ms_communication.application.service.exception.NotFoundException;
 import com.keepguard.ms_communication.application.port.out.persistence.TemplateRepositoryPort;
 import com.keepguard.ms_communication.application.mapper.TemplateApplicationMapper;
@@ -27,7 +27,7 @@ public class TemplateQueryService  {
     private final TemplateRepositoryPort repositoryPort;
     private final TemplateApplicationMapper mapper;
 
-    public TemplateView getById(UUID id) {
+    public TemplateViewDTO getById(UUID id) {
         log.debug("Buscando template por ID: {}", id);
 
         return repositoryPort.findById(id)
@@ -35,20 +35,20 @@ public class TemplateQueryService  {
                 .orElseThrow(() -> new NotFoundException("Template não encontrado: " + id));
     }
 
-    public PageResultView<TemplateView> search(TemplateSearchCriteriaView criteria) {
+    public PageResultViewDTO<TemplateViewDTO> search(TemplateSearchCriteriaViewDTO criteria) {
         log.debug("Buscando templates com critérios: {}", criteria);
 
-        PageResultView<Template> domainResult =
+        PageResultViewDTO<Template> domainResult =
                 repositoryPort.search(criteria);
 
-        List<TemplateView> content = domainResult.content().stream()
+        List<TemplateViewDTO> content = domainResult.content().stream()
                 .map(mapper::toView)
                 .collect(Collectors.toList());
 
-        return PageResultView.of(content, domainResult.page(), domainResult.size(), domainResult.totalElements());
+        return PageResultViewDTO.of(content, domainResult.page(), domainResult.size(), domainResult.totalElements());
     }
 
-    public List<TemplateView> getAllActive() {
+    public List<TemplateViewDTO> getAllActive() {
         log.debug("Listando todos os templates ativos");
 
         return repositoryPort.findAllActive().stream()
@@ -56,7 +56,7 @@ public class TemplateQueryService  {
                 .collect(Collectors.toList());
     }
 
-    public List<TemplateView> getByType(TemplateTypeEnum type) {
+    public List<TemplateViewDTO> getByType(TemplateTypeEnum type) {
         log.debug("Listando templates por tipo: {}", type);
 
         return repositoryPort.findByType(type).stream()
@@ -64,7 +64,7 @@ public class TemplateQueryService  {
                 .collect(Collectors.toList());
     }
 
-    public List<TemplateView> getByMessageType(MessageTypeEnum messageType) {
+    public List<TemplateViewDTO> getByMessageType(MessageTypeEnum messageType) {
         log.debug("Listando templates por tipo de mensagem: {}", messageType);
 
         return repositoryPort.findByMessageType(messageType).stream()

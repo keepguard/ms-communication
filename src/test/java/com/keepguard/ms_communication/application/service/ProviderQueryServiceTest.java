@@ -1,8 +1,8 @@
 package com.keepguard.ms_communication.application.service;
 
-import com.keepguard.ms_communication.application.dto.common.PageResultView;
-import com.keepguard.ms_communication.application.dto.provider.ProviderSearchCriteriaView;
-import com.keepguard.ms_communication.application.dto.provider.ProviderView;
+import com.keepguard.ms_communication.application.dto.common.PageResultViewDTO;
+import com.keepguard.ms_communication.application.dto.provider.ProviderSearchCriteriaViewDTO;
+import com.keepguard.ms_communication.application.dto.provider.ProviderViewDTO;
 import com.keepguard.ms_communication.application.mapper.ProviderApplicationMapper;
 import com.keepguard.ms_communication.application.port.out.persistence.ProviderRepositoryPort;
 import com.keepguard.ms_communication.application.service.exception.NotFoundException;
@@ -44,7 +44,7 @@ class ProviderQueryServiceTest {
     private ProviderApplicationMapper mapper;
     
     private Provider provider;
-    private ProviderView providerView;
+    private ProviderViewDTO providerView;
     private UUID providerId;
     
     @BeforeEach
@@ -59,7 +59,7 @@ class ProviderQueryServiceTest {
             .withIsActive(true)
             .buildDomain();
         
-        providerView = new ProviderView(
+        providerView = new ProviderViewDTO(
             providerId,
             "Test Provider",
             ProviderTypeEnum.N8N,
@@ -87,7 +87,7 @@ class ProviderQueryServiceTest {
         when(mapper.toView(provider)).thenReturn(providerView);
         
         // When
-        ProviderView result = providerQueryService.getById(providerId);
+        ProviderViewDTO result = providerQueryService.getById(providerId);
         
         // Then
         assertNotNull(result);
@@ -123,12 +123,12 @@ class ProviderQueryServiceTest {
     @DisplayName("Deve buscar providers com critérios de busca com sucesso")
     void shouldSearchProvidersWithCriteriaSuccessfully() {
         // Given
-        ProviderSearchCriteriaView criteria = new ProviderSearchCriteriaView(
+        ProviderSearchCriteriaViewDTO criteria = new ProviderSearchCriteriaViewDTO(
             0, 10, "name", "ASC", "Test", ProviderTypeEnum.N8N, 
             CommunicationTypeEnum.EMAIL, true, false
         );
         
-        PageResultView<Provider> domainResult = PageResultView.of(
+        PageResultViewDTO<Provider> domainResult = PageResultViewDTO.of(
             List.of(provider), 0, 10, 1L
         );
         
@@ -136,7 +136,7 @@ class ProviderQueryServiceTest {
         when(mapper.toView(provider)).thenReturn(providerView);
         
         // When
-        PageResultView<ProviderView> result = providerQueryService.search(criteria);
+        PageResultViewDTO<ProviderViewDTO> result = providerQueryService.search(criteria);
         
         // Then
         assertNotNull(result);
@@ -151,18 +151,18 @@ class ProviderQueryServiceTest {
     @DisplayName("Deve retornar lista vazia quando busca não retorna resultados")
     void shouldReturnEmptyListWhenSearchReturnsNoResults() {
         // Given
-        ProviderSearchCriteriaView criteria = new ProviderSearchCriteriaView(
+        ProviderSearchCriteriaViewDTO criteria = new ProviderSearchCriteriaViewDTO(
             0, 10, "name", "ASC", "NonExistent", null, null, null, null
         );
         
-        PageResultView<Provider> domainResult = PageResultView.of(
+        PageResultViewDTO<Provider> domainResult = PageResultViewDTO.of(
             List.of(), 0, 10, 0L
         );
         
         when(repositoryPort.search(criteria)).thenReturn(domainResult);
         
         // When
-        PageResultView<ProviderView> result = providerQueryService.search(criteria);
+        PageResultViewDTO<ProviderViewDTO> result = providerQueryService.search(criteria);
         
         // Then
         assertNotNull(result);
@@ -181,7 +181,7 @@ class ProviderQueryServiceTest {
         when(mapper.toView(provider)).thenReturn(providerView);
         
         // When
-        List<ProviderView> result = providerQueryService.getAllActive();
+        List<ProviderViewDTO> result = providerQueryService.getAllActive();
         
         // Then
         assertNotNull(result);
@@ -203,7 +203,7 @@ class ProviderQueryServiceTest {
         when(mapper.toView(provider)).thenReturn(providerView);
         
         // When
-        List<ProviderView> result = providerQueryService.getByCommunicationType(communicationType);
+        List<ProviderViewDTO> result = providerQueryService.getByCommunicationType(communicationType);
         
         // Then
         assertNotNull(result);
@@ -224,7 +224,7 @@ class ProviderQueryServiceTest {
         when(mapper.toView(provider)).thenReturn(providerView);
         
         // When
-        Optional<ProviderView> result = providerQueryService.getDefaultByCommunicationType(communicationType);
+        Optional<ProviderViewDTO> result = providerQueryService.getDefaultByCommunicationType(communicationType);
         
         // Then
         assertTrue(result.isPresent());
@@ -243,7 +243,7 @@ class ProviderQueryServiceTest {
             .thenReturn(Optional.empty());
         
         // When
-        Optional<ProviderView> result = providerQueryService.getDefaultByCommunicationType(communicationType);
+        Optional<ProviderViewDTO> result = providerQueryService.getDefaultByCommunicationType(communicationType);
         
         // Then
         assertNotNull(result);
@@ -324,7 +324,7 @@ class ProviderQueryServiceTest {
             .withName("Test Provider 2")
             .buildDomain();
             
-        ProviderView providerView2 = new ProviderView(
+        ProviderViewDTO providerView2 = new ProviderViewDTO(
             provider2.getId(),
             "Test Provider 2",
             null,
@@ -343,11 +343,11 @@ class ProviderQueryServiceTest {
             null
         );
         
-        ProviderSearchCriteriaView criteria = new ProviderSearchCriteriaView(
+        ProviderSearchCriteriaViewDTO criteria = new ProviderSearchCriteriaViewDTO(
             0, 10, "name", "ASC", "Test", null, null, null, null
         );
         
-        PageResultView<Provider> domainResult = PageResultView.of(
+        PageResultViewDTO<Provider> domainResult = PageResultViewDTO.of(
             List.of(provider, provider2), 0, 10, 2L
         );
         
@@ -356,7 +356,7 @@ class ProviderQueryServiceTest {
         when(mapper.toView(provider2)).thenReturn(providerView2);
         
         // When
-        PageResultView<ProviderView> result = providerQueryService.search(criteria);
+        PageResultViewDTO<ProviderViewDTO> result = providerQueryService.search(criteria);
         
         // Then
         assertNotNull(result);
@@ -386,7 +386,7 @@ class ProviderQueryServiceTest {
                 .withCommunicationType(communicationType)
                 .buildDomain();
                 
-            ProviderView testProviderView = new ProviderView(
+            ProviderViewDTO testProviderView = new ProviderViewDTO(
                 null, null, null, communicationType, null, null, null, null, null, null, null, null, null, null, null, null
             );
             
@@ -395,7 +395,7 @@ class ProviderQueryServiceTest {
             when(mapper.toView(testProvider)).thenReturn(testProviderView);
             
             // When
-            List<ProviderView> result = providerQueryService.getByCommunicationType(communicationType);
+            List<ProviderViewDTO> result = providerQueryService.getByCommunicationType(communicationType);
             
             // Then
             assertNotNull(result);

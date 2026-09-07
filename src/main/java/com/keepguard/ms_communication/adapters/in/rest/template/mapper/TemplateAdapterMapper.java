@@ -3,9 +3,9 @@ package com.keepguard.ms_communication.adapters.in.rest.template.mapper;
 import com.keepguard.ms_communication.adapters.in.rest.template.dto.request.TemplateCreateRequestDTO;
 import com.keepguard.ms_communication.adapters.in.rest.template.dto.request.TemplateUpdateRequestDTO;
 import com.keepguard.ms_communication.adapters.in.rest.template.dto.response.*;
-import com.keepguard.ms_communication.application.dto.template.TemplateView;
-import com.keepguard.ms_communication.domain.dto.template.TemplateCreateCommandDTO;
-import com.keepguard.ms_communication.domain.dto.template.TemplateUpdateCommandDTO;
+import com.keepguard.ms_communication.application.dto.template.TemplateViewDTO;
+import com.keepguard.ms_communication.application.dto.template.TemplateCreateCommandDTO;
+import com.keepguard.ms_communication.application.dto.template.TemplateUpdateCommandDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -63,7 +63,7 @@ public class TemplateAdapterMapper {
         }
     }
 
-    public TemplateCreateResponseDTO toCreateResponseDTO(TemplateView view) {
+    public TemplateCreateResponseDTO toCreateResponseDTO(TemplateViewDTO view) {
         if (view == null) {
             return null;
         }
@@ -85,12 +85,12 @@ public class TemplateAdapterMapper {
                     .updatedAt(view.updatedAt())
                     .build();
         } catch (Exception e) {
-            log.error("Erro ao mapear TemplateView para TemplateCreateResponseDTO: {}", e.getMessage(), e);
+            log.error("Erro ao mapear TemplateViewDTO para TemplateCreateResponseDTO: {}", e.getMessage(), e);
             throw e;
         }
     }
 
-    public TemplateUpdateResponseDTO toUpdateResponseDTO(TemplateView view) {
+    public TemplateUpdateResponseDTO toUpdateResponseDTO(TemplateViewDTO view) {
         if (view == null) {
             return null;
         }
@@ -111,12 +111,12 @@ public class TemplateAdapterMapper {
                     .updatedAt(view.updatedAt())
                     .build();
         } catch (Exception e) {
-            log.error("Erro ao mapear TemplateView para TemplateUpdateResponseDTO: {}", e.getMessage(), e);
+            log.error("Erro ao mapear TemplateViewDTO para TemplateUpdateResponseDTO: {}", e.getMessage(), e);
             throw e;
         }
     }
 
-    public TemplateGetTemplateByIdResponseDTO toGetTemplateByIdResponseDTO(TemplateView view) {
+    public TemplateGetTemplateByIdResponseDTO toGetTemplateByIdResponseDTO(TemplateViewDTO view) {
         if (view == null) {
             return null;
         }
@@ -137,12 +137,12 @@ public class TemplateAdapterMapper {
                     .updatedAt(view.updatedAt())
                     .build();
         } catch (Exception e) {
-            log.error("Erro ao mapear TemplateView para TemplateGetTemplateByIdResponseDTO: {}", e.getMessage(), e);
+            log.error("Erro ao mapear TemplateViewDTO para TemplateGetTemplateByIdResponseDTO: {}", e.getMessage(), e);
             throw e;
         }
     }
 
-    public TemplateGetTemplateByTypeResponseDTO toGetTemplateByTypeResponseDTO(TemplateView view) {
+    public TemplateGetTemplateByTypeResponseDTO toGetTemplateByTypeResponseDTO(TemplateViewDTO view) {
         if (view == null) {
             return null;
         }
@@ -163,12 +163,12 @@ public class TemplateAdapterMapper {
                     .updatedAt(view.updatedAt())
                     .build();
         } catch (Exception e) {
-            log.error("Erro ao mapear TemplateView para TemplateGetTemplateByTypeResponseDTO: {}", e.getMessage(), e);
+            log.error("Erro ao mapear TemplateViewDTO para TemplateGetTemplateByTypeResponseDTO: {}", e.getMessage(), e);
             throw e;
         }
     }
 
-    public TemplateGetTemplatesResponseDTO toGetTemplatesResponseDTO(TemplateView view) {
+    public TemplateGetTemplatesResponseDTO toGetTemplatesResponseDTO(TemplateViewDTO view) {
         if (view == null) {
             return null;
         }
@@ -190,7 +190,7 @@ public class TemplateAdapterMapper {
                     .updatedAt(view.updatedAt())
                     .build();
         } catch (Exception e) {
-            log.error("Erro ao mapear TemplateView para TemplateGetTemplatesResponseDTO: {}", e.getMessage(), e);
+            log.error("Erro ao mapear TemplateViewDTO para TemplateGetTemplatesResponseDTO: {}", e.getMessage(), e);
             throw e;
         }
     }
