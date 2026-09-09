@@ -116,10 +116,12 @@ management:
 
 # Configurações customizadas do RabbitMQ (nomes de filas/exchanges)
 rabbitmq:
+  billing-exchange: ms-billing-exchange-dev
   queues:
     # Filas de mensageria (padrão enterprise)
     message-send: ms.communication.message.send.dev
     message-send-requests-dlt: ms.communication.message.send.dlt.dev
+    billing-invoice: ms.communication.billing.invoice.dev
     
     # Exchanges
     message-exchange: ms-communication-exchange-dev
