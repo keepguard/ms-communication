@@ -1,0 +1,58 @@
+# Migração Java → Go: ms-communication — levantamento
+
+Data: 2026-10-05. Status: **Fase 0 concluída. Decisões D1–D10 abaixo são recomendações — aguardando aprovação do Rafael antes da Fase 2.**
+Molde vivo: `ms-company-go`, `ms-auth-go` (em prod) e seus respectivos `docs/migracao-go/`.
+
+## Por que migrar
+
+Serviço Java/Spring Boot em produção, ~10k linhas, 26 handlers (1 health + 1 message + 13 provider + 7 template + 1 debug não portável), 2 consumers RabbitMQ, 3 clientes Feign. Mesmo padrão de ganho de memória já visto em ms-auth-go/ms-company-go (centenas de MB em Java vs. dígitos de MB em Go no mesmo node único do cluster).
+
+## Documentos
+
+| Arquivo | Conteúdo |
+|---|---|
+| `01-spec-ms-communication.md` | Especificação de referência: 22 endpoints REST documentados com validação/erro exatos, contrato de erro (`GlobalExceptionHandler`, 15 handlers, campos na raiz do JSON), domínio (`Provider`/`Template`, sem tenant em Provider), 7 use cases passo a passo, persistência, cache (código morto), integrações de saída, infra transversal, testes Java, **23 bugs/comportamentos catalogados (§10)**. |
+| `02-consumidores-infra.md` | Quem chama (`ms-ai-guardian`, `ms-auth`, `ms-auth-go`, `ms-ai-guardian-go`, `bff-auth`, `bff-core` — nenhum em achadinhos/investbot), contrato fora do HTTP (fila `keepguard.notifications.sms` consumida pelo `srv-sms-sender`), Deployment real de prod, achado do profile `local` ativo. |
+| `03-libs-lib-go-common.md` | Não usa JWT/lib-security. `comm` já cobre 100% dos enums. `oplog`/`httpmetrics` cobrem `@LogOperation`/`@MetricsEndpoint`. Gap: métricas de negócio arbitrárias (replicar padrão local do ms-auth-go/ms-company-go). |
+| `04-resiliencia-integracoes.md` | Confirma o bug `ofDefaults()` (mesmo do ms-auth): YAML do Resilience4j é ignorado. Nenhum send é idempotente. Recomendação de decorator por client. |
+
+## O que o levantamento mostrou (muda a forma do plano)
+
+1. **O contrato mais perigoso não é HTTP, é uma fila RabbitMQ.** `keepguard.notifications.sms` é criada e publicada pelo `ms-communication` e consumida pelo `srv-sms-sender`, que não a redeclara (evita `PRECONDITION_FAILED`) e espera o campo `companyId` no payload (o próprio contrato Go interno do consumer usa `tenantId`, documentado em comentário no código dele). Divergir nome, args de durabilidade/DLX ou esse campo quebra o `srv-sms-sender` em produção sem aviso.
+2. **Produção roda com profile Spring `local`, não `prod` — terceira vez que esse padrão aparece** (mesmo achado em ms-auth e ms-company). Consequência direta na migração: os nomes de fila/exchange **efetivamente ativos hoje** têm sufixo `-dev`/`.dev` (`ms.communication.message.send.dev`, `ms-communication-exchange-dev`, `ms-billing-exchange-dev`), não os `-prod` documentados em `application-prod.yml`. `ddl-auto: update` também está ativo em vez de `validate`.
+3. **Nenhum consumidor confirmado lê a resposta do `POST /messages/send`.** Todos os 6 callers mapeados descartam o body — a maioria usa RabbitMQ como caminho primário e HTTP só como fallback best-effort (erro logado e engolido). Isso dá liberdade para simplificar o contrato de saída sem medo de quebrar leitura de response em algum caller.
+4. **Falha de envio nunca é visível para quem espera o resultado.** `MessageRabbitMQProcessorService` sempre dá ack mesmo quando `sendWithFallback` retorna `false` (nenhum provider disponível) — mensagem tratada como processada com sucesso, nunca vai para retry/DLQ. `EventPublisherPort`/`MessageSentEvent`/`MessageFailedEvent` existem com CB/retry completos mas são 100% código morto (nenhum service os chama).
+5. **Cache Redis de Provider/Template é código morto** — toda a infra (TTL 7 dias, chaves, circuit breaker) existe e funcionaria, mas nenhum service injeta `ProviderCachePort`/`TemplateCachePort`. O `system-design.md` local descreve esse cache como ativo; não está.
+6. **Resiliência configurada no YAML não vale nada** (`ResilienceConfig.java` usa `ofDefaults()` nos 5 registries, igual ao bug do ms-auth). `BillingUserClient` (usado dentro de um consumer) não tem proteção nenhuma. Nenhum dos 3 sends (email/N8N/billing) é idempotente.
+7. **`SendGridCommunicationProvider` é um placeholder** — sempre retorna sucesso fictício, nunca envia nada de fato. Qualquer provider cadastrado com `providerType=SENDGRID` "funciona" sempre, sem enviar.
+8. **`Provider` não tem campo de tenant**, apesar de todo endpoint de `ProviderController` exigir `X-Company-Id` no header — o header é lido e nunca usado para filtrar. `Template` tem `companyId` (String, nome de aplicação cliente como `"ms-auth"`, não um UUID de empresa).
+9. **Não usa JWT/lib-security.** Nenhuma rota exige `Authorization: Bearer`; só `X-Company-Id`. A var `JWT_SECRET` está no Deployment Helm sem nenhum uso no código — resquício do template compartilhado.
+10. **3 erros de contrato HTTP confirmados**: `RuntimeException` genérica em 3 lookups por ID (`ProviderController.getProviderById`, `TemplateController.getTemplateById`/`getTemplateByType`) sempre cai em 500, nunca no 404 que o Swagger promete; `GET /templates/by-type` ignora os query params e busca por `UUID.randomUUID()` (confirmado pelo próprio teste Java, que mocka `any(UUID.class)`); inconsistência de nome de campo JSON (`companyId` vs `application`) entre Response DTOs do mesmo recurso Template.
+11. **Schema real de prod tem um CHECK constraint incompleto** (`pg_dump -s` confirmado, `ms_communication_schema_prod.sql:79`): `templates_template_type_check` só lista 14 dos 16 valores de `TemplateTypeEnum` — faltam `FATURA_PAGA`/`FATURA_VENCIDA` (usados pelo fluxo de billing). Criar um Template com esses 2 valores falha hoje em produção com violação de CHECK (500). Causa: `ddl-auto: update` não recria CHECK constraint quando o enum Java cresce.
+
+## Decisões que são suas
+
+| # | Decisão | Opções | Recomendação |
+|---|---|---|---|
+| D1 | Paridade de rotas | (a) paridade total, 22 endpoints; (b) paridade menos o endpoint de debug | **(b)** — 21 endpoints (exclui `GET /templates/teste-hot-reload`, resquício de debug sem valor de produto, confirmado sem uso por consumidor). Os outros 21, inclusive os com bug confirmado, são portados — bug vira item fechado em D6, não motivo para não portar a rota. |
+| D2 | Lib no build | `require lib-go-common vX.Y.Z` (sem `replace`) + `vendor/` versionado | **Sim**, igual ms-company-go/ms-auth-go. Nenhuma mudança pendente na lib além do pacote `metrics` local ao serviço (D3). |
+| D3 | Métricas de negócio arbitrárias (`MetricsPort.incrementCounter`) | (a) pacote novo em `lib-go-common`; (b) local ao serviço, padrão `business_metrics.go` do ms-auth-go/ms-company-go | **(b)** — não é compartilhado por múltiplos serviços hoje; criar pacote na lib por um único consumidor é prematuro. |
+| D4 | Fila `keepguard.notifications.sms` | (a) manter nome, args e campo `companyId` byte a byte; (b) corrigir para `tenantId` e coordenar com `srv-sms-sender` | **(a) agora, (b) depois do corte se quiser** — mudar os dois lados simultaneamente no corte do ms-communication aumenta o raio de explosão sem necessidade. Documentar a divergência `companyId`/`tenantId` como dívida conhecida, não como bug a corrigir nesta migração. |
+| D5 | Nomes de fila/exchange ativos (achado do profile `local`) | (a) Go usa os nomes `-dev`/`.dev` que estão de fato ativos hoje; (b) corrigir o profile e usar os nomes `-prod`, coordenando com `ms-billing` e `srv-sms-sender` | **(a) para o corte, (b) como ação de infra separada depois** — trocar nome de fila no mesmo deploy que troca o runtime inteiro do serviço é dois riscos no mesmo commit. Corrigir o profile Spring (ou o K8s manifest Go) é tarefa independente, com o Rafael decidindo quando. |
+| D6 | Bugs — lista fechada a corrigir | (a) paridade estrita, inclusive bugs; (b) paridade de contrato + corrigir os que são erro de framework/500 indevido | **(b)**, lista fechada: (i) os 3 lookups por ID devolvem 404 em vez de 500 quando o recurso não existe; (ii) `GET /templates/by-type` usa de fato os query params `type`/`messageType` em vez de UUID aleatório; (iii) erro de framework (JSON/UUID/param inválido, header `X-Company-Id` ausente) responde 400, não 500 (já é o comportamento do Spring por padrão — preservar o equivalente no Go); (iv) nome de campo JSON de `companyId`/Template unificado em todos os Response DTOs; (v) baseline SQL nasce com os 16 valores de `TemplateTypeEnum` no CHECK de `template_type` (inclui `FATURA_PAGA`/`FATURA_VENCIDA`, achado 11 — é `ADD CONSTRAINT` aditivo, não mudança de comportamento de API, e desbloqueia um fluxo de billing hoje quebrado). Resto da lista (22 itens restantes, seção 10 do `01`) fica igual ao Java e documentado — inclusive `SendGridCommunicationProvider` placeholder, falha de envio nunca propagada do consumer RabbitMQ, cache morto, `setAsDefault` não exclusivo, delete sem checar `isActive`, `PUT` como replace total. |
+| D7 | Métricas | Sem `entity_id`/`company_id`/`provider_id` como rótulo de alta cardinalidade — mesma linha do ms-auth/ms-company. |
+| D8 | Rate limiter/circuit breaker do YAML (achado do `ofDefaults()`) | **Não portar a config "fantasma" do YAML.** Aplicar decorator real (retry+CB+logging+metrics, molde `bff-auth`) só nos clients que fazem sentido: `BillingUserClient` (GET idempotente, hoje sem proteção nenhuma — ganha retry+CB de verdade) e `N8nWebhookClient` (CB real, já que tinha anotação no Java, mesmo que inoperante). `DynamicEmailSenderClient` mantém timeout explícito, sem retry automático (send não é idempotente). |
+| D9 | Eventos de domínio não publicados (`MessageSentEvent`/`MessageFailedEvent`) e falha de envio nunca propagada ao consumer RabbitMQ | **Paridade agora — comportamento atual preservado, não corrigido.** Corrigir "ack mesmo com falha de envio" é mudança de contrato observável do fluxo de notificação (teria efeito em retry/DLQ reais), fica fora desta migração; registrar como dívida para decisão futura separada. |
+| D10 | Corte | Selector do Service `ms-communication` → `ms-communication-go`; validar lado a lado com `ms-auth-go`/`ms-ai-guardian-go` (que já falam com o Go) e o `srv-sms-sender` (consumidor da fila) antes do corte. Java mantido escalado a 0 por alguns dias, sem apagar. |
+
+**Fora de escopo (registrado, não muda nesta migração):** corrigir o profile Spring `local`→`prod` em si (é ação de infra, D5 trata só o nome de fila que ele afeta); credencial literal `guest`/`guest` do RabbitMQ no Deployment; ausência de HPA/PDB/probes/CPU limits no Deployment atual (Go herda o mesmo Helm por ora, ajuste de recursos é decisão separada de SRE).
+
+## Pendência antes da Fase 2
+
+Schema real de prod (baseline da migration) — banco `ms_communication` foi criado por Hibernate `ddl-auto` (sem Flyway). Rodar da raiz do monorepo:
+
+```bash
+kubectl --kubeconfig keepguard-core/docker/keepguard-kubeconfig.yaml -n keepguard exec \
+  $(kubectl --kubeconfig keepguard-core/docker/keepguard-kubeconfig.yaml -n keepguard get pod -l app=postgres -o name | head -1) -- \
+  pg_dump -s -n ms_communication -U keepguard_api_user keepguard_api_db > keepguard-core/backend/ms/ms-communication/docs/migracao-go/ms_communication_schema_prod.sql
+```
